@@ -26,3 +26,6 @@ venv/
 dist/
 build/
 *.egg-info/
+
+# Local assignment reference photos (do not publish proprietary source material)
+assets/
