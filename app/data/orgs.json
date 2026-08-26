@@ -1,0 +1,61 @@
+{
+  "orgs": [
+    {
+      "id": "ORG-ENG",
+      "name": "Engineering",
+      "leader_id": "E-1000",
+      "parent_org_id": null
+    },
+    {
+      "id": "ORG-CONSUMER",
+      "name": "Consumer Engineering",
+      "leader_id": "E-1002",
+      "parent_org_id": "ORG-ENG"
+    },
+    {
+      "id": "ORG-PLATFORM",
+      "name": "Platform",
+      "leader_id": "E-1003",
+      "parent_org_id": "ORG-ENG"
+    },
+    {
+      "id": "ORG-JANE",
+      "name": "Jane Smith Organization",
+      "leader_id": "E-1001",
+      "parent_org_id": "ORG-ENG"
+    }
+  ],
+  "teams": [
+    {
+      "id": "TEAM-PAYMENTS",
+      "name": "Payments Engineering",
+      "manager_id": "E-1010",
+      "org_id": "ORG-CONSUMER",
+      "cost_center": "CC-4102",
+      "member_ids": [
+        "E-1010",
+        "E-1004",
+        "E-1011",
+        "E-1012",
+        "E-1013",
+        "E-1014",
+        "E-1015",
+        "E-1016",
+        "E-1017",
+        "E-1018",
+        "E-1019",
+        "E-1020",
+        "E-1021",
+        "E-1022"
+      ]
+    },
+    {
+      "id": "TEAM-PLATFORM-CORE",
+      "name": "Platform Core",
+      "manager_id": "E-1003",
+      "org_id": "ORG-PLATFORM",
+      "cost_center": "CC-4200",
+      "member_ids": []
+    }
+  ]
+}
