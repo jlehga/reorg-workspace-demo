@@ -18,13 +18,13 @@ _AUTH_MAX_AGE = 7 * 24 * 60 * 60  # 7 days
 # Never open a standalone HTML card around "Sign in" — widgets cannot nest in it.
 LOGIN_CSS = """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
 
 section[data-testid="stSidebar"] { display: none !important; }
 [data-testid="stSidebarCollapsedControl"] { display: none !important; }
 
-html, body, .stApp {
-  font-family: "IBM Plex Sans", system-ui, sans-serif !important;
+html, body, .stApp, .stApp * {
+  font-family: "DM Sans", "Source Sans 3", system-ui, sans-serif !important;
 }
 
 .stApp {
@@ -35,31 +35,49 @@ html, body, .stApp {
 }
 
 .block-container {
-  padding-top: 4rem !important;
-  padding-bottom: 2rem !important;
-  max-width: 420px !important;
+  padding-top: 1.75rem !important;
+  padding-bottom: 1.25rem !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  max-width: 400px !important;
   background: transparent !important;
+}
+
+/* Collapse Streamlit's default vertical rhythm on the login portal */
+.block-container > div[data-testid="stVerticalBlock"] {
+  gap: 0.55rem !important;
+}
+.block-container [data-testid="stMarkdownContainer"] {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.block-container [data-testid="stMarkdownContainer"] p {
+  margin: 0 !important;
 }
 
 .rw-portal-brand {
   text-align: center;
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 0.65rem 0;
+  width: 100%;
 }
 .rw-portal-brand h1 {
-  font-family: "IBM Plex Serif", Georgia, serif !important;
+  font-family: "DM Sans", "Source Sans 3", system-ui, sans-serif !important;
   font-weight: 700;
-  font-size: 2.15rem;
-  line-height: 1.15;
+  font-size: 1.95rem;
+  line-height: 1.2;
   color: #FFFFFF !important;
-  margin: 0 0 0.45rem 0;
-  letter-spacing: -0.02em;
+  margin: 0 0 0.35rem 0;
+  letter-spacing: -0.03em;
+  text-align: center;
 }
 .rw-portal-brand h1 span { color: #B8D0FF !important; }
 .rw-portal-brand p {
   margin: 0;
   color: #D6E4FF !important;
-  font-size: 0.95rem;
-  line-height: 1.45;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  text-align: center;
+  font-weight: 400;
 }
 
 /* One cohesive white card = the form wrapping title + inputs + button */
@@ -67,20 +85,37 @@ div[data-testid="stForm"] {
   background: #FFFFFF !important;
   border: none !important;
   border-radius: 12px !important;
-  padding: 1.6rem 1.45rem 1.35rem 1.45rem !important;
-  box-shadow: 0 16px 48px rgba(0, 16, 64, 0.35) !important;
+  padding: 1.1rem 1.2rem 1rem 1.2rem !important;
+  box-shadow: 0 14px 40px rgba(0, 16, 64, 0.32) !important;
+  margin: 0 !important;
+}
+div[data-testid="stForm"] > div[data-testid="stVerticalBlock"] {
+  gap: 0.55rem !important;
+}
+div[data-testid="stForm"] [data-testid="stElementContainer"],
+div[data-testid="stForm"] [data-testid="stFormSubmitButton"],
+div[data-testid="stForm"] div[data-testid="stTextInput"] {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 
+div[data-testid="stForm"] [data-testid="stMarkdownContainer"]:has(.rw-login-card-title) {
+  text-align: center !important;
+  width: 100%;
+}
 .rw-login-card-title {
-  margin: 0 0 1.05rem 0;
-  font-size: 1.1rem;
+  display: block;
+  margin: 0 0 0.15rem 0;
+  font-size: 1.05rem;
   font-weight: 700;
   color: #0F172A !important;
-  font-family: "IBM Plex Sans", system-ui, sans-serif !important;
+  font-family: "DM Sans", "Source Sans 3", system-ui, sans-serif !important;
+  text-align: center !important;
+  letter-spacing: -0.02em;
 }
 
 .rw-login-hint {
-  margin: 1rem 0 0 0;
+  margin: 0.65rem 0 0 0;
   text-align: center;
   color: #C7D9FF !important;
   font-size: 0.78rem;
