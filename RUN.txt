@@ -15,7 +15,7 @@ Open: http://127.0.0.1:8765
 
 Or:  ./run_demo.sh
 
-Demo login (session-only spoof gate, not real auth):
+Demo login:
   Username: ops.demo
   Password: reorg-demo
 

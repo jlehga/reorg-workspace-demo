@@ -98,9 +98,14 @@ div[data-testid="stAlert"] {
   border-radius: 8px;
 }
 
+/* Minimize Streamlit chrome / hide Deploy */
 #MainMenu { visibility: hidden; }
 footer { visibility: hidden; }
 header[data-testid="stHeader"] { background: transparent; }
+.stDeployButton, [data-testid="stDeployButton"],
+div[data-testid="stToolbar"] button[kind="header"],
+div[data-testid="stToolbar"] a { display: none !important; }
+div[data-testid="stDecoration"] { display: none !important; }
 </style>
 """
 
@@ -123,10 +128,7 @@ def render_login() -> None:
         """
         <div class="rc-login-card">
           <p class="rc-login-brand">Reorg <span>Case</span></p>
-          <p class="rc-login-sub">
-            Sign in to the demo workspace. This gate is session-only
-            (no real authentication).
-          </p>
+          <p class="rc-login-sub">Sign in</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -157,6 +159,6 @@ def render_login() -> None:
             st.rerun()
 
     st.markdown(
-        '<p class="rc-login-hint">Demo credentials are listed in RUN.txt.</p>',
+        '<p class="rc-login-hint">Demo credentials are in RUN.txt.</p>',
         unsafe_allow_html=True,
     )

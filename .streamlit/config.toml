@@ -6,5 +6,9 @@ secondaryBackgroundColor = "#F8FAFC"
 textColor = "#0F172A"
 font = "sans serif"
 
+[client]
+# Hide Deploy / reduce Streamlit chrome in demos
+toolbarMode = "minimal"
+
 [server]
 headless = true

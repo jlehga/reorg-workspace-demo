@@ -504,9 +504,13 @@ section[data-testid="stSidebar"] h4 {
   padding: 0.65rem 0.75rem;
 }
 
-/* Hide default Streamlit chrome noise a bit */
+/* Minimize Streamlit chrome / hide Deploy */
 #MainMenu { visibility: hidden; }
 footer { visibility: hidden; }
 header[data-testid="stHeader"] { background: transparent; }
+.stDeployButton, [data-testid="stDeployButton"],
+div[data-testid="stToolbar"] button[kind="header"],
+div[data-testid="stToolbar"] a { display: none !important; }
+div[data-testid="stDecoration"] { display: none !important; }
 </style>
 """

@@ -43,7 +43,7 @@ Or: `./run_demo.sh`
 
 Open [http://127.0.0.1:8765](http://127.0.0.1:8765).
 
-Demo login (session-only): **ops.demo** / **reorg-demo** (see RUN.txt).
+Demo login: **ops.demo** / **reorg-demo** (see RUN.txt).
 
 `OPENAI_API_KEY` is optional. Without it, a deterministic demo extractor drives the scenarios.
 
