@@ -23,26 +23,7 @@ https://jlehga-reorg-workspace-demo-app-ggbknu.streamlit.app/
 • run_demo.sh        — optional one-command local start
 
 ────────────────────────────────────────────────────────────────
-3. IF THE LIVE DEMO IS UNAVAILABLE
-────────────────────────────────────────────────────────────────
-Unzip the attached reorg-execution-system.zip (or this archive), then:
-
-  python -m venv .venv
-  source .venv/bin/activate          # Windows: .venv\Scripts\activate
-  pip install -r requirements.txt
-  streamlit run app.py --server.port 8765
-  # or: ./run_demo.sh
-
-Open http://127.0.0.1:8765 and sign in with demouser / test123.
-
-────────────────────────────────────────────────────────────────
-4. SOURCE CONTROL (optional)
-────────────────────────────────────────────────────────────────
-Code is also in a private GitHub repo (access on request):
-https://github.com/jlehga/reorg-execution-system
-
-────────────────────────────────────────────────────────────────
-5. 60-SECOND DEMO PATH
+3. 60-SECOND DEMO PATH
 ────────────────────────────────────────────────────────────────
 1. Sign in with demouser / test123
 2. Workspace home → New Reorg Case
@@ -58,6 +39,25 @@ https://github.com/jlehga/reorg-execution-system
 Optional failure beat: before Mark complete, check
 “Simulate incorrect GL entry (demo failure path)” → reconciliation fails.
 Optional Scenario B: load Scenario B for ambiguity / validation failures.
+
+────────────────────────────────────────────────────────────────
+4. IF THE LIVE DEMO IS UNAVAILABLE
+────────────────────────────────────────────────────────────────
+Unzip the attached reorg-execution-system.zip (or this archive), then:
+
+  python -m venv .venv
+  source .venv/bin/activate          # Windows: .venv\Scripts\activate
+  pip install -r requirements.txt
+  streamlit run app.py --server.port 8765
+  # or: ./run_demo.sh
+
+Open http://127.0.0.1:8765 and sign in with demouser / test123.
+
+────────────────────────────────────────────────────────────────
+5. SOURCE CONTROL (optional)
+────────────────────────────────────────────────────────────────
+Code is also in a private GitHub repo (access on request):
+https://github.com/jlehga/reorg-execution-system
 
 ────────────────────────────────────────────────────────────────
 6. OPTIONAL LLM

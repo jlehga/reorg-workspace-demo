@@ -50,35 +50,63 @@ html, body, .stApp, .stApp * {
 .block-container [data-testid="stMarkdownContainer"] {
   margin: 0 !important;
   padding: 0 !important;
+  width: 100% !important;
+  text-align: center !important;
 }
 .block-container [data-testid="stMarkdownContainer"] p {
   margin: 0 !important;
+  text-align: center !important;
+}
+
+/* Force brand markdown wrappers full-width + centered (Streamlit nests oddly) */
+.block-container [data-testid="stElementContainer"]:has(.rw-portal-brand),
+.block-container [data-testid="stMarkdown"]:has(.rw-portal-brand),
+.block-container [data-testid="stMarkdownContainer"]:has(.rw-portal-brand),
+.block-container [data-testid="stMarkdownContainer"]:has(.rw-portal-brand) > div,
+.block-container [data-testid="stMarkdownContainer"]:has(.rw-portal-brand) p,
+.block-container [data-testid="stMarkdownContainer"]:has(.rw-portal-brand) h1 {
+  width: 100% !important;
+  max-width: 100% !important;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  justify-content: center !important;
 }
 
 .rw-portal-brand {
-  text-align: center;
-  margin: 0 auto 0.5rem auto;
-  width: 100%;
+  display: block !important;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  margin-top: 0 !important;
+  margin-bottom: 0.5rem !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 .rw-portal-brand h1 {
+  display: block !important;
   font-family: "DM Sans", "Source Sans 3", system-ui, sans-serif !important;
-  font-weight: 700;
-  font-size: 1.85rem;
-  line-height: 1.15;
+  font-weight: 700 !important;
+  font-size: 1.85rem !important;
+  line-height: 1.15 !important;
   color: #FFFFFF !important;
-  margin: 0 0 0.25rem 0;
-  letter-spacing: -0.03em;
-  text-align: center;
+  margin: 0 auto 0.25rem auto !important;
+  letter-spacing: -0.03em !important;
+  text-align: center !important;
+  width: 100% !important;
 }
 .rw-portal-brand h1 span { color: #B8D0FF !important; }
 .rw-portal-brand p {
-  margin: 0 auto;
+  display: block !important;
+  margin: 0 auto !important;
   color: #D6E4FF !important;
-  font-size: 0.88rem;
-  line-height: 1.35;
-  text-align: center;
-  font-weight: 400;
-  max-width: 22rem;
+  font-size: 0.88rem !important;
+  line-height: 1.35 !important;
+  text-align: center !important;
+  font-weight: 400 !important;
+  width: 100% !important;
+  max-width: 22rem !important;
 }
 
 /* One cohesive white card = the form wrapping title + inputs + button */
@@ -100,27 +128,36 @@ div[data-testid="stForm"] div[data-testid="stTextInput"] {
   margin-bottom: 0 !important;
 }
 
-div[data-testid="stForm"] [data-testid="stMarkdownContainer"]:has(.rw-login-card-title) {
+/* Center "Sign in" inside the form card */
+div[data-testid="stForm"] [data-testid="stElementContainer"]:has(.rw-login-card-title),
+div[data-testid="stForm"] [data-testid="stMarkdown"]:has(.rw-login-card-title),
+div[data-testid="stForm"] [data-testid="stMarkdownContainer"]:has(.rw-login-card-title),
+div[data-testid="stForm"] [data-testid="stMarkdownContainer"]:has(.rw-login-card-title) p {
   text-align: center !important;
-  width: 100%;
+  width: 100% !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 .rw-login-card-title {
-  display: block;
-  margin: 0 0 0.15rem 0;
-  font-size: 1.05rem;
-  font-weight: 700;
+  display: block !important;
+  margin: 0 auto 0.15rem auto !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
   color: #0F172A !important;
   font-family: "DM Sans", "Source Sans 3", system-ui, sans-serif !important;
   text-align: center !important;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.02em !important;
+  width: 100% !important;
 }
 
 .rw-login-hint {
-  margin: 0.65rem 0 0 0;
-  text-align: center;
+  display: block !important;
+  margin: 0.65rem auto 0 auto !important;
+  text-align: center !important;
   color: #C7D9FF !important;
-  font-size: 0.78rem;
-  line-height: 1.4;
+  font-size: 0.78rem !important;
+  line-height: 1.4 !important;
+  width: 100% !important;
 }
 
 div[data-testid="stForm"] div[data-testid="stTextInput"] label p,
@@ -128,6 +165,7 @@ div[data-testid="stForm"] div[data-testid="stTextInput"] label span,
 div[data-testid="stForm"] [data-testid="stWidgetLabel"] p {
   color: #1E293B !important;
   font-weight: 600 !important;
+  text-align: left !important;
 }
 div[data-testid="stForm"] div[data-testid="stTextInput"] input {
   background: #F8FAFC !important;
@@ -242,9 +280,9 @@ def render_login() -> None:
 
     st.markdown(
         """
-        <div class="rw-portal-brand">
-          <h1>Reorg <span>Workspace</span></h1>
-          <p>Governed reorganization cases for HR, Finance, and Ops</p>
+        <div class="rw-portal-brand" style="text-align:center;width:100%;margin-left:auto;margin-right:auto;display:block;">
+          <h1 style="text-align:center;width:100%;margin:0 auto 0.25rem auto;display:block;">Reorg <span>Workspace</span></h1>
+          <p style="text-align:center;width:100%;margin:0 auto;display:block;max-width:22rem;">Governed reorganization cases for HR, Finance, and Ops</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -252,7 +290,7 @@ def render_login() -> None:
 
     with st.form("login_form", clear_on_submit=False):
         st.markdown(
-            '<p class="rw-login-card-title">Sign in</p>',
+            '<p class="rw-login-card-title" style="text-align:center;width:100%;margin:0 auto 0.15rem auto;display:block;">Sign in</p>',
             unsafe_allow_html=True,
         )
         username = st.text_input("Username", key="login_username", autocomplete="username")
@@ -286,6 +324,6 @@ def render_login() -> None:
             st.rerun()
 
     st.markdown(
-        '<p class="rw-login-hint">Demo credentials are in RUN.txt.</p>',
+        '<p class="rw-login-hint" style="text-align:center;width:100%;margin:0.65rem auto 0 auto;display:block;">Demo credentials are in RUN.txt.</p>',
         unsafe_allow_html=True,
     )

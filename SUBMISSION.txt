@@ -10,19 +10,27 @@ How to review
    https://jlehga-reorg-workspace-demo-app-ggbknu.streamlit.app/
    Login: demouser / test123
 
-2. Design document (in this zip):
-   docs/design.md
+2. What’s in this package / design doc:
+   docs/design.md — design deliverable (read this)
+   This zip also has RUN.txt, SUBMISSION.txt, and the Streamlit prototype
+   (app.py, app/, requirements.txt, …).
 
-3. Prototype source:
-   This zip (app.py, app/, requirements.txt, …)
+3. 60-second demo path:
+   See RUN.txt section 3 (Sign in → New Reorg Case → Analyze → Approve →
+   Execute → Reconcile → Completed).
 
-4. Version control (optional; access on request):
+4. Local run — only if the live demo is unavailable:
+   See RUN.txt section 4 (venv → pip install → streamlit on port 8765).
+
+5. Version control (optional; access on request):
    Private repo where this work is maintained:
    https://github.com/jlehga/reorg-execution-system
    Not required for the design review or walkthrough.
 
-5. Local run — only if the live demo is unavailable:
-   See RUN.txt in this zip (venv → pip install → streamlit on port 8765).
+6. Optional LLM:
+   LLM_API_KEY enables live LLM interpretation of freeform text; without
+   it, a built-in demo parser is used. Optional LLM_MODEL / LLM_BASE_URL.
+   The model does not approve or execute changes.
 
 What’s in the zip
 -----------------
@@ -41,7 +49,3 @@ on failed GL reconciliation; Scenario B surfaces ambiguity and
 validation failures.
 
 Architecture, trade-offs, and scope: docs/design.md.
-
-Optional LLM_API_KEY enables live LLM interpretation of freeform text;
-without it, a built-in demo parser is used. Optional LLM_MODEL /
-LLM_BASE_URL. The model does not approve or execute changes.
