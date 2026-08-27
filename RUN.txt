@@ -21,8 +21,13 @@ Demo login:
 
 After Sign in, use the sidebar Sign out to return to the login screen.
 
-OPENAI_API_KEY is optional. Without it, a deterministic demo extractor runs
-(fine for the walkthrough). With it, interpretation uses OpenAI.
+Optional: LLM for interpretation (the app calling a model to parse freeform text)
+  export LLM_API_KEY=your_key_here
+  # Optional: LLM_MODEL=gpt-4o-mini   LLM_BASE_URL=https://api.openai.com/v1
+
+Without LLM_API_KEY the demo still works using a built-in deterministic parser
+(no external model call). With the key set, Analyze Reorg uses a live LLM only
+for structured extraction. The model does not approve or execute changes.
 
 ════════════════════════════════════════════════════════════════
 60-SECOND DEMO PATH

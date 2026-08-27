@@ -19,4 +19,6 @@ surfaces ambiguity and validation failures.
 
 For architecture, trade-offs, and scope, see docs/design.md. To clone, install,
 and follow the ~60-second demo path (Streamlit on port 8765), use RUN.txt.
-OPENAI_API_KEY is optional; without it, a deterministic demo extractor is used.
+Optional LLM_API_KEY lets the app call a live LLM for freeform text interpretation
+only; without it, a built-in demo parser is used. The model does not approve or
+execute changes.

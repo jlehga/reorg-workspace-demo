@@ -279,15 +279,28 @@ class DeterministicExtractor(LLMProvider):
 
 
 class OpenAIProvider(LLMProvider):
-    """Optional OpenAI structured extraction when OPENAI_API_KEY is set."""
+    """
+    Live LLM structured extraction via an OpenAI-compatible API.
 
-    name = "openai"
+    Uses LLM_API_KEY (preferred) or OPENAI_API_KEY. This is only for the app's
+    interpretation step (freeform text → typed ExtractedRequest), not for
+    approvals or system writes.
+    """
 
-    def __init__(self, model: str | None = None) -> None:
+    name = "llm"
+
+    def __init__(self, model: str | None = None, api_key: str | None = None) -> None:
         from openai import OpenAI
 
-        self.model = model or os.getenv("OPENAI_MODEL", "gpt-4o-mini")
-        self.client = OpenAI()
+        key = api_key or os.getenv("LLM_API_KEY") or os.getenv("OPENAI_API_KEY")
+        self.model = (
+            model
+            or os.getenv("LLM_MODEL")
+            or os.getenv("OPENAI_MODEL")
+            or "gpt-4o-mini"
+        )
+        base_url = os.getenv("LLM_BASE_URL") or None
+        self.client = OpenAI(api_key=key, base_url=base_url) if base_url else OpenAI(api_key=key)
 
     def extract(self, raw_text: str) -> ExtractedRequest:
         safe_text = redact_for_prompt(raw_text)
@@ -319,9 +332,19 @@ class OpenAIProvider(LLMProvider):
         return ExtractedRequest.model_validate(data)
 
 
+def _llm_api_key() -> str | None:
+    return os.getenv("LLM_API_KEY") or os.getenv("OPENAI_API_KEY")
+
+
 def get_llm_provider() -> LLMProvider:
-    """Prefer live OpenAI when credentials exist; otherwise deterministic demo extractor."""
-    if os.getenv("OPENAI_API_KEY"):
+    """
+    Use a live LLM when LLM_API_KEY (or OPENAI_API_KEY) is set.
+
+    Otherwise fall back to the deterministic demo extractor so the walkthrough
+    runs with no credentials. The LLM is only used to interpret freeform intake;
+    it never authorizes or executes changes.
+    """
+    if _llm_api_key():
         try:
             return OpenAIProvider()
         except Exception:

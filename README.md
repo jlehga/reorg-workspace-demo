@@ -45,7 +45,9 @@ Open [http://127.0.0.1:8765](http://127.0.0.1:8765).
 
 Demo login: **ops.demo** / **reorg-demo** (see RUN.txt).
 
-`OPENAI_API_KEY` is optional. Without it, a deterministic demo extractor drives the scenarios.
+Optional `LLM_API_KEY`: lets the app call a live LLM to interpret freeform reorg
+text into a structured case. Without it, a built-in deterministic parser runs the
+demo. The model is not used for approvals or system writes.
 
 ### Tests
 

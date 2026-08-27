@@ -111,7 +111,7 @@ def main() -> None:
         st.markdown("---")
         st.caption(
             f"Extractor: `{wf.interpreter.provider.name}` · "
-            "Set `OPENAI_API_KEY` to use live LLM extraction."
+            "Set `LLM_API_KEY` to have the app call a live LLM for interpretation."
         )
         if st.button("Reset workspace", use_container_width=True):
             st.session_state.workflow = ReorgWorkflow()
