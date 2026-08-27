@@ -28,26 +28,19 @@ from app.ui.components import (
     render_plan,
     render_reconciliation,
     render_validation,
+    stage_header,
 )
+from app.ui.theme import THEME_CSS
 from app.workflow.engine import ReorgWorkflow
 
 st.set_page_config(
     page_title="Reorg Case",
-    page_icon="🗂️",
+    page_icon="📋",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
-# Avoid broken emoji — use text
-st.markdown(
-    """
-    <style>
-    .block-container { padding-top: 1.5rem; }
-    div[data-testid="stMetricValue"] { font-size: 1.4rem; }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+st.markdown(THEME_CSS, unsafe_allow_html=True)
 
 
 def _init_state() -> None:
@@ -63,18 +56,27 @@ def main() -> None:
     _init_state()
     wf: ReorgWorkflow = st.session_state.workflow
 
-    st.title("Reorg Case")
-    st.caption(
-        "Agents interpret and plan · Policies authorize · Tools execute · "
-        "Humans resolve ambiguity · The system verifies the result"
+    st.markdown(
+        """
+        <div class="rc-brand">
+          <h1 class="rc-brand-name">Reorg <span>Case</span></h1>
+          <p class="rc-brand-tagline">
+            Turn freeform reorg requests into a governed case —
+            interpret, validate, approve, execute, and reconcile across HR and Finance systems.
+          </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
     with st.sidebar:
-        st.header("Demo controls")
+        st.markdown('<p class="rc-sidebar-label">Demo controls</p>', unsafe_allow_html=True)
+        st.markdown("#### Scenario")
         scenario_key = st.selectbox(
             "Load scenario",
             options=list(SCENARIOS.keys()),
             format_func=lambda k: SCENARIOS[k]["label"],
+            label_visibility="collapsed",
         )
         if st.button("Load scenario text", use_container_width=True):
             st.session_state.raw_text = SCENARIOS[scenario_key]["text"]
@@ -83,7 +85,13 @@ def main() -> None:
             st.rerun()
 
         st.markdown("---")
-        st.markdown(f"**Scenario notes**\n\n{SCENARIOS[scenario_key]['notes']}")
+        st.markdown('<p class="rc-sidebar-label">Scenario notes</p>', unsafe_allow_html=True)
+        from html import escape as _esc
+
+        st.markdown(
+            f'<div class="rc-sidebar-notes">{_esc(SCENARIOS[scenario_key]["notes"])}</div>',
+            unsafe_allow_html=True,
+        )
         st.markdown("---")
         st.caption(
             f"Extractor: `{wf.interpreter.provider.name}` · "
@@ -100,19 +108,20 @@ def main() -> None:
     tab_submit, tab_case, tab_plan, tab_exec, tab_recon, tab_audit = st.tabs(
         [
             "1. Submit",
-            "2. Reorg Case",
-            "3. Plan & Approve",
-            "4. Execution",
-            "5. Reconciliation",
+            "2. Review case",
+            "3. Plan & approve",
+            "4. Execute",
+            "5. Reconcile",
             "6. Audit",
         ]
     )
 
     with tab_submit:
-        st.subheader("Submit reorg request")
-        st.write(
-            "Reorg changes arrive as freeform text — email, Slack, or a document. "
-            "There is no structured event to subscribe to."
+        stage_header(
+            "Stage 1 · Intake",
+            "Submit reorg request",
+            "Paste the freeform request (email, Slack, or document). "
+            "There is no structured event to subscribe to — analysis starts here.",
         )
         raw = st.text_area(
             "Freeform reorg request",
@@ -122,7 +131,7 @@ def main() -> None:
         )
         st.session_state.raw_text = raw
 
-        if st.button("Analyze Reorg", type="primary"):
+        if st.button("Analyze reorg", type="primary"):
             if not raw.strip():
                 st.error("Paste a reorg request first.")
             else:
@@ -134,7 +143,7 @@ def main() -> None:
                     st.session_state.case = wf.analyze(new_case)
                 st.success(
                     f"Created case {st.session_state.case.id}. "
-                    "Review validation and the proposed plan."
+                    "Open Review case to check validation, then Plan & approve."
                 )
                 st.rerun()
 
@@ -147,10 +156,11 @@ def main() -> None:
     case_badge(case)
 
     with tab_case:
-        st.subheader("Interpreted Reorg Case")
-        st.write(
+        stage_header(
+            "Stage 2 · Interpret & validate",
+            "Review the Reorg Case",
             "The model proposes structure. Authoritative systems verify. "
-            "Natural-language approval claims are **not** execution permission."
+            "Natural-language approval claims are not execution permission.",
         )
         if case.extracted_request and case.validation:
             render_validation(case)
@@ -158,15 +168,20 @@ def main() -> None:
             st.code(case.source.raw_text)
 
     with tab_plan:
-        st.subheader("Proposed execution plan")
+        stage_header(
+            "Stage 3 · Plan & approve",
+            "Proposed execution plan",
+            "Review the dependency-aware plan, unresolved risks, and required approvals "
+            "before any system is updated.",
+        )
         if not case.change_plan:
             st.warning("No plan generated.")
         else:
             render_plan(case)
             st.markdown("---")
-            st.subheader("Approval gate")
+            st.markdown("#### Approval gate")
             st.write(
-                "Why approval is required, what will happen after approval, "
+                "Policy determines why approval is required, what runs after approval, "
                 "and what remains unresolved."
             )
             render_approvals(case)
@@ -181,7 +196,7 @@ def main() -> None:
             )
 
             if can_approve and case.change_plan:
-                st.markdown("#### Approve plan")
+                st.markdown("#### Grant approvals")
                 st.write(
                     "After approval the system will: update HRIS → headcount & cost "
                     "allocation → create a **manual GL mapping task** → reporting → reconcile."
@@ -195,13 +210,18 @@ def main() -> None:
                     "Approver identity (demo)",
                     value="hr.ops.lead@example.com",
                 )
-                if st.button("Approve Plan", type="primary"):
+                if st.button("Approve plan", type="primary"):
                     st.session_state.case = wf.approve(case, granted_by=granted_by)
-                    st.success("Approvals granted. Proceed to Execution.")
+                    st.success("Approvals granted. Continue to Execute.")
                     st.rerun()
 
     with tab_exec:
-        st.subheader("Execution status")
+        stage_header(
+            "Stage 4 · Execute",
+            "Run the approved plan",
+            "Automated adapters update connected systems. Steps without an API pause "
+            "for a named human owner — the workflow stays owned by the case.",
+        )
         if not case.change_plan:
             st.info("No plan yet.")
         else:
@@ -228,11 +248,10 @@ def main() -> None:
             ]
             if pending_manual or case.status == CaseStatus.NEEDS_HUMAN_ACTION:
                 st.markdown("---")
-                st.subheader("Human-mediated step (no API)")
+                st.markdown("#### Manual GL mapping")
                 st.write(
-                    "Automation does not mean removing humans — it means removing "
-                    "humans as the orchestration layer. The system owns the workflow; "
-                    "Finance Operations is the actuator for GL mapping."
+                    "GL mapping has no API in this prototype. Finance Operations completes "
+                    "the entry; the case tracks the task and continues when marked done."
                 )
                 render_human_tasks(case)
 
@@ -259,7 +278,7 @@ def main() -> None:
                     value=False,
                     help="Writes the old cost center into GL to show reconciliation failure.",
                 )
-                if st.button("Mark Complete", type="primary"):
+                if st.button("Mark complete", type="primary"):
                     st.session_state.case = wf.complete_manual_gl(
                         case,
                         entered_cost_center=entered or expected_cc,
@@ -268,16 +287,21 @@ def main() -> None:
                     st.rerun()
 
     with tab_recon:
-        st.subheader("Reconciliation")
-        st.write(
+        stage_header(
+            "Stage 5 · Reconcile",
+            "Expected vs observed",
             "Completion means expected state matches observed state — "
-            "not merely that every task reported success."
+            "not merely that every task reported success.",
         )
         render_reconciliation(case)
 
     with tab_audit:
-        st.subheader("Audit trail")
-        st.caption("Sensitive raw values are minimized; events record decisions and mutations.")
+        stage_header(
+            "Stage 6 · Audit",
+            "Decision and mutation trail",
+            "Sensitive raw values are minimized. Events record interpretation, "
+            "approvals, writes, and reconciliation outcomes.",
+        )
         render_audit(case)
 
 

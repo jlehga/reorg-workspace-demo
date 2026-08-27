@@ -2,34 +2,57 @@
 
 from __future__ import annotations
 
+import html
+
 import streamlit as st
 
 from app.models.case import ReorgCase
 from app.models.enums import ActionStatus, CaseStatus, IntegrationType, ReconciliationStatus
 
 
-STATUS_COLORS = {
-    CaseStatus.DRAFT: "gray",
-    CaseStatus.INTERPRETED: "blue",
-    CaseStatus.VALIDATED: "blue",
-    CaseStatus.NEEDS_REVIEW: "orange",
-    CaseStatus.PLANNED: "blue",
-    CaseStatus.AWAITING_APPROVAL: "orange",
-    CaseStatus.APPROVED: "green",
-    CaseStatus.EXECUTING: "blue",
-    CaseStatus.NEEDS_HUMAN_ACTION: "orange",
-    CaseStatus.RECONCILING: "blue",
-    CaseStatus.COMPLETED: "green",
-    CaseStatus.FAILED: "red",
-    CaseStatus.BLOCKED: "red",
+STATUS_BADGE_CLASS = {
+    CaseStatus.DRAFT: "rc-badge-gray",
+    CaseStatus.INTERPRETED: "rc-badge-blue",
+    CaseStatus.VALIDATED: "rc-badge-blue",
+    CaseStatus.NEEDS_REVIEW: "rc-badge-orange",
+    CaseStatus.PLANNED: "rc-badge-blue",
+    CaseStatus.AWAITING_APPROVAL: "rc-badge-orange",
+    CaseStatus.APPROVED: "rc-badge-green",
+    CaseStatus.EXECUTING: "rc-badge-blue",
+    CaseStatus.NEEDS_HUMAN_ACTION: "rc-badge-orange",
+    CaseStatus.RECONCILING: "rc-badge-blue",
+    CaseStatus.COMPLETED: "rc-badge-green",
+    CaseStatus.FAILED: "rc-badge-red",
+    CaseStatus.BLOCKED: "rc-badge-red",
 }
 
 
-def case_badge(case: ReorgCase) -> None:
-    color = STATUS_COLORS.get(case.status, "gray")
+def stage_header(step: str, title: str, help_text: str) -> None:
+    """Framing block so nontechnical users know what this stage is for."""
     st.markdown(
-        f"**Case** `{case.id}` &nbsp;|&nbsp; **Status:** "
-        f":{color}[{case.status.value.replace('_', ' ').title()}]"
+        f"""
+        <div class="rc-stage">
+          <p class="rc-stage-label">{step}</p>
+          <p class="rc-stage-title">{title}</p>
+          <p class="rc-stage-help">{help_text}</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def case_badge(case: ReorgCase) -> None:
+    badge_cls = STATUS_BADGE_CLASS.get(case.status, "rc-badge-gray")
+    label = case.status.value.replace("_", " ").title()
+    case_id = html.escape(case.id)
+    st.markdown(
+        f"""
+        <div class="rc-status-strip">
+          <span class="rc-status-id">Case <code>{case_id}</code></span>
+          <span class="rc-badge {badge_cls}">{html.escape(label)}</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
 
@@ -48,7 +71,7 @@ def render_validation(case: ReorgCase) -> None:
         "Yes" if val.is_safe_to_plan else "Needs review",
     )
 
-    st.subheader("What the source claims")
+    st.markdown("#### What the source claims")
     if req.summary:
         st.write(req.summary)
     if req.org_changes:
@@ -75,22 +98,43 @@ def render_validation(case: ReorgCase) -> None:
             for a in req.assumptions:
                 st.write(f"• {a}")
 
-    st.subheader("Claimed vs verified approvals")
+    st.markdown("#### Claimed vs verified approvals")
+    st.caption(
+        "Approvals mentioned in email or Slack are treated as claims until "
+        "confirmed in an authoritative approvals ledger."
+    )
     for claim in val.claimed_vs_verified_approvals:
+        role = html.escape(claim.approver_role_or_name)
         if claim.independently_verified:
-            st.success(
-                f"**{claim.approver_role_or_name}** — verified. {claim.verification_note}"
+            note = html.escape(claim.verification_note or "")
+            st.markdown(
+                f"""
+                <div class="rc-callout rc-callout-verified">
+                  <span class="rc-pill rc-pill-ok">Verified</span>
+                  <p class="rc-callout-title">{role}</p>
+                  <p class="rc-callout-body">{note}</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
             )
         else:
-            st.warning(
-                f"**{claim.approver_role_or_name}** — claimed in source, not verified.\n\n"
-                f"> {claim.claim_text}\n\n"
-                f"{claim.verification_note}"
+            note = html.escape(claim.verification_note or "")
+            quote = html.escape(claim.claim_text or "")
+            st.markdown(
+                f"""
+                <div class="rc-callout rc-callout-unverified">
+                  <span class="rc-pill rc-pill-warn">Unverified claim</span>
+                  <p class="rc-callout-title">{role}</p>
+                  <div class="rc-callout-quote">{quote}</div>
+                  <p class="rc-callout-body">{note}</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
             )
     if not val.claimed_vs_verified_approvals:
         st.info("No approval claims detected in source text.")
 
-    st.subheader("Authoritative validation")
+    st.markdown("#### Authoritative validation")
     if val.conflicts:
         st.error("Conflicts with systems of record")
         for c in val.conflicts:
@@ -124,32 +168,64 @@ def render_plan(case: ReorgCase) -> None:
         for r in plan.unresolved_risks:
             st.write(f"• {r}")
 
-    st.markdown("#### Dependency-aware actions")
+    st.markdown("#### Ordered actions")
+    st.caption("Actions run in dependency order. Manual steps pause the workflow until completed.")
     for action in plan.ordered_actions:
-        deps = ", ".join(action.depends_on) if action.depends_on else "—"
-        itype = action.integration_type.value
+        deps = html.escape(", ".join(action.depends_on) if action.depends_on else "—")
         if action.integration_type == IntegrationType.MANUAL:
-            badge = "🛠️ Manual"
+            type_cls = "rc-type-manual"
+            type_label = "Manual"
         elif action.integration_type == IntegrationType.APPROVAL_GATE:
-            badge = "🛂 Approval gate"
+            type_cls = "rc-type-gate"
+            type_label = "Approval gate"
         else:
-            badge = "⚙️ Automated"
+            type_cls = "rc-type-auto"
+            type_label = "Automated"
         st.markdown(
-            f"**`{action.id}`** {badge} — **{action.name}** ({action.system})  \n"
-            f"Depends on: `{deps}`  \n"
-            f"{action.description}"
+            f"""
+            <div class="rc-action">
+              <div class="rc-action-top">
+                <span class="rc-action-id">{html.escape(action.id)}</span>
+                <span class="rc-type {type_cls}">{type_label}</span>
+                <span class="rc-action-name">{html.escape(action.name)}</span>
+              </div>
+              <p class="rc-action-meta">System: {html.escape(action.system)} · Depends on: {deps}</p>
+              <p class="rc-action-desc">{html.escape(action.description)}</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
         )
 
 
 def render_approvals(case: ReorgCase) -> None:
     assert case.change_plan is not None
     for apr in case.change_plan.approval_requirements:
+        role = html.escape(apr.role)
         if apr.granted:
-            st.success(
-                f"**{apr.role}** approved by {apr.granted_by} at {apr.granted_at}"
+            granted_at = html.escape(str(apr.granted_at or "—"))
+            granted_by = html.escape(apr.granted_by or "—")
+            st.markdown(
+                f"""
+                <div class="rc-callout rc-callout-granted">
+                  <span class="rc-pill rc-pill-ok">Granted</span>
+                  <p class="rc-callout-title">{role}</p>
+                  <p class="rc-callout-body">Approved by {granted_by} at {granted_at}</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
             )
         else:
-            st.info(f"**{apr.role} required** — {apr.reason}")
+            reason = html.escape(apr.reason)
+            st.markdown(
+                f"""
+                <div class="rc-callout rc-callout-required">
+                  <span class="rc-pill rc-pill-req">Required</span>
+                  <p class="rc-callout-title">{role} approval</p>
+                  <p class="rc-callout-body">{reason}</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
 
 def _action_status_label(status: ActionStatus) -> str:
@@ -178,8 +254,9 @@ def render_execution(case: ReorgCase) -> None:
 
 def render_human_tasks(case: ReorgCase) -> None:
     for task in case.human_tasks:
+        status_label = task.status.value.replace("_", " ").title()
         st.markdown(f"### {task.title}")
-        st.caption(f"Assigned to: **{task.assigned_role}** · Status: `{task.status.value}`")
+        st.caption(f"Assigned to: **{task.assigned_role}** · Status: {status_label}")
         st.code(task.instructions)
         st.write("Required fields:")
         for k, v in task.required_fields.items():
@@ -188,7 +265,7 @@ def render_human_tasks(case: ReorgCase) -> None:
 
 def render_reconciliation(case: ReorgCase) -> None:
     if not case.reconciliation:
-        st.info("Reconciliation has not run yet.")
+        st.info("Reconciliation has not run yet. Complete execution (including any manual GL step) first.")
         return
     rec = case.reconciliation
     if rec.overall_status == ReconciliationStatus.PASSED:
