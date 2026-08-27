@@ -18,7 +18,7 @@ if str(ROOT) not in sys.path:
 
 import streamlit as st
 
-from app.agents.llm import get_llm_provider, llm_mode_label
+from app.agents.llm import llm_mode_label
 from app.data.scenarios import SCENARIOS, scenario_option_label
 from app.models.enums import CaseStatus
 from app.ui.auth import ensure_auth_cookie, is_authenticated, render_login, sign_out
