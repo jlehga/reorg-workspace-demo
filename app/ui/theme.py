@@ -186,8 +186,7 @@ html, body, .stApp {
 .block-container:has(.rc-home-root) div[data-testid="stVerticalBlockBorderWrapper"] > div {
   gap: 0.65rem !important;
 }
-.rc-past-cases-root,
-.rc-case-col-spacer {
+.rc-past-cases-root {
   display: none;
 }
 
@@ -210,13 +209,19 @@ html, body, .stApp {
   overflow-x: clip;
 }
 /*
- * Status / Action labels must not sit on a horizontal rule.
- * No border on the header row; clear air under the labels before the first case.
+ * Status / Action labels must sit cleanly ABOVE the list divider.
+ * The shared rule's overflow-x:clip can collapse row height below the
+ * label text so border-bottom cuts through "Status"/"Action". Override
+ * overflow, give the header a real min-height, and pad below the labels
+ * before the divider.
  */
 [data-testid="stHorizontalBlock"]:has(.rc-case-col-head) {
-  border-bottom: none !important;
-  padding: 0.1rem 0 0.15rem 0 !important;
-  margin: 0.05rem 0 0.7rem 0 !important;
+  border-bottom: 1px solid var(--rc-border) !important;
+  padding: 0.2rem 0 0.55rem 0 !important;
+  margin: 0.15rem 0 0.45rem 0 !important;
+  min-height: 1.85rem !important;
+  overflow: visible !important;
+  align-items: center !important;
 }
 /* No trailing divider after the last case. */
 [data-testid="stHorizontalBlock"]:has(.rc-case-row-last) {
@@ -253,11 +258,20 @@ html, body, .stApp {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--rc-muted);
-  line-height: 1.2;
-  padding-top: 0.15rem;
+  line-height: 1.25;
+  padding: 0;
+  display: block;
 }
 .rc-case-col-head-action {
   text-align: right;
+}
+/* Keep the empty Case column from collapsing header row metrics. */
+.rc-case-col-spacer {
+  display: block;
+  width: 100%;
+  height: 1.1rem;
+  visibility: hidden;
+  pointer-events: none;
 }
 .rc-case-main {
   display: flex;
@@ -312,9 +326,11 @@ html, body, .stApp {
   }
   [data-testid="stHorizontalBlock"]:has(.rc-case-col-head) {
     gap: 0.45rem !important;
-    border-bottom: none !important;
-    padding: 0.1rem 0 0.1rem 0 !important;
-    margin: 0.05rem 0 0.55rem 0 !important;
+    border-bottom: 1px solid var(--rc-border) !important;
+    padding: 0.15rem 0 0.5rem 0 !important;
+    margin: 0.1rem 0 0.3rem 0 !important;
+    min-height: 1.7rem !important;
+    overflow: visible !important;
   }
   .rc-case-col-head-action {
     text-align: left;
