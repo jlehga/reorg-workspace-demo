@@ -10,6 +10,9 @@ import streamlit as st
 from app.data.scenarios import SCENARIOS, scenario_option_label
 from app.workflow.engine import ReorgWorkflow
 
+# Shared column weights: Case | Status | Action (header + every row).
+_CASE_COLS = [6.2, 1.75, 1.15]
+
 _STATUS_BADGE = {
     "completed": "rc-badge-green",
     "failed": "rc-badge-red",
@@ -58,11 +61,8 @@ def _status_badge(status_raw: str) -> str:
     return f'<span class="rc-badge {klass}">{label}</span>'
 
 
-def _case_row_html(
-    row: dict[str, Any],
-    *,
-    action_html: str | None = "Sample",
-) -> str:
+def _case_main_html(row: dict[str, Any], *, is_last: bool = False) -> str:
+    """Title / meta / optional note for the Past cases main column."""
     title = html.escape(str(row.get("title") or row.get("id") or "Reorg Case"))
     case_id = html.escape(str(row.get("id") or "—"))
     effective = html.escape(str(row.get("effective_date") or "—"))
@@ -74,25 +74,59 @@ def _case_row_html(
     meta = f"{case_id} · Effective {effective}"
     if updated:
         meta += f" · {updated}"
-    openable = action_html is None
-    row_klass = "rc-case-row rc-case-row-openable" if openable else "rc-case-row"
-    action_block = (
-        ""
-        if openable
-        else f'<div class="rc-case-action">{action_html}</div>'
-    )
+    main_klass = "rc-case-main rc-case-row-last" if is_last else "rc-case-main"
     # Single-line HTML: Streamlit markdown breaks multi-block HTML on blank lines.
     return (
-        f'<div class="{row_klass}">'
-        f'<div class="rc-case-main">'
+        f'<div class="{main_klass}">'
         f'<p class="rc-case-title">{title}</p>'
         f'<p class="rc-case-meta">{meta}</p>'
         f"{note_html}"
         f"</div>"
-        f'<div class="rc-case-status">{_status_badge(str(row.get("status", "unknown")))}</div>'
-        f"{action_block}"
-        f"</div>"
     )
+
+
+def _render_past_cases_header() -> None:
+    c_case, c_status, c_action = st.columns(_CASE_COLS)
+    with c_case:
+        st.markdown(
+            '<div class="rc-case-col-spacer" aria-hidden="true"></div>',
+            unsafe_allow_html=True,
+        )
+    with c_status:
+        st.markdown(
+            '<div class="rc-case-col-head">Status</div>',
+            unsafe_allow_html=True,
+        )
+    with c_action:
+        st.markdown(
+            '<div class="rc-case-col-head rc-case-col-head-action">Action</div>',
+            unsafe_allow_html=True,
+        )
+
+
+def _render_past_case_row(row: dict[str, Any], *, is_last: bool) -> None:
+    c_case, c_status, c_action = st.columns(_CASE_COLS)
+    with c_case:
+        st.markdown(_case_main_html(row, is_last=is_last), unsafe_allow_html=True)
+    with c_status:
+        st.markdown(
+            f'<div class="rc-case-status">'
+            f'{_status_badge(str(row.get("status", "unknown")))}'
+            f"</div>",
+            unsafe_allow_html=True,
+        )
+    with c_action:
+        openable = bool(row.get("openable") and row.get("case_ref"))
+        if openable:
+            if st.button("Open", key=f"open_{row['id']}", use_container_width=True):
+                st.session_state.case = row["case_ref"]
+                st.session_state.view = "case"
+                st.rerun()
+        else:
+            st.markdown(
+                '<div class="rc-case-action">Sample</div>',
+                unsafe_allow_html=True,
+            )
 
 
 def render_home() -> None:
@@ -156,7 +190,8 @@ def render_home() -> None:
             st.rerun()
 
     st.markdown(
-        '<div class="rc-home-section-label">Past cases</div>',
+        '<div class="rc-home-section-label">Past cases</div>'
+        '<div class="rc-past-cases-root" aria-hidden="true"></div>',
         unsafe_allow_html=True,
     )
 
@@ -165,38 +200,9 @@ def render_home() -> None:
         st.info("No cases yet. Create one with New Reorg Case.")
         return
 
-    # One HTML list (no blank lines) so Streamlit keeps markup as HTML.
-    sample_rows: list[str] = []
-    openable_rows: list[dict[str, Any]] = []
-    for row in cases:
-        if row.get("openable") and row.get("case_ref"):
-            if sample_rows:
-                st.markdown(
-                    f'<div class="rc-case-list">{"".join(sample_rows)}</div>',
-                    unsafe_allow_html=True,
-                )
-                sample_rows = []
-            openable_rows.append(row)
-            main = st.columns([6.2, 1])
-            with main[0]:
-                st.markdown(
-                    f'<div class="rc-case-list">{_case_row_html(row, action_html=None)}</div>',
-                    unsafe_allow_html=True,
-                )
-            with main[1]:
-                st.markdown('<div class="rc-case-open-slot"></div>', unsafe_allow_html=True)
-                if st.button("Open", key=f"open_{row['id']}", use_container_width=True):
-                    st.session_state.case = row["case_ref"]
-                    st.session_state.view = "case"
-                    st.rerun()
-        else:
-            sample_rows.append(_case_row_html(row, action_html="Sample"))
-
-    if sample_rows:
-        st.markdown(
-            f'<div class="rc-case-list">{"".join(sample_rows)}</div>',
-            unsafe_allow_html=True,
-        )
+    _render_past_cases_header()
+    for i, row in enumerate(cases):
+        _render_past_case_row(row, is_last=(i == len(cases) - 1))
 
 
 def upsert_case_index(case) -> None:

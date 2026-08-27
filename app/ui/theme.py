@@ -167,88 +167,143 @@ html, body, .stApp {
   line-height: 1.35 !important;
 }
 .rc-home-section-label {
-  margin: 0.25rem 0 0.2rem 0;
-  padding-top: 0.5rem;
+  margin: 0.35rem 0 0.1rem 0;
+  padding-top: 0.55rem;
   border-top: 1px solid var(--rc-border);
   font-size: 1.02rem;
   font-weight: 600;
   color: var(--rc-ink);
   line-height: 1.25;
 }
-.rc-case-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin: 0.15rem 0 0 0;
+.rc-past-cases-root,
+.rc-case-col-spacer {
+  display: none;
 }
-.rc-case-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 7.25rem 5.25rem;
-  column-gap: 0.85rem;
-  align-items: start;
-  padding: 0.42rem 0;
+[data-testid="stElementContainer"]:has(.rc-past-cases-root) {
+  display: none !important;
+}
+
+/*
+ * Past cases: every row (and the Status/Action header) is a Streamlit
+ * horizontal block with the same column weights. Target by content markers
+ * so New Reorg Case / Quick load columns are untouched.
+ */
+[data-testid="stHorizontalBlock"]:has(.rc-case-main),
+[data-testid="stHorizontalBlock"]:has(.rc-case-col-head) {
+  gap: 0.75rem !important;
+  align-items: start !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  /* Counter parent vertical-block gap so rows read as one list. */
+  margin: -0.22rem 0 !important;
+  padding: 0.62rem 0 !important;
   border-bottom: 1px solid var(--rc-border);
+  overflow-x: clip;
 }
-.rc-case-row.rc-case-row-openable {
-  grid-template-columns: minmax(0, 1fr) 7.25rem;
+[data-testid="stHorizontalBlock"]:has(.rc-case-col-head) {
+  padding: 0.2rem 0 0.42rem 0 !important;
+  margin: 0.1rem 0 -0.12rem 0 !important;
 }
-.rc-case-row:last-child {
+/* No trailing divider after the last case. */
+[data-testid="stHorizontalBlock"]:has(.rc-case-row-last) {
   border-bottom: none;
+}
+[data-testid="stHorizontalBlock"]:has(.rc-case-main) > div[data-testid="stColumn"],
+[data-testid="stHorizontalBlock"]:has(.rc-case-col-head) > div[data-testid="stColumn"] {
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+}
+[data-testid="stHorizontalBlock"]:has(.rc-case-main)
+  > div[data-testid="stColumn"] > div[data-testid="stVerticalBlock"],
+[data-testid="stHorizontalBlock"]:has(.rc-case-col-head)
+  > div[data-testid="stColumn"] > div[data-testid="stVerticalBlock"] {
+  gap: 0 !important;
+}
+/* Open buttons: no extra top margin (home CTAs keep 0.75rem above). */
+[data-testid="stHorizontalBlock"]:has(.rc-case-main)
+  [data-testid="stElementContainer"]:has(.stButton) {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+}
+[data-testid="stHorizontalBlock"]:has(.rc-case-main) .stButton > button {
+  min-height: 2rem !important;
+  padding-top: 0.28rem !important;
+  padding-bottom: 0.28rem !important;
+  font-size: 0.82rem !important;
+}
+.rc-case-col-head {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--rc-muted);
+  line-height: 1.2;
+  padding-top: 0.15rem;
+}
+.rc-case-col-head-action {
+  text-align: right;
 }
 .rc-case-main {
   display: flex;
   flex-direction: column;
-  gap: 0.12rem;
+  gap: 0.22rem;
   min-width: 0;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 .rc-case-title {
   margin: 0;
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--rc-ink);
-  line-height: 1.3;
+  line-height: 1.35;
 }
 .rc-case-meta {
   margin: 0;
   font-size: 0.8rem;
   color: var(--rc-muted);
-  line-height: 1.35;
+  line-height: 1.4;
 }
 .rc-case-note {
-  margin: 0;
+  margin: 0.12rem 0 0 0;
   font-size: 0.8rem;
-  color: var(--rc-muted);
-  line-height: 1.35;
+  color: var(--rc-ink-2);
+  line-height: 1.4;
 }
 .rc-case-status {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  padding-top: 0.1rem;
+  padding-top: 0.18rem;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 .rc-case-action {
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
-  padding-top: 0.12rem;
+  padding-top: 0.38rem;
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--rc-muted);
-}
-.rc-case-open-slot {
-  margin-top: -0.15rem;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 @media (max-width: 720px) {
-  .rc-case-row {
-    grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-areas:
-      "main status"
-      "main action";
-    row-gap: 0.25rem;
+  [data-testid="stHorizontalBlock"]:has(.rc-case-main),
+  [data-testid="stHorizontalBlock"]:has(.rc-case-col-head) {
+    gap: 0.45rem !important;
+    padding: 0.55rem 0 !important;
   }
-  .rc-case-main { grid-area: main; }
-  .rc-case-status { grid-area: status; justify-content: flex-end; }
-  .rc-case-action { grid-area: action; }
+  .rc-case-col-head-action {
+    text-align: left;
+  }
+  .rc-case-action {
+    justify-content: flex-start;
+  }
 }
 
 /* Stage framing */
@@ -499,23 +554,37 @@ section[data-testid="stSidebar"] .stButton > button[data-testid="baseButton-prim
   color: #FFFFFF !important;
 }
 
-/* Sidebar secondary actions: stronger outline on light sidebar */
+/* Sidebar buttons: white / soft-blue outlines on login blue */
 section[data-testid="stSidebar"] .stButton > button {
-  background: #EEF2F7 !important;
-  border: 1.5px solid #475569 !important;
-  color: #0F172A !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.72) !important;
+  color: #FFFFFF !important;
   box-shadow: none !important;
 }
+section[data-testid="stSidebar"] .stButton > button *,
+section[data-testid="stSidebar"] .stButton > button p,
+section[data-testid="stSidebar"] .stButton > button span {
+  color: #FFFFFF !important;
+}
 section[data-testid="stSidebar"] .stButton > button:hover {
-  background: var(--rc-blue-soft) !important;
-  border-color: var(--rc-blue) !important;
-  color: #0F172A !important;
+  background: rgba(232, 240, 255, 0.95) !important;
+  border-color: #FFFFFF !important;
+  color: #0033A0 !important;
+}
+section[data-testid="stSidebar"] .stButton > button:hover *,
+section[data-testid="stSidebar"] .stButton > button:hover p,
+section[data-testid="stSidebar"] .stButton > button:hover span {
+  color: #0033A0 !important;
 }
 section[data-testid="stSidebar"] .stButton > button[kind="primary"],
 section[data-testid="stSidebar"] .stButton > button[data-testid="baseButton-primary"] {
-  background: var(--rc-blue) !important;
-  border-color: var(--rc-blue) !important;
-  color: #fff !important;
+  background: #FFFFFF !important;
+  border-color: #FFFFFF !important;
+  color: #0033A0 !important;
+}
+section[data-testid="stSidebar"] .stButton > button[kind="primary"] *,
+section[data-testid="stSidebar"] .stButton > button[data-testid="baseButton-primary"] * {
+  color: #0033A0 !important;
 }
 
 /*
@@ -637,19 +706,15 @@ div[data-testid="stTextInput"] input {
   border-color: var(--rc-border) !important;
 }
 
-/* Select / checkbox readable on light — slate fill (home + sidebar) */
+/* Select / checkbox readable on light (main canvas) */
 .stSelectbox [data-baseweb="select"] > div,
-div[data-testid="stSelectbox"] [data-baseweb="select"] > div,
-section[data-testid="stSidebar"] .stSelectbox [data-baseweb="select"] > div,
-section[data-testid="stSidebar"] div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
   color: var(--rc-ink) !important;
   background-color: #E8EEF6 !important;
   border-color: #94A3B8 !important;
 }
 .stSelectbox [data-baseweb="select"] > div:hover,
-div[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover,
-section[data-testid="stSidebar"] .stSelectbox [data-baseweb="select"] > div:hover,
-section[data-testid="stSidebar"] div[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
+div[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
   background-color: var(--rc-blue-soft) !important;
   border-color: var(--rc-blue) !important;
 }
@@ -693,10 +758,15 @@ div[data-testid="stAlert"] div {
   color: inherit;
 }
 
-/* Sidebar text readable on light panel */
+/* Sidebar = login blue gradient; light text */
 section[data-testid="stSidebar"] {
-  background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
-  border-right: 1px solid var(--rc-border);
+  background:
+    radial-gradient(700px 420px at 10% -10%, #1A4DFF 0%, transparent 55%),
+    linear-gradient(165deg, #0033A0 0%, #0052FF 48%, #002B7A 100%) !important;
+  border-right: 1px solid rgba(0, 43, 122, 0.55);
+}
+section[data-testid="stSidebar"] > div {
+  background: transparent !important;
 }
 section[data-testid="stSidebar"],
 section[data-testid="stSidebar"] p,
@@ -704,30 +774,99 @@ section[data-testid="stSidebar"] span,
 section[data-testid="stSidebar"] label,
 section[data-testid="stSidebar"] li,
 section[data-testid="stSidebar"] div[data-testid="stMarkdownContainer"],
-section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] {
-  color: var(--rc-ink) !important;
+section[data-testid="stSidebar"] div[data-testid="stMarkdownContainer"] p,
+section[data-testid="stSidebar"] [data-testid="stCaptionContainer"],
+section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] p,
+section[data-testid="stSidebar"] [data-testid="stWidgetLabel"],
+section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p,
+section[data-testid="stSidebar"] [data-testid="stWidgetLabel"] span {
+  color: #E8F0FF !important;
+  opacity: 1 !important;
 }
 section[data-testid="stSidebar"] h1,
 section[data-testid="stSidebar"] h2,
 section[data-testid="stSidebar"] h3,
 section[data-testid="stSidebar"] h4 {
   font-family: "IBM Plex Sans", system-ui, sans-serif;
-  color: var(--rc-ink) !important;
+  color: #FFFFFF !important;
+}
+section[data-testid="stSidebar"] hr {
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  margin: 0.65rem 0 !important;
 }
 .rc-sidebar-label {
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--rc-muted) !important;
+  color: #B8D0FF !important;
   margin: 0 0 0.35rem 0;
 }
-/* Extra air under DEMO CONTROLS before Scenario / select */
+.rc-sidebar-mode {
+  margin: 0 0 0.45rem 0 !important;
+  font-size: 0.84rem !important;
+  color: #E8F0FF !important;
+  line-height: 1.35 !important;
+}
+.rc-sidebar-mode strong {
+  color: #FFFFFF !important;
+  font-weight: 650 !important;
+}
+/* Extra air under Demo scenarios before select */
 .rc-demo-controls-label {
   margin: 0 0 0.7rem 0 !important;
 }
 section[data-testid="stSidebar"] .rc-scenario-preview {
   margin: 0.35rem 0 0.55rem 0;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  border-left-color: #B8D0FF !important;
+}
+section[data-testid="stSidebar"] .rc-scenario-preview-label {
+  color: #B8D0FF !important;
+}
+section[data-testid="stSidebar"] .rc-scenario-preview-body {
+  color: #F1F5F9 !important;
+}
+
+/* Sidebar selectbox: light fill on blue */
+section[data-testid="stSidebar"] .stSelectbox [data-baseweb="select"] > div,
+section[data-testid="stSidebar"] div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+  color: #0F172A !important;
+  background-color: #EEF4FF !important;
+  border-color: rgba(255, 255, 255, 0.55) !important;
+}
+section[data-testid="stSidebar"] .stSelectbox [data-baseweb="select"] > div:hover,
+section[data-testid="stSidebar"] div[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
+  background-color: #FFFFFF !important;
+  border-color: #FFFFFF !important;
+}
+section[data-testid="stSidebar"] .stSelectbox svg,
+section[data-testid="stSidebar"] div[data-testid="stSelectbox"] svg {
+  fill: #0033A0 !important;
+  color: #0033A0 !important;
+}
+
+/* Sidebar Settings inputs */
+section[data-testid="stSidebar"] .stTextInput input,
+section[data-testid="stSidebar"] div[data-testid="stTextInput"] input {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  color: #0F172A !important;
+  border-color: rgba(255, 255, 255, 0.55) !important;
+}
+section[data-testid="stSidebar"] [data-testid="stExpander"] {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-radius: 8px !important;
+}
+section[data-testid="stSidebar"] [data-testid="stExpander"] summary,
+section[data-testid="stSidebar"] [data-testid="stExpander"] summary span,
+section[data-testid="stSidebar"] [data-testid="stExpander"] summary p {
+  color: #FFFFFF !important;
+}
+section[data-testid="stSidebar"] [data-testid="stExpander"] details,
+section[data-testid="stSidebar"] [data-testid="stExpander"] div[role="button"] {
+  color: #FFFFFF !important;
 }
 
 /* Minimize Streamlit chrome / hide Deploy */
