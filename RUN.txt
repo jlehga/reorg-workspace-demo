@@ -1,64 +1,71 @@
-════════════════════════════════════════════════════════════════
-TRY THE DEMO (no install required)
-════════════════════════════════════════════════════════════════
-1. Live demo (primary — open this first):
-   https://jlehga-reorg-workspace-demo-app-ggbknu.streamlit.app/
+Reorg Workspace — reviewer quickstart
+=====================================
 
-   Demo login:
-     Username: demouser
-     Password: test123
+You may have received this as an email attachment or inside the source zip.
+Either way, start with the live demo if you can.
 
-2. Design deliverable: docs/design.md
+────────────────────────────────────────────────────────────────
+1. LIVE DEMO (preferred — no install)
+────────────────────────────────────────────────────────────────
+https://jlehga-reorg-workspace-demo-app-ggbknu.streamlit.app/
 
-3. Source (version-controlled; not required to review):
-   Private repo: https://github.com/jlehga/reorg-execution-system
-   Access on request, or use an attached / release zip. Cloning is optional.
+  Username: demouser
+  Password: test123
 
-4. OPTIONAL — only if the live link does not work:
-   Zip (preferred fallback — no clone):
-     Download reorg-execution-system.zip from GitHub Releases:
-       https://github.com/jlehga/reorg-execution-system/releases
-     Or build locally: ./make_zip.sh  →  dist/reorg-execution-system.zip
-     Then: unzip → python -m venv .venv → source .venv/bin/activate
-       → pip install -r requirements.txt
-       → streamlit run app.py --server.port 8765
-       → http://127.0.0.1:8765
+────────────────────────────────────────────────────────────────
+2. WHAT’S IN THIS PACKAGE
+────────────────────────────────────────────────────────────────
+• docs/design.md     — design deliverable (read this)
+• RUN.txt            — this file
+• SUBMISSION.txt     — short cover note
+• app source         — Streamlit prototype (app.py, app/, …)
+• requirements.txt   — Python deps for local fallback
+• run_demo.sh        — optional one-command local start
 
-   Clone & run (only if access has been granted):
-     git clone https://github.com/jlehga/reorg-execution-system.git
-     cd reorg-execution-system
-     python -m venv .venv
-     source .venv/bin/activate          # Windows: .venv\Scripts\activate
-     pip install -r requirements.txt
-     streamlit run app.py --server.port 8765
-     Or: ./run_demo.sh
-     Open: http://127.0.0.1:8765
+────────────────────────────────────────────────────────────────
+3. IF THE LIVE DEMO IS UNAVAILABLE
+────────────────────────────────────────────────────────────────
+Unzip the attached reorg-execution-system.zip (or this archive), then:
 
-Hosting notes: docs/HOSTING.md
+  python -m venv .venv
+  source .venv/bin/activate          # Windows: .venv\Scripts\activate
+  pip install -r requirements.txt
+  streamlit run app.py --server.port 8765
+  # or: ./run_demo.sh
 
-After Sign in you land on Workspace home. Use sidebar Sign out to return
-to the login screen.
+Open http://127.0.0.1:8765 and sign in with demouser / test123.
 
-LLM_API_KEY is optional. Without it, a deterministic demo extractor runs
-(fine for the walkthrough). With a key, interpretation uses a live LLM.
-Optional: LLM_MODEL, LLM_BASE_URL.
+────────────────────────────────────────────────────────────────
+4. SOURCE CONTROL (optional)
+────────────────────────────────────────────────────────────────
+Code is also in a private GitHub repo (access on request):
+https://github.com/jlehga/reorg-execution-system
 
-════════════════════════════════════════════════════════════════
-60-SECOND DEMO PATH
-════════════════════════════════════════════════════════════════
+────────────────────────────────────────────────────────────────
+5. 60-SECOND DEMO PATH
+────────────────────────────────────────────────────────────────
 1. Sign in with demouser / test123
-2. Workspace home → New Reorg Case (or Start from scenario / Scenario A)
-3. Analyze Reorg
-4. Reorg Case: note unverified Finance approval warning
-5. Plan & Approve → Approve Plan
-6. Execution → Run execution → Mark Complete on GL task (CC-4175)
-7. Reconciliation: all Passed → case Completed
-8. Back to workspace to see the case in Past cases
+2. Workspace home → New Reorg Case
+   (or Start from scenario → Scenario A → Load scenario text)
+3. Submit tab → Analyze reorg
+4. Review case → note unverified Finance approval warning
+5. Plan & approve → Approve plan
+6. Execute → Run execution → Mark complete on the GL task (CC-4175)
+7. Reconcile → all Passed → case Completed
+8. ← Back to workspace → case appears under Past cases
 9. (Optional) Audit tab for the event trail
 
-Optional failure beat: before Mark Complete, check "Simulate incorrect GL
-entry" → reconciliation fails / reporting blocked.
+Optional failure beat: before Mark complete, check
+“Simulate incorrect GL entry (demo failure path)” → reconciliation fails.
 Optional Scenario B: load Scenario B for ambiguity / validation failures.
+
+────────────────────────────────────────────────────────────────
+6. OPTIONAL LLM
+────────────────────────────────────────────────────────────────
+LLM_API_KEY is optional. Without it, a deterministic demo extractor runs
+(fine for the walkthrough). With a key, freeform interpretation uses a
+live LLM. Optional: LLM_MODEL, LLM_BASE_URL.
+The model does not approve or execute changes.
 
 Design: docs/design.md
 Tests:  pytest -q

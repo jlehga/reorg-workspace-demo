@@ -1,51 +1,47 @@
-Reorg Execution System: submission for review
-==============================================
+Reorg Execution System — submission
+====================================
 
-Thank you for reviewing this take-home prototype.
+Thank you for reviewing this take-home. Everything you need is either
+linked below or in the attached zip.
 
-How to try it
+How to review
 -------------
 1. Live demo (primary — no install):
    https://jlehga-reorg-workspace-demo-app-ggbknu.streamlit.app/
    Login: demouser / test123
 
-2. Design document (primary design deliverable):
+2. Design document (in this zip):
    docs/design.md
 
-3. Source (version-controlled; not required to review):
-   Private GitHub repository:
+3. Prototype source:
+   This zip (app.py, app/, requirements.txt, …)
+
+4. Version control (optional; access on request):
+   Private repo where this work is maintained:
    https://github.com/jlehga/reorg-execution-system
-   Access available on request, or attach / download a source zip.
-   Reviewers do not need to clone to evaluate the design or walkthrough.
+   Not required for the design review or walkthrough.
 
-4. OPTIONAL — only if the live demo is unavailable:
-   Zip: download reorg-execution-system.zip from
-   https://github.com/jlehga/reorg-execution-system/releases
-   (or build with ./make_zip.sh → dist/reorg-execution-system.zip),
-   then: unzip → python -m venv .venv → pip install -r requirements.txt
-   → streamlit run app.py --server.port 8765 → http://127.0.0.1:8765
+5. Local run — only if the live demo is unavailable:
+   See RUN.txt in this zip (venv → pip install → streamlit on port 8765).
 
-   Clone only if repo access has been granted — see RUN.txt.
-   Full quickstart + 60-second path: RUN.txt
-
-Included materials
-------------------
-• Design document (primary design deliverable): docs/design.md
-• Run / review instructions: RUN.txt
-• Hosting guide: docs/HOSTING.md
-• Source repository (version-controlled; access on request):
-  https://github.com/jlehga/reorg-execution-system
+What’s in the zip
+-----------------
+• docs/design.md   — design deliverable
+• RUN.txt          — quickstart + 60-second demo path
+• SUBMISSION.txt   — this cover note
+• Prototype source — Streamlit app and supporting modules
 
 What the prototype demonstrates
 -------------------------------
-This Streamlit app is a Reorg Workspace portal. After Sign in, operators open
-or start a Reorg Case and walk a cost-center reorg: natural-language intake →
-validated case → approval → task execution → reconciliation and audit trail.
-Scenario A covers the happy path; optional controls show blocked reporting on
-failed GL reconciliation, and Scenario B surfaces ambiguity and validation
-failures.
+Reorg Workspace is an operator portal. After Sign in, open or start a
+Reorg Case and walk a cost-center reorg: natural-language intake →
+validated case → approval → task execution → reconciliation and audit.
+Scenario A is the happy path; optional controls show blocked reporting
+on failed GL reconciliation; Scenario B surfaces ambiguity and
+validation failures.
 
-For architecture, trade-offs, and scope, see docs/design.md. Optional
-LLM_API_KEY lets the app call a live LLM for freeform text interpretation
-only; without it, a built-in demo parser is used. Optional LLM_MODEL /
+Architecture, trade-offs, and scope: docs/design.md.
+
+Optional LLM_API_KEY enables live LLM interpretation of freeform text;
+without it, a built-in demo parser is used. Optional LLM_MODEL /
 LLM_BASE_URL. The model does not approve or execute changes.
