@@ -28,9 +28,9 @@ SCENARIOS = {
         ),
     },
     "scenario_b_failure": {
-        "title": "Payments + Ledger move",
-        "outcome": "Ambiguity / failure",
-        "label": "Payments + Ledger move — Ambiguity / failure",
+        "title": "Ambiguous move",
+        "outcome": "Failure path",
+        "label": "Ambiguous move — Failure path",
         "text": SCENARIO_B_FAILURE.strip(),
         "notes": (
             "Headcount claim (20) does not match Payments membership (14). "

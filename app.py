@@ -8,6 +8,7 @@ Humans resolve ambiguity and high-impact decisions. The system verifies the resu
 from __future__ import annotations
 
 import sys
+from html import escape as html_escape
 from pathlib import Path
 
 # Ensure repo root on path when launched via `streamlit run app.py`
@@ -94,28 +95,30 @@ def _render_sidebar(*, case_view: bool) -> None:
         return
 
     st.markdown("---")
-    st.markdown('<p class="rc-sidebar-label">Demo controls</p>', unsafe_allow_html=True)
-    st.markdown("#### Scenario")
+    st.markdown(
+        '<p class="rc-sidebar-label rc-demo-controls-label">Demo controls</p>',
+        unsafe_allow_html=True,
+    )
     scenario_key = st.selectbox(
-        "Load scenario",
+        "Scenario",
         options=list(SCENARIOS.keys()),
         format_func=scenario_option_label,
-        label_visibility="collapsed",
     )
+    notes = SCENARIOS[scenario_key].get("notes") or ""
+    if notes:
+        st.markdown(
+            f'<div class="rc-scenario-preview">'
+            f'<p class="rc-scenario-preview-label">What to expect</p>'
+            f'<p class="rc-scenario-preview-body">{html_escape(notes)}</p>'
+            f"</div>",
+            unsafe_allow_html=True,
+        )
     if st.button("Load scenario text", use_container_width=True):
         _set_freeform_text(SCENARIOS[scenario_key]["text"])
         st.session_state.case = None
         st.session_state.workflow = ReorgWorkflow()
         st.rerun()
 
-    st.markdown("---")
-    st.markdown('<p class="rc-sidebar-label">Scenario notes</p>', unsafe_allow_html=True)
-    from html import escape as _esc
-
-    st.markdown(
-        f'<div class="rc-sidebar-notes">{_esc(SCENARIOS[scenario_key]["notes"])}</div>',
-        unsafe_allow_html=True,
-    )
     st.markdown("---")
     st.caption(
         f"Extractor: `{wf.interpreter.provider.name}` · "

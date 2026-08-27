@@ -135,7 +135,7 @@ html, body, .stApp {
   transform: none !important;
 }
 .block-container:has(.rc-home-root) [data-testid="stMarkdownContainer"] h3 {
-  margin: 0 0 0.2rem 0 !important;
+  margin: 0 0 0.55rem 0 !important;
   font-size: 1.02rem !important;
   font-weight: 600 !important;
   line-height: 1.25 !important;
@@ -637,15 +637,19 @@ div[data-testid="stTextInput"] input {
   border-color: var(--rc-border) !important;
 }
 
-/* Select / checkbox readable on light — slate fill so dropdowns read as controls */
+/* Select / checkbox readable on light — slate fill (home + sidebar) */
 .stSelectbox [data-baseweb="select"] > div,
-div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+div[data-testid="stSelectbox"] [data-baseweb="select"] > div,
+section[data-testid="stSidebar"] .stSelectbox [data-baseweb="select"] > div,
+section[data-testid="stSidebar"] div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
   color: var(--rc-ink) !important;
   background-color: #E8EEF6 !important;
   border-color: #94A3B8 !important;
 }
 .stSelectbox [data-baseweb="select"] > div:hover,
-div[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
+div[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover,
+section[data-testid="stSidebar"] .stSelectbox [data-baseweb="select"] > div:hover,
+section[data-testid="stSidebar"] div[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
   background-color: var(--rc-blue-soft) !important;
   border-color: var(--rc-blue) !important;
 }
@@ -718,14 +722,12 @@ section[data-testid="stSidebar"] h4 {
   color: var(--rc-muted) !important;
   margin: 0 0 0.35rem 0;
 }
-.rc-sidebar-notes {
-  font-size: 0.85rem;
-  color: var(--rc-ink-2) !important;
-  line-height: 1.45;
-  background: var(--rc-surface);
-  border: 1px solid var(--rc-border);
-  border-radius: var(--rc-radius);
-  padding: 0.65rem 0.75rem;
+/* Extra air under DEMO CONTROLS before Scenario / select */
+.rc-demo-controls-label {
+  margin: 0 0 0.7rem 0 !important;
+}
+section[data-testid="stSidebar"] .rc-scenario-preview {
+  margin: 0.35rem 0 0.55rem 0;
 }
 
 /* Minimize Streamlit chrome / hide Deploy */
