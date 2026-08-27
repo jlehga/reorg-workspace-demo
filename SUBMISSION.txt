@@ -11,11 +11,12 @@ Included materials
 
 What the prototype demonstrates
 -------------------------------
-This Streamlit app walks an HR/Finance operator through a cost-center reorg:
-natural-language intake → validated case → approval → task execution →
-reconciliation and audit trail. Scenario A covers the happy path; optional
-controls show blocked reporting on failed GL reconciliation, and Scenario B
-surfaces ambiguity and validation failures.
+This Streamlit app is a Reorg Workspace portal. After Sign in, operators open
+or start a Reorg Case and walk a cost-center reorg: natural-language intake →
+validated case → approval → task execution → reconciliation and audit trail.
+Scenario A covers the happy path; optional controls show blocked reporting on
+failed GL reconciliation, and Scenario B surfaces ambiguity and validation
+failures.
 
 For architecture, trade-offs, and scope, see docs/design.md. To clone, install,
 and follow the ~60-second demo path (Streamlit on port 8765), use RUN.txt.

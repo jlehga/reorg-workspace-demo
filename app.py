@@ -1,5 +1,5 @@
 """
-Reorg Case: Agentic-Driven Reorganization Prototype
+Reorg Workspace: portal for governed Reorg Cases.
 
 Agents interpret and plan. Policies authorize. Tools execute.
 Humans resolve ambiguity and high-impact decisions. The system verifies the result.
@@ -19,7 +19,7 @@ import streamlit as st
 
 from app.data.scenarios import SCENARIOS
 from app.models.enums import CaseStatus
-from app.ui.auth import ensure_auth_cookie, is_authenticated, render_login, sign_out
+from app.ui.auth import is_authenticated, render_login, sign_out
 from app.ui.components import (
     case_badge,
     render_approvals,
@@ -31,11 +31,12 @@ from app.ui.components import (
     render_validation,
     stage_header,
 )
+from app.ui.home import render_home, seed_demo_cases, upsert_case_index
 from app.ui.theme import THEME_CSS
 from app.workflow.engine import ReorgWorkflow
 
 st.set_page_config(
-    page_title="Reorg Case",
+    page_title="Reorg Workspace",
     page_icon="📋",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -45,23 +46,81 @@ st.set_page_config(
 def _init_state() -> None:
     if "authenticated" not in st.session_state:
         st.session_state.authenticated = False
+    if "view" not in st.session_state:
+        st.session_state.view = "home"
     if "workflow" not in st.session_state:
         st.session_state.workflow = ReorgWorkflow()
     if "case" not in st.session_state:
         st.session_state.case = None
     if "raw_text" not in st.session_state:
         st.session_state.raw_text = SCENARIOS["scenario_a_success"]["text"]
+    if "case_index" not in st.session_state:
+        st.session_state.case_index = []
 
 
-def main() -> None:
-    _init_state()
+def _seed_case_index_if_empty() -> None:
+    if not st.session_state.get("case_index"):
+        st.session_state.case_index = seed_demo_cases()
 
-    if not is_authenticated():
-        render_login()
+
+def _render_sidebar(*, case_view: bool) -> None:
+    wf: ReorgWorkflow = st.session_state.workflow
+    auth_user = st.session_state.get("auth_user", "demo")
+
+    st.markdown('<p class="rc-sidebar-label">Signed in</p>', unsafe_allow_html=True)
+    st.caption(f"`{auth_user}` (demo session)")
+    if st.button("Sign out", use_container_width=True):
+        sign_out()
+        st.rerun()
+
+    if not case_view:
+        st.markdown("---")
+        if st.button("Reset workspace", use_container_width=True):
+            st.session_state.workflow = ReorgWorkflow()
+            st.session_state.case = None
+            st.session_state.raw_text = SCENARIOS["scenario_a_success"]["text"]
+            st.session_state.case_index = seed_demo_cases()
+            st.session_state.view = "home"
+            st.rerun()
         return
 
-    ensure_auth_cookie()
-    st.markdown(THEME_CSS, unsafe_allow_html=True)
+    st.markdown("---")
+    st.markdown('<p class="rc-sidebar-label">Demo controls</p>', unsafe_allow_html=True)
+    st.markdown("#### Scenario")
+    scenario_key = st.selectbox(
+        "Load scenario",
+        options=list(SCENARIOS.keys()),
+        format_func=lambda k: SCENARIOS[k]["label"],
+        label_visibility="collapsed",
+    )
+    if st.button("Load scenario text", use_container_width=True):
+        st.session_state.raw_text = SCENARIOS[scenario_key]["text"]
+        st.session_state.case = None
+        st.session_state.workflow = ReorgWorkflow()
+        st.rerun()
+
+    st.markdown("---")
+    st.markdown('<p class="rc-sidebar-label">Scenario notes</p>', unsafe_allow_html=True)
+    from html import escape as _esc
+
+    st.markdown(
+        f'<div class="rc-sidebar-notes">{_esc(SCENARIOS[scenario_key]["notes"])}</div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown("---")
+    st.caption(
+        f"Extractor: `{wf.interpreter.provider.name}` · "
+        "Set `LLM_API_KEY` (or `OPENAI_API_KEY`) for live LLM extraction."
+    )
+    if st.button("Reset case", use_container_width=True):
+        st.session_state.workflow = ReorgWorkflow()
+        st.session_state.case = None
+        st.session_state.raw_text = SCENARIOS["scenario_a_success"]["text"]
+        st.session_state.view = "home"
+        st.rerun()
+
+
+def _render_case_view() -> None:
     wf: ReorgWorkflow = st.session_state.workflow
 
     st.markdown(
@@ -77,47 +136,9 @@ def main() -> None:
         unsafe_allow_html=True,
     )
 
-    with st.sidebar:
-        auth_user = st.session_state.get("auth_user", "demo")
-        st.markdown('<p class="rc-sidebar-label">Signed in</p>', unsafe_allow_html=True)
-        st.caption(f"`{auth_user}` (demo session)")
-        if st.button("Sign out", use_container_width=True):
-            sign_out()
-            st.rerun()
-
-        st.markdown("---")
-        st.markdown('<p class="rc-sidebar-label">Demo controls</p>', unsafe_allow_html=True)
-        st.markdown("#### Scenario")
-        scenario_key = st.selectbox(
-            "Load scenario",
-            options=list(SCENARIOS.keys()),
-            format_func=lambda k: SCENARIOS[k]["label"],
-            label_visibility="collapsed",
-        )
-        if st.button("Load scenario text", use_container_width=True):
-            st.session_state.raw_text = SCENARIOS[scenario_key]["text"]
-            st.session_state.case = None
-            st.session_state.workflow = ReorgWorkflow()
-            st.rerun()
-
-        st.markdown("---")
-        st.markdown('<p class="rc-sidebar-label">Scenario notes</p>', unsafe_allow_html=True)
-        from html import escape as _esc
-
-        st.markdown(
-            f'<div class="rc-sidebar-notes">{_esc(SCENARIOS[scenario_key]["notes"])}</div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown("---")
-        st.caption(
-            f"Extractor: `{wf.interpreter.provider.name}` · "
-            "Set `LLM_API_KEY` to have the app call a live LLM for interpretation."
-        )
-        if st.button("Reset workspace", use_container_width=True):
-            st.session_state.workflow = ReorgWorkflow()
-            st.session_state.case = None
-            st.session_state.raw_text = SCENARIOS["scenario_a_success"]["text"]
-            st.rerun()
+    if st.button("← Back to workspace"):
+        st.session_state.view = "home"
+        st.rerun()
 
     case = st.session_state.case
     if case is not None:
@@ -159,6 +180,7 @@ def main() -> None:
                     wf = st.session_state.workflow
                     new_case = wf.create_case(raw)
                     st.session_state.case = wf.analyze(new_case)
+                    upsert_case_index(st.session_state.case)
                 st.success(
                     f"Created case {st.session_state.case.id}. "
                     "Open Review case to check validation, then Plan & approve."
@@ -228,6 +250,7 @@ def main() -> None:
                 )
                 if st.button("Approve plan", type="primary"):
                     st.session_state.case = wf.approve(case, granted_by=granted_by)
+                    upsert_case_index(st.session_state.case)
                     st.success("Approvals granted. Continue to Execute.")
                     st.rerun()
 
@@ -253,6 +276,7 @@ def main() -> None:
                 ):
                     if st.button("Run execution", type="primary"):
                         st.session_state.case = wf.execute(case)
+                        upsert_case_index(st.session_state.case)
                         st.rerun()
 
             render_execution(case)
@@ -300,6 +324,7 @@ def main() -> None:
                         entered_cost_center=entered or expected_cc,
                         simulate_incorrect_entry=simulate_bad,
                     )
+                    upsert_case_index(st.session_state.case)
                     st.rerun()
 
     with tab_recon:
@@ -319,6 +344,28 @@ def main() -> None:
             "approvals, writes, and reconciliation outcomes.",
         )
         render_audit(case)
+
+
+def main() -> None:
+    _init_state()
+
+    if not is_authenticated():
+        render_login()
+        return
+
+    _seed_case_index_if_empty()
+    st.markdown(THEME_CSS, unsafe_allow_html=True)
+
+    view = st.session_state.get("view", "home")
+    case_view = view == "case"
+
+    with st.sidebar:
+        _render_sidebar(case_view=case_view)
+
+    if case_view:
+        _render_case_view()
+    else:
+        render_home()
 
 
 if __name__ == "__main__":

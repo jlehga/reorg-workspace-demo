@@ -1,6 +1,6 @@
-# Reorg Case: Agentic-Driven Reorganization Prototype
+# Reorg Workspace: Agentic-Driven Reorganization Prototype
 
-A functional take-home prototype that turns **unstructured reorg intent** into a governed **Reorg Case**: interpret → validate → plan → approve → execute (automated + manual) → reconcile → audit.
+A functional take-home prototype. **Reorg Workspace** is the operator portal; each governed **Reorg Case** turns unstructured reorg intent into interpret → validate → plan → approve → execute (automated + manual) → reconcile → audit.
 
 It is designed for HR, FP&A, Finance, Legal, and Operations stakeholders as much as for engineers. The product should feel **agentic on the inside, simple on the outside**.
 
@@ -43,7 +43,7 @@ Or: `./run_demo.sh`
 
 Open [http://127.0.0.1:8765](http://127.0.0.1:8765).
 
-Demo login: **ops.demo** / **reorg-demo** (see RUN.txt).
+Demo login: **ops.demo** / **reorg-demo** (see RUN.txt). After Sign in: Workspace home → New Reorg Case → case workflow.
 
 Optional `LLM_API_KEY`: lets the app call a live LLM to interpret freeform reorg
 text into a structured case. Without it, a built-in deterministic parser runs the
@@ -60,7 +60,7 @@ pytest -q
 
 ## Demo scenario (60 seconds)
 
-See **[RUN.txt](RUN.txt)** for the short path. Summary: Scenario A → Analyze → note unverified Finance → Approve → Run → Mark Complete GL → Reconciliation. Optional: incorrect-GL failure beat or Scenario B.
+See **[RUN.txt](RUN.txt)** for the short path. Summary: Sign in → Workspace home → New Reorg Case → Analyze → note unverified Finance → Approve → Run → Mark Complete GL → Reconciliation. Optional: incorrect-GL failure beat or Scenario B.
 
 ---
 
