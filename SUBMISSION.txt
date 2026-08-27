@@ -1,4 +1,4 @@
-Reorg Execution System — submission for review
+Reorg Execution System: submission for review
 ==============================================
 
 Thank you for reviewing this take-home prototype.

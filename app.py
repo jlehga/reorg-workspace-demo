@@ -1,5 +1,5 @@
 """
-Reorg Case — Agentic-Driven Reorganization Prototype
+Reorg Case: Agentic-Driven Reorganization Prototype
 
 Agents interpret and plan. Policies authorize. Tools execute.
 Humans resolve ambiguity and high-impact decisions. The system verifies the result.
@@ -19,6 +19,7 @@ import streamlit as st
 
 from app.data.scenarios import SCENARIOS
 from app.models.enums import CaseStatus
+from app.ui.auth import is_authenticated, render_login, sign_out
 from app.ui.components import (
     case_badge,
     render_approvals,
@@ -40,10 +41,10 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-st.markdown(THEME_CSS, unsafe_allow_html=True)
-
 
 def _init_state() -> None:
+    if "authenticated" not in st.session_state:
+        st.session_state.authenticated = False
     if "workflow" not in st.session_state:
         st.session_state.workflow = ReorgWorkflow()
     if "case" not in st.session_state:
@@ -54,6 +55,12 @@ def _init_state() -> None:
 
 def main() -> None:
     _init_state()
+
+    if not is_authenticated():
+        render_login()
+        return
+
+    st.markdown(THEME_CSS, unsafe_allow_html=True)
     wf: ReorgWorkflow = st.session_state.workflow
 
     st.markdown(
@@ -61,7 +68,7 @@ def main() -> None:
         <div class="rc-brand">
           <div class="rc-brand-name">Reorg <span>Case</span></div>
           <p class="rc-brand-tagline">
-            Turn freeform reorg requests into a governed case —
+            Turn freeform reorg requests into a governed case:
             interpret, validate, approve, execute, and reconcile across HR and Finance systems.
           </p>
         </div>
@@ -70,6 +77,14 @@ def main() -> None:
     )
 
     with st.sidebar:
+        auth_user = st.session_state.get("auth_user", "demo")
+        st.markdown('<p class="rc-sidebar-label">Signed in</p>', unsafe_allow_html=True)
+        st.caption(f"`{auth_user}` (demo session)")
+        if st.button("Sign out", use_container_width=True):
+            sign_out()
+            st.rerun()
+
+        st.markdown("---")
         st.markdown('<p class="rc-sidebar-label">Demo controls</p>', unsafe_allow_html=True)
         st.markdown("#### Scenario")
         scenario_key = st.selectbox(
@@ -123,7 +138,7 @@ def main() -> None:
             "Stage 1 · Intake",
             "Submit reorg request",
             "Paste the freeform request (email, Slack, or document). "
-            "There is no structured event to subscribe to — analysis starts here.",
+            "There is no structured event to subscribe to; analysis starts here.",
         )
         raw = st.text_area(
             "Freeform reorg request",
@@ -220,7 +235,7 @@ def main() -> None:
             "Stage 4 · Execute",
             "Run the approved plan",
             "Automated adapters update connected systems. Steps without an API pause "
-            "for a named human owner — the workflow stays owned by the case.",
+            "for a named human owner; the workflow stays owned by the case.",
         )
         if not case.change_plan:
             st.info("No plan yet.")
@@ -229,7 +244,7 @@ def main() -> None:
                 a.granted for a in case.change_plan.approval_requirements if a.required
             )
             if not all_granted:
-                st.warning("Approvals not granted yet — execution is blocked by policy.")
+                st.warning("Approvals not granted yet; execution is blocked by policy.")
             else:
                 if case.status in (
                     CaseStatus.APPROVED,
@@ -290,7 +305,7 @@ def main() -> None:
         stage_header(
             "Stage 5 · Reconcile",
             "Expected vs observed",
-            "Completion means expected state matches observed state — "
+            "Completion means expected state matches observed state, "
             "not merely that every task reported success.",
         )
         render_reconciliation(case)

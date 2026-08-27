@@ -8,9 +8,9 @@ THEME_CSS = """
   --rc-blue: #0052FF;
   --rc-blue-hover: #0041CC;
   --rc-blue-soft: #E8F0FF;
-  --rc-ink: #0B1220;
+  --rc-ink: #0F172A;
   --rc-ink-2: #1E293B;
-  --rc-muted: #64748B;
+  --rc-muted: #475569;
   --rc-border: #E2E8F0;
   --rc-surface: #F8FAFC;
   --rc-white: #FFFFFF;
@@ -23,11 +23,14 @@ THEME_CSS = """
   --rc-info: #1D4ED8;
   --rc-info-bg: #EFF6FF;
   --rc-radius: 8px;
+  --rc-input-bg: #0F172A;
+  --rc-input-fg: #F8FAFC;
 }
 
-html, body, [class*="css"] {
+/* Base: light surface, dark body text. Avoid broad [class*="css"] color overrides. */
+html, body, .stApp {
   font-family: "IBM Plex Sans", system-ui, sans-serif;
-  color: var(--rc-ink);
+  color: var(--rc-ink) !important;
 }
 
 .stApp {
@@ -53,7 +56,7 @@ html, body, [class*="css"] {
   border-bottom: 1px solid var(--rc-border);
 }
 .rc-brand-name {
-  font-family: "IBM Plex Serif", Georgia, serif;
+  font-family: "IBM Plex Serif", Georgia, serif !important;
   font-weight: 700;
   font-size: 2.05rem;
   line-height: 1.15;
@@ -285,6 +288,8 @@ div[data-testid="stMetricLabel"] {
   font-weight: 600 !important;
   font-family: "IBM Plex Sans", system-ui, sans-serif !important;
   border: 1px solid var(--rc-border) !important;
+  color: var(--rc-ink) !important;
+  background: var(--rc-white) !important;
   transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
 }
 .stButton > button[kind="primary"],
@@ -300,65 +305,152 @@ div[data-testid="stMetricLabel"] {
   box-shadow: 0 1px 3px rgba(0, 82, 255, 0.25);
 }
 
-/* Tabs */
+/*
+ * Tabs: Streamlit/BaseWeb dark-theme text can stay white while .stApp is forced light.
+ * Pin inactive tabs to slate and active to brand blue.
+ */
+div[data-testid="stTabs"] [data-baseweb="tab-list"],
 .stTabs [data-baseweb="tab-list"] {
   gap: 0.15rem;
   border-bottom: 1px solid var(--rc-border);
-  background: transparent;
+  background: transparent !important;
 }
-.stTabs [data-baseweb="tab"] {
-  font-weight: 500;
-  color: var(--rc-muted);
+div[data-testid="stTabs"] [data-baseweb="tab"],
+.stTabs [data-baseweb="tab"],
+div[data-testid="stTabs"] button[role="tab"],
+.stTabs button[role="tab"] {
+  font-weight: 500 !important;
+  color: #334155 !important;
   padding: 0.55rem 0.85rem;
   font-family: "IBM Plex Sans", system-ui, sans-serif !important;
+  background: transparent !important;
 }
-.stTabs [aria-selected="true"] {
+div[data-testid="stTabs"] [data-baseweb="tab"] p,
+.stTabs [data-baseweb="tab"] p,
+div[data-testid="stTabs"] button[role="tab"] p,
+.stTabs button[role="tab"] p,
+div[data-testid="stTabs"] [data-baseweb="tab"] span,
+.stTabs [data-baseweb="tab"] span,
+div[data-testid="stTabs"] button[role="tab"] span,
+.stTabs button[role="tab"] span {
+  color: inherit !important;
+}
+div[data-testid="stTabs"] [aria-selected="true"],
+.stTabs [aria-selected="true"],
+div[data-testid="stTabs"] button[role="tab"][aria-selected="true"],
+.stTabs button[role="tab"][aria-selected="true"] {
   color: var(--rc-blue) !important;
-  font-weight: 600;
+  font-weight: 600 !important;
 }
+div[data-testid="stTabs"] [data-baseweb="tab-highlight"],
 .stTabs [data-baseweb="tab-highlight"],
+div[data-testid="stTabs"] [data-baseweb="tab-border"],
 .stTabs [data-baseweb="tab-border"] {
   background-color: var(--rc-blue) !important;
 }
+div[data-testid="stTabs"] [data-baseweb="tab-panel"],
 .stTabs [data-baseweb="tab-panel"] {
   padding-top: 0.75rem;
 }
 
-/* Force brand typography through Streamlit wrappers */
-.rc-brand-name, .rc-brand-name * {
-  font-family: "IBM Plex Serif", Georgia, serif !important;
+/* Widget labels ABOVE inputs: always dark on light page */
+label,
+[data-testid="stWidgetLabel"],
+[data-testid="stWidgetLabel"] p,
+[data-testid="stWidgetLabel"] span,
+[data-testid="stWidgetLabel"] label,
+.stTextArea label,
+.stTextInput label,
+.stSelectbox label,
+.stCheckbox label,
+div[data-testid="stMarkdownContainer"] p,
+div[data-testid="stMarkdownContainer"] li,
+div[data-testid="stMarkdownContainer"] span,
+.stCaption,
+[data-testid="stCaptionContainer"],
+[data-testid="stCaptionContainer"] p {
+  color: var(--rc-ink) !important;
 }
-.stMarkdown, .stText, .stCaption, label, p, span, button {
-  font-family: "IBM Plex Sans", system-ui, sans-serif;
+.stCaption,
+[data-testid="stCaptionContainer"],
+[data-testid="stCaptionContainer"] p {
+  color: var(--rc-muted) !important;
 }
 
-/* Alerts */
+/* Dark textarea with light text inside; labels stay dark above */
+.stTextArea textarea,
+div[data-testid="stTextArea"] textarea {
+  background-color: var(--rc-input-bg) !important;
+  color: var(--rc-input-fg) !important;
+  border: 1px solid #1E293B !important;
+  caret-color: var(--rc-input-fg) !important;
+}
+.stTextArea textarea::placeholder,
+div[data-testid="stTextArea"] textarea::placeholder {
+  color: #94A3B8 !important;
+}
+
+/* Regular text inputs stay light for readability */
+.stTextInput input,
+div[data-testid="stTextInput"] input {
+  color: var(--rc-ink) !important;
+  background-color: var(--rc-white) !important;
+  border-color: var(--rc-border) !important;
+}
+
+/* Select / checkbox readable on light */
+.stSelectbox [data-baseweb="select"] > div,
+div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
+  color: var(--rc-ink) !important;
+  background-color: var(--rc-white) !important;
+}
+.stCheckbox label span,
+div[data-testid="stCheckbox"] label span {
+  color: var(--rc-ink) !important;
+}
+
+/* Alerts / status callouts readable */
 div[data-testid="stAlert"] {
   border-radius: var(--rc-radius);
 }
+div[data-testid="stAlert"] p,
+div[data-testid="stAlert"] span,
+div[data-testid="stAlert"] div {
+  color: inherit;
+}
 
-/* Sidebar */
+/* Sidebar text readable on light panel */
 section[data-testid="stSidebar"] {
   background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
   border-right: 1px solid var(--rc-border);
 }
+section[data-testid="stSidebar"],
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] span,
+section[data-testid="stSidebar"] label,
+section[data-testid="stSidebar"] li,
+section[data-testid="stSidebar"] div[data-testid="stMarkdownContainer"],
+section[data-testid="stSidebar"] [data-testid="stCaptionContainer"] {
+  color: var(--rc-ink) !important;
+}
 section[data-testid="stSidebar"] h1,
 section[data-testid="stSidebar"] h2,
-section[data-testid="stSidebar"] h3 {
+section[data-testid="stSidebar"] h3,
+section[data-testid="stSidebar"] h4 {
   font-family: "IBM Plex Sans", system-ui, sans-serif;
-  color: var(--rc-ink);
+  color: var(--rc-ink) !important;
 }
 .rc-sidebar-label {
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--rc-muted);
+  color: var(--rc-muted) !important;
   margin: 0 0 0.35rem 0;
 }
 .rc-sidebar-notes {
   font-size: 0.85rem;
-  color: var(--rc-ink-2);
+  color: var(--rc-ink-2) !important;
   line-height: 1.45;
   background: var(--rc-surface);
   border: 1px solid var(--rc-border);

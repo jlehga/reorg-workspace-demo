@@ -17,7 +17,7 @@ Also move the Ledger team under an unknown manager named Alex Unknown.
 
 SCENARIOS = {
     "scenario_a_success": {
-        "label": "Scenario A — Payments move (mostly valid, claimed Finance approval)",
+        "label": "Scenario A: Payments move (mostly valid, claimed Finance approval)",
         "text": SCENARIO_A_SUCCESS.strip(),
         "notes": (
             "Valid entities and cost centers. Headcount claim (14) matches. "
@@ -26,7 +26,7 @@ SCENARIOS = {
         ),
     },
     "scenario_b_failure": {
-        "label": "Scenario B — Ambiguity / invalid cost center / headcount mismatch",
+        "label": "Scenario B: Ambiguity / invalid cost center / headcount mismatch",
         "text": SCENARIO_B_FAILURE.strip(),
         "notes": (
             "Headcount claim (20) does not match Payments membership (14). "

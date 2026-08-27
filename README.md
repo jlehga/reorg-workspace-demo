@@ -1,4 +1,4 @@
-# Reorg Case — Agentic-Driven Reorganization Prototype
+# Reorg Case: Agentic-Driven Reorganization Prototype
 
 A functional take-home prototype that turns **unstructured reorg intent** into a governed **Reorg Case**: interpret → validate → plan → approve → execute (automated + manual) → reconcile → audit.
 
@@ -43,7 +43,9 @@ Or: `./run_demo.sh`
 
 Open [http://127.0.0.1:8765](http://127.0.0.1:8765).
 
-`OPENAI_API_KEY` is optional — without it, a deterministic demo extractor drives the scenarios.
+Demo login (session-only): **ops.demo** / **reorg-demo** (see RUN.txt).
+
+`OPENAI_API_KEY` is optional. Without it, a deterministic demo extractor drives the scenarios.
 
 ### Tests
 
@@ -85,7 +87,7 @@ requirements.txt
 
 ## Prototype scope
 
-**In scope:** two meaningful slices—(A) interpretation + authoritative validation, (B) dependency-aware planning, approval, mixed execution, reconciliation—plus auditability and a demo-friendly UI.
+**In scope:** two meaningful slices: (A) interpretation + authoritative validation, (B) dependency-aware planning, approval, mixed execution, reconciliation, plus auditability and a demo-friendly UI.
 
 **Out of scope:** production integrations, real auth/RBAC, durable workflow infra, Slack/email ingestion, compensation workflows, and production observability. See design doc §15 for the explicit non-build list and rationale.
 

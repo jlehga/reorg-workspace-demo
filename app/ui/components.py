@@ -1,4 +1,4 @@
-"""Streamlit UI helpers — presentation only."""
+"""Streamlit UI helpers (presentation only)."""
 
 from __future__ import annotations
 
@@ -63,7 +63,7 @@ def render_validation(case: ReorgCase) -> None:
     val = case.validation
 
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Effective date", req.effective_date or "—")
+    c1.metric("Effective date", req.effective_date or "n/a")
     c2.metric("People impacted", val.people_impacted_count)
     c3.metric("Confidence", f"{val.confidence:.0%}")
     c4.metric(
@@ -79,7 +79,7 @@ def render_validation(case: ReorgCase) -> None:
             st.write(
                 f"• **Org:** {oc.team_name}: "
                 f"{oc.from_org_or_manager or '?'} → {oc.to_org_or_manager or '?'} "
-                f"(claimed headcount: {oc.expected_headcount or '—'})"
+                f"(claimed headcount: {oc.expected_headcount or 'n/a'})"
             )
     if req.cost_center_changes:
         for cc in req.cost_center_changes:
@@ -91,7 +91,7 @@ def render_validation(case: ReorgCase) -> None:
         for ex in req.exceptions:
             st.write(
                 f"• **Exception:** {ex.person_name} → "
-                f"{ex.to_org_or_manager or ''} under {ex.to_manager or '—'}"
+                f"{ex.to_org_or_manager or ''} under {ex.to_manager or 'n/a'}"
             )
     if req.assumptions:
         with st.expander("Extracted assumptions"):
@@ -156,7 +156,7 @@ def render_validation(case: ReorgCase) -> None:
     with st.expander("Verified entities"):
         for ent in val.verified_entities:
             mark = "✓" if ent.found else "✗"
-            st.write(f"{mark} `{ent.entity_type}` **{ent.name}** ({ent.entity_id or '—'})")
+            st.write(f"{mark} `{ent.entity_type}` **{ent.name}** ({ent.entity_id or 'n/a'})")
 
 
 def render_plan(case: ReorgCase) -> None:
@@ -171,7 +171,7 @@ def render_plan(case: ReorgCase) -> None:
     st.markdown("#### Ordered actions")
     st.caption("Actions run in dependency order. Manual steps pause the workflow until completed.")
     for action in plan.ordered_actions:
-        deps = html.escape(", ".join(action.depends_on) if action.depends_on else "—")
+        deps = html.escape(", ".join(action.depends_on) if action.depends_on else "none")
         if action.integration_type == IntegrationType.MANUAL:
             type_cls = "rc-type-manual"
             type_label = "Manual"
@@ -189,7 +189,7 @@ def render_plan(case: ReorgCase) -> None:
                 <span class="rc-type {type_cls}">{type_label}</span>
                 <span class="rc-action-name">{html.escape(action.name)}</span>
               </div>
-              <p class="rc-action-meta">System: {html.escape(action.system)} · Depends on: {deps}</p>
+              <p class="rc-action-meta">System: {html.escape(action.system)}. Depends on: {deps}</p>
               <p class="rc-action-desc">{html.escape(action.description)}</p>
             </div>
             """,
@@ -202,8 +202,8 @@ def render_approvals(case: ReorgCase) -> None:
     for apr in case.change_plan.approval_requirements:
         role = html.escape(apr.role)
         if apr.granted:
-            granted_at = html.escape(str(apr.granted_at or "—"))
-            granted_by = html.escape(apr.granted_by or "—")
+            granted_at = html.escape(str(apr.granted_at or "n/a"))
+            granted_by = html.escape(apr.granted_by or "n/a")
             st.markdown(
                 f"""
                 <div class="rc-callout rc-callout-granted">
@@ -242,7 +242,7 @@ def render_execution(case: ReorgCase) -> None:
                 "System": a.system,
                 "Type": a.integration_type.value,
                 "Status": _action_status_label(a.status),
-                "Depends on": ", ".join(a.depends_on) or "—",
+                "Depends on": ", ".join(a.depends_on) or "none",
             }
         )
     st.dataframe(rows, use_container_width=True, hide_index=True)
@@ -256,7 +256,7 @@ def render_human_tasks(case: ReorgCase) -> None:
     for task in case.human_tasks:
         status_label = task.status.value.replace("_", " ").title()
         st.markdown(f"### {task.title}")
-        st.caption(f"Assigned to: **{task.assigned_role}** · Status: {status_label}")
+        st.caption(f"Assigned to: **{task.assigned_role}**. Status: {status_label}")
         st.code(task.instructions)
         st.write("Required fields:")
         for k, v in task.required_fields.items():
@@ -290,6 +290,6 @@ def render_reconciliation(case: ReorgCase) -> None:
 def render_audit(case: ReorgCase) -> None:
     for event in reversed(case.audit_log):
         st.write(
-            f"`{event.timestamp}` · **{event.event_type.value}** · "
-            f"{event.actor_type.value}:{event.actor_id} — {event.message}"
+            f"`{event.timestamp}`. **{event.event_type.value}**. "
+            f"{event.actor_type.value}:{event.actor_id}: {event.message}"
         )

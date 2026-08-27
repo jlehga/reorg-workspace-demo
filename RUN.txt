@@ -1,5 +1,5 @@
 ════════════════════════════════════════════════════════════════
-QUICKSTART — clone & run (copy/paste)
+QUICKSTART (clone & run)
 ════════════════════════════════════════════════════════════════
 Repo: https://github.com/jlehga/reorg-execution-system
 
@@ -15,19 +15,26 @@ Open: http://127.0.0.1:8765
 
 Or:  ./run_demo.sh
 
+Demo login (session-only spoof gate, not real auth):
+  Username: ops.demo
+  Password: reorg-demo
+
+After Sign in, use the sidebar Sign out to return to the login screen.
+
 OPENAI_API_KEY is optional. Without it, a deterministic demo extractor runs
 (fine for the walkthrough). With it, interpretation uses OpenAI.
 
 ════════════════════════════════════════════════════════════════
 60-SECOND DEMO PATH
 ════════════════════════════════════════════════════════════════
-1. Sidebar → Scenario A → Load scenario text
-2. Analyze Reorg
-3. Reorg Case: note unverified Finance approval warning
-4. Plan & Approve → Approve Plan
-5. Execution → Run execution → Mark Complete on GL task (CC-4175)
-6. Reconciliation: all Passed → case Completed
-7. (Optional) Audit tab for the event trail
+1. Sign in with ops.demo / reorg-demo
+2. Sidebar → Scenario A → Load scenario text
+3. Analyze Reorg
+4. Reorg Case: note unverified Finance approval warning
+5. Plan & Approve → Approve Plan
+6. Execution → Run execution → Mark Complete on GL task (CC-4175)
+7. Reconciliation: all Passed → case Completed
+8. (Optional) Audit tab for the event trail
 
 Optional failure beat: before Mark Complete, check "Simulate incorrect GL
 entry" → reconciliation fails / reporting blocked.
