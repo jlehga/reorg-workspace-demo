@@ -11,7 +11,8 @@ How to review
    Login: demouser / test123
 
 2. What’s in this package / design doc:
-   docs/design.md — design deliverable (read this)
+   docs/design.pdf — design deliverable (preferred for email; attach this)
+   docs/design.md  — same design doc as Markdown source (also in the zip)
    This zip also has RUN.txt, SUBMISSION.txt, and the Streamlit prototype
    (app.py, app/, requirements.txt, …).
 
@@ -32,7 +33,8 @@ How to review
 
 What’s in the zip
 -----------------
-• docs/design.md   — design deliverable
+• docs/design.pdf  — design deliverable (PDF for email attachment)
+• docs/design.md   — design doc Markdown source
 • RUN.txt          — quickstart + 60-second demo path
 • SUBMISSION.txt   — this cover note
 • Prototype source — Streamlit app and supporting modules
@@ -46,4 +48,4 @@ Scenario A is the happy path; optional controls show blocked reporting
 on failed GL reconciliation; Scenario B surfaces ambiguity and
 validation failures.
 
-Architecture, trade-offs, and scope: docs/design.md.
+Architecture, trade-offs, and scope: docs/design.pdf (or docs/design.md).

@@ -15,7 +15,8 @@ https://jlehga-reorg-workspace-demo-app-ggbknu.streamlit.app/
 ────────────────────────────────────────────────────────────────
 2. WHAT’S IN THIS PACKAGE
 ────────────────────────────────────────────────────────────────
-• docs/design.md     — design deliverable (read this)
+• docs/design.pdf    — design deliverable (PDF for email attachment)
+• docs/design.md     — design doc Markdown source
 • RUN.txt            — this file
 • SUBMISSION.txt     — short cover note
 • app source         — Streamlit prototype (app.py, app/, …)
@@ -64,5 +65,5 @@ https://github.com/jlehga/reorg-execution-system
 ────────────────────────────────────────────────────────────────
 Optional live LLM via env (LLM_API_KEY); otherwise the built-in demo parser.
 
-Design: docs/design.md
+Design: docs/design.pdf (email) / docs/design.md (source)
 Tests:  pytest -q
