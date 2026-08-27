@@ -236,7 +236,7 @@ class DeterministicExtractor(LLMProvider):
                     claim_text=claim_text,
                     independently_verified=False,
                     verification_note=(
-                        "Claimed in source material only — not independently verified."
+                        "Claimed in source material only; not independently verified."
                     ),
                 )
             )
@@ -314,7 +314,7 @@ class OpenAIProvider(LLMProvider):
             claim["independently_verified"] = False
             claim.setdefault(
                 "verification_note",
-                "Claimed in source material only — not independently verified.",
+                "Claimed in source material only; not independently verified.",
             )
         return ExtractedRequest.model_validate(data)
 

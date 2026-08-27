@@ -114,7 +114,7 @@ class ReconciliationService:
                     system="Reporting",
                     field="sync",
                     expected=str(expected_cc),
-                    observed="—",
+                    observed="n/a",
                     status=ReconciliationStatus.BLOCKED,
                     notes=self.store.reporting.get("block_reason"),
                 )
@@ -125,7 +125,7 @@ class ReconciliationService:
                     system="Reporting",
                     field="synced_cost_center",
                     expected=str(expected_cc),
-                    observed=str(reporting.get("synced_cost_center") or "—"),
+                    observed=str(reporting.get("synced_cost_center") or "n/a"),
                     status=(
                         ReconciliationStatus.PASSED
                         if reporting.get("synced_cost_center") == expected_cc

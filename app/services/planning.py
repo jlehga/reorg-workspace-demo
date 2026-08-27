@@ -79,7 +79,7 @@ class PlanningService:
                 id="human_approval_gate",
                 name="Human approval gate",
                 system="Policy",
-                description="Deterministic policy gate — LLM cannot authorize execution.",
+                description="Deterministic policy gate: LLM cannot authorize execution.",
                 integration_type=IntegrationType.APPROVAL_GATE,
                 depends_on=["verify_preconditions"],
                 payload={},
@@ -137,7 +137,7 @@ class PlanningService:
             ),
             PlannedAction(
                 id="update_gl_mapping",
-                name="Update GL mapping (manual — no API)",
+                name="Update GL mapping (manual, no API)",
                 system="GL Mapping",
                 description=(
                     "Finance Operations must key the GL mapping change. "

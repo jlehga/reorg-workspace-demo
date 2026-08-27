@@ -16,7 +16,7 @@
       "approver_name": "Finance Controller Desk",
       "status": "approved",
       "related_cost_centers": ["CC-4200"],
-      "notes": "Unrelated prior approval — must not satisfy Payments reorg."
+      "notes": "Unrelated prior approval; must not satisfy Payments reorg."
     }
   ]
 }

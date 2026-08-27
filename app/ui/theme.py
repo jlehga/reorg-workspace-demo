@@ -23,8 +23,9 @@ THEME_CSS = """
   --rc-info: #1D4ED8;
   --rc-info-bg: #EFF6FF;
   --rc-radius: 8px;
-  --rc-input-bg: #0F172A;
-  --rc-input-fg: #F8FAFC;
+  --rc-input-bg: #F1F5F9;
+  --rc-input-fg: #0F172A;
+  --rc-input-border: #64748B;
 }
 
 /* Base: light surface, dark body text. Avoid broad [class*="css"] color overrides. */
@@ -282,15 +283,20 @@ div[data-testid="stMetricLabel"] {
   color: var(--rc-muted) !important;
 }
 
-/* Buttons */
+/* Buttons: secondary/outline always readable on white (not white-on-white) */
 .stButton > button {
   border-radius: 7px !important;
   font-weight: 600 !important;
   font-family: "IBM Plex Sans", system-ui, sans-serif !important;
-  border: 1px solid var(--rc-border) !important;
+  border: 1.5px solid #64748B !important;
   color: var(--rc-ink) !important;
-  background: var(--rc-white) !important;
+  background: var(--rc-surface) !important;
   transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.stButton > button:hover {
+  background: var(--rc-blue-soft) !important;
+  border-color: var(--rc-blue) !important;
+  color: var(--rc-ink) !important;
 }
 .stButton > button[kind="primary"],
 .stButton > button[data-testid="baseButton-primary"] {
@@ -302,7 +308,27 @@ div[data-testid="stMetricLabel"] {
 .stButton > button[data-testid="baseButton-primary"]:hover {
   background: var(--rc-blue-hover) !important;
   border-color: var(--rc-blue-hover) !important;
+  color: #fff !important;
   box-shadow: 0 1px 3px rgba(0, 82, 255, 0.25);
+}
+
+/* Sidebar secondary actions: stronger outline on light sidebar */
+section[data-testid="stSidebar"] .stButton > button {
+  background: #EEF2F7 !important;
+  border: 1.5px solid #475569 !important;
+  color: #0F172A !important;
+  box-shadow: none !important;
+}
+section[data-testid="stSidebar"] .stButton > button:hover {
+  background: var(--rc-blue-soft) !important;
+  border-color: var(--rc-blue) !important;
+  color: #0F172A !important;
+}
+section[data-testid="stSidebar"] .stButton > button[kind="primary"],
+section[data-testid="stSidebar"] .stButton > button[data-testid="baseButton-primary"] {
+  background: var(--rc-blue) !important;
+  border-color: var(--rc-blue) !important;
+  color: #fff !important;
 }
 
 /*
@@ -377,17 +403,37 @@ div[data-testid="stMarkdownContainer"] span,
   color: var(--rc-muted) !important;
 }
 
-/* Dark textarea with light text inside; labels stay dark above */
+/*
+ * Freeform textarea: subtle fill + clear border so it reads as an input
+ * on the white page (Streamlit default can blend into .stApp).
+ */
+div[data-testid="stTextArea"],
+.stTextArea {
+  background: transparent !important;
+}
+div[data-testid="stTextArea"] > div,
+.stTextArea > div {
+  border-radius: var(--rc-radius) !important;
+}
 .stTextArea textarea,
-div[data-testid="stTextArea"] textarea {
+div[data-testid="stTextArea"] textarea,
+div[data-testid="stTextArea"] [data-baseweb="textarea"],
+div[data-testid="stTextArea"] [data-baseweb="base-input"] {
   background-color: var(--rc-input-bg) !important;
   color: var(--rc-input-fg) !important;
-  border: 1px solid #1E293B !important;
+  border: 1.5px solid var(--rc-input-border) !important;
+  border-radius: var(--rc-radius) !important;
   caret-color: var(--rc-input-fg) !important;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06) !important;
+}
+.stTextArea textarea:focus,
+div[data-testid="stTextArea"] textarea:focus {
+  border-color: var(--rc-blue) !important;
+  box-shadow: 0 0 0 2px rgba(0, 82, 255, 0.18) !important;
 }
 .stTextArea textarea::placeholder,
 div[data-testid="stTextArea"] textarea::placeholder {
-  color: #94A3B8 !important;
+  color: #64748B !important;
 }
 
 /* Regular text inputs stay light for readability */
