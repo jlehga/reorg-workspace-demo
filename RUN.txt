@@ -35,8 +35,9 @@ Hosting notes: docs/HOSTING.md
 After Sign in you land on Workspace home. Use sidebar Sign out to return
 to the login screen.
 
-OPENAI_API_KEY / LLM_API_KEY is optional. Without either, a deterministic demo
-extractor runs (fine for the walkthrough). With a key, interpretation uses a live LLM.
+LLM_API_KEY is optional. Without it, a deterministic demo extractor runs
+(fine for the walkthrough). With a key, interpretation uses a live LLM.
+Optional: LLM_MODEL, LLM_BASE_URL.
 
 ════════════════════════════════════════════════════════════════
 60-SECOND DEMO PATH

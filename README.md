@@ -52,7 +52,8 @@ Open [http://127.0.0.1:8765](http://127.0.0.1:8765). After Sign in: Workspace ho
 
 Optional `LLM_API_KEY`: lets the app call a live LLM to interpret freeform reorg
 text into a structured case. Without it, a built-in deterministic parser runs the
-demo. The model is not used for approvals or system writes.
+demo. Optional: `LLM_MODEL`, `LLM_BASE_URL`. The model is not used for approvals
+or system writes.
 
 ### Tests
 

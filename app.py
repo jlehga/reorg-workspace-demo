@@ -110,7 +110,7 @@ def _render_sidebar(*, case_view: bool) -> None:
     st.markdown("---")
     st.caption(
         f"Extractor: `{wf.interpreter.provider.name}` · "
-        "Set `LLM_API_KEY` (or `OPENAI_API_KEY`) for live LLM extraction."
+        "Set `LLM_API_KEY` for live LLM extraction (optional: `LLM_MODEL`, `LLM_BASE_URL`)."
     )
     if st.button("Reset case", use_container_width=True):
         st.session_state.workflow = ReorgWorkflow()

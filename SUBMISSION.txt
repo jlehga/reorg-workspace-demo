@@ -42,5 +42,5 @@ failures.
 
 For architecture, trade-offs, and scope, see docs/design.md. Optional
 LLM_API_KEY lets the app call a live LLM for freeform text interpretation
-only; without it, a built-in demo parser is used. The model does not approve or
-execute changes.
+only; without it, a built-in demo parser is used. Optional LLM_MODEL /
+LLM_BASE_URL. The model does not approve or execute changes.
