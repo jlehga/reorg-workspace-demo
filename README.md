@@ -28,18 +28,16 @@ The **Reorg Case** is the system of record for *execution*. HRIS/Finance/plannin
 
 ---
 
-## Try without cloning
+## Try it
 
-- **Hosted demo (temporary):** https://notifications-developmental-diego-complicated.trycloudflare.com
-- **Durable Streamlit Cloud:** one-click from the [public mirror](https://share.streamlit.io/deploy?repository=jlehga/reorg-workspace-demo&branch=main&mainModule=app.py) — see [docs/HOSTING.md](docs/HOSTING.md).
-- **Zip:** `./make_zip.sh` → `dist/reorg-execution-system.zip`, or download from [GitHub Releases](https://github.com/jlehga/reorg-execution-system/releases).
-- **Clone (optional):** quickstart in [RUN.txt](RUN.txt).
+1. **Live demo (primary):** https://jlehga-reorg-workspace-demo-app-ggbknu.streamlit.app/  
+   Login: **demouser** / **test123**
+2. **Design deliverable:** [docs/design.md](docs/design.md)
+3. **OPTIONAL** — only if the live link does not work: zip or clone — see [RUN.txt](RUN.txt) and [docs/HOSTING.md](docs/HOSTING.md).
 
-Demo login: **demouser** / **test123**. Design deliverable: [docs/design.md](docs/design.md).
+Copy-paste guide: **[RUN.txt](RUN.txt)**. Submission checklist: **[SUBMISSION.txt](SUBMISSION.txt)**.
 
-## Running locally
-
-Copy-paste guide (email-friendly): **[RUN.txt](RUN.txt)**. Submission checklist: **[SUBMISSION.txt](SUBMISSION.txt)**.
+### Running locally (fallback)
 
 ```bash
 python -m venv .venv
@@ -50,9 +48,7 @@ streamlit run app.py --server.port 8765
 
 Or: `./run_demo.sh`
 
-Open [http://127.0.0.1:8765](http://127.0.0.1:8765).
-
-Demo login: **demouser** / **test123** (see RUN.txt). After Sign in: Workspace home → New Reorg Case → case workflow.
+Open [http://127.0.0.1:8765](http://127.0.0.1:8765). After Sign in: Workspace home → New Reorg Case → case workflow.
 
 Optional `LLM_API_KEY`: lets the app call a live LLM to interpret freeform reorg
 text into a structured case. Without it, a built-in deterministic parser runs the

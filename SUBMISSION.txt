@@ -3,32 +3,32 @@ Reorg Execution System: submission for review
 
 Thank you for reviewing this take-home prototype.
 
-How to try it (pick one — clone is optional)
---------------------------------------------
-1. Hosted demo (preferred, no install):
-   Temporary: https://notifications-developmental-diego-complicated.trycloudflare.com
-   Durable: one-click Streamlit deploy from the public mirror
-   https://share.streamlit.io/deploy?repository=jlehga/reorg-workspace-demo&branch=main&mainModule=app.py
-   Full hosting steps: docs/HOSTING.md
+How to try it
+-------------
+1. Live demo (primary — no install):
+   https://jlehga-reorg-workspace-demo-app-ggbknu.streamlit.app/
+   Login: demouser / test123
 
-2. Zip (no git clone): download reorg-execution-system.zip from
+2. Design document (primary design deliverable):
+   docs/design.md
+
+3. OPTIONAL — only if the live link does not work:
+   Zip: download reorg-execution-system.zip from
    https://github.com/jlehga/reorg-execution-system/releases
    or build with ./make_zip.sh → dist/reorg-execution-system.zip
    Then: unzip → python -m venv .venv → pip install -r requirements.txt
    → streamlit run app.py --server.port 8765 → http://127.0.0.1:8765
 
-3. Optional source clone:
+   Clone:
    Private: https://github.com/jlehga/reorg-execution-system
    Public mirror: https://github.com/jlehga/reorg-workspace-demo
    Full quickstart + 60-second path: RUN.txt
-
-Demo login: demouser / test123
 
 Included materials
 ------------------
 • Design document (primary design deliverable): docs/design.md
 • Run / review instructions: RUN.txt
-• Hosting guide (Streamlit Cloud / Render / zip): docs/HOSTING.md
+• Hosting guide: docs/HOSTING.md
 • Source repository (optional): https://github.com/jlehga/reorg-execution-system
 
 What the prototype demonstrates

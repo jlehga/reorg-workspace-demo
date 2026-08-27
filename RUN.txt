@@ -1,48 +1,36 @@
 ════════════════════════════════════════════════════════════════
-TRY THE DEMO (no git clone required)
+TRY THE DEMO (no install required)
 ════════════════════════════════════════════════════════════════
-Hosted URL (try first — no install):
-  Temporary tunnel (live while demo host is up):
-    https://notifications-developmental-diego-complicated.trycloudflare.com
-  Durable Streamlit Cloud (one-click deploy from public mirror):
-    https://share.streamlit.io/deploy?repository=jlehga/reorg-workspace-demo&branch=main&mainModule=app.py
-    → after Deploy finishes, share https://<app>.streamlit.app
-  Details: docs/HOSTING.md
+1. Live demo (primary — open this first):
+   https://jlehga-reorg-workspace-demo-app-ggbknu.streamlit.app/
 
-Zip download (no clone):
-  1) Download reorg-execution-system.zip from GitHub Releases:
-     https://github.com/jlehga/reorg-execution-system/releases
+   Demo login:
+     Username: demouser
+     Password: test123
+
+2. Design deliverable: docs/design.md
+
+3. OPTIONAL — only if the live link does not work:
+   Zip (no clone):
+     Download reorg-execution-system.zip from GitHub Releases:
+       https://github.com/jlehga/reorg-execution-system/releases
      Or build locally: ./make_zip.sh  →  dist/reorg-execution-system.zip
-  2) Unzip, then:
+     Then: unzip → python -m venv .venv → source .venv/bin/activate
+       → pip install -r requirements.txt
+       → streamlit run app.py --server.port 8765
+       → http://127.0.0.1:8765
+
+   Clone & run:
+     git clone https://github.com/jlehga/reorg-execution-system.git
+     cd reorg-execution-system
      python -m venv .venv
      source .venv/bin/activate          # Windows: .venv\Scripts\activate
      pip install -r requirements.txt
      streamlit run app.py --server.port 8765
-  3) Open http://127.0.0.1:8765
+     Or: ./run_demo.sh
+     Open: http://127.0.0.1:8765
 
-Demo login (Reorg Workspace portal):
-  Username: demouser
-  Password: test123
-
-Design deliverable: docs/design.md
-Hosting details:     docs/HOSTING.md
-
-════════════════════════════════════════════════════════════════
-OPTIONAL: clone & run
-════════════════════════════════════════════════════════════════
-Repo: https://github.com/jlehga/reorg-execution-system
-
-  git clone https://github.com/jlehga/reorg-execution-system.git
-  cd reorg-execution-system
-
-  python -m venv .venv
-  source .venv/bin/activate          # Windows: .venv\Scripts\activate
-  pip install -r requirements.txt
-  streamlit run app.py --server.port 8765
-
-Open: http://127.0.0.1:8765
-
-Or:  ./run_demo.sh
+Hosting notes: docs/HOSTING.md
 
 After Sign in you land on Workspace home. Use sidebar Sign out to return
 to the login screen.
