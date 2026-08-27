@@ -3,11 +3,29 @@ Reorg Execution System: submission for review
 
 Thank you for reviewing this take-home prototype.
 
+How to try it (pick one — clone is optional)
+--------------------------------------------
+1. Hosted demo (preferred): open the Streamlit / Render URL when available.
+   Deploy steps and deep link: docs/HOSTING.md
+   (If no URL is pasted yet, use the zip below — fastest path without git.)
+
+2. Zip (no git clone): download reorg-execution-system.zip from
+   https://github.com/jlehga/reorg-execution-system/releases
+   or build with ./make_zip.sh → dist/reorg-execution-system.zip
+   Then: unzip → python -m venv .venv → pip install -r requirements.txt
+   → streamlit run app.py --server.port 8765 → http://127.0.0.1:8765
+
+3. Optional source clone: https://github.com/jlehga/reorg-execution-system
+   Full quickstart + 60-second path: RUN.txt
+
+Demo login: ops.demo / reorg-demo
+
 Included materials
 ------------------
-• Design document: docs/design.md
-• Run instructions: RUN.txt
-• Source repository: https://github.com/jlehga/reorg-execution-system
+• Design document (primary design deliverable): docs/design.md
+• Run / review instructions: RUN.txt
+• Hosting guide (Streamlit Cloud / Render / zip): docs/HOSTING.md
+• Source repository (optional): https://github.com/jlehga/reorg-execution-system
 
 What the prototype demonstrates
 -------------------------------
@@ -18,8 +36,7 @@ Scenario A covers the happy path; optional controls show blocked reporting on
 failed GL reconciliation, and Scenario B surfaces ambiguity and validation
 failures.
 
-For architecture, trade-offs, and scope, see docs/design.md. To clone, install,
-and follow the ~60-second demo path (Streamlit on port 8765), use RUN.txt.
-Optional LLM_API_KEY lets the app call a live LLM for freeform text interpretation
+For architecture, trade-offs, and scope, see docs/design.md. Optional
+LLM_API_KEY lets the app call a live LLM for freeform text interpretation
 only; without it, a built-in demo parser is used. The model does not approve or
 execute changes.

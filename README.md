@@ -28,6 +28,14 @@ The **Reorg Case** is the system of record for *execution*. HRIS/Finance/plannin
 
 ---
 
+## Try without cloning
+
+- **Hosted demo:** see [docs/HOSTING.md](docs/HOSTING.md) (Streamlit Community Cloud / Render).
+- **Zip:** `./make_zip.sh` → `dist/reorg-execution-system.zip`, or download from [GitHub Releases](https://github.com/jlehga/reorg-execution-system/releases).
+- **Clone (optional):** quickstart in [RUN.txt](RUN.txt).
+
+Demo login: **demouser** / **test123**. Design deliverable: [docs/design.md](docs/design.md).
+
 ## Running locally
 
 Copy-paste guide (email-friendly): **[RUN.txt](RUN.txt)**. Submission checklist: **[SUBMISSION.txt](SUBMISSION.txt)**.
@@ -43,7 +51,7 @@ Or: `./run_demo.sh`
 
 Open [http://127.0.0.1:8765](http://127.0.0.1:8765).
 
-Demo login: **demouser** / **test123** (see RUN.txt). After Sign in: Workspace home → New Reorg Case → case workflow.
+Demo login: **ops.demo** / **reorg-demo** (see RUN.txt). After Sign in: Workspace home → New Reorg Case → case workflow.
 
 Optional `LLM_API_KEY`: lets the app call a live LLM to interpret freeform reorg
 text into a structured case. Without it, a built-in deterministic parser runs the
