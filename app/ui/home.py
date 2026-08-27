@@ -123,7 +123,9 @@ def render_home() -> None:
         if st.button("New Reorg Case", type="primary", use_container_width=True):
             st.session_state.view = "case"
             st.session_state.case = None
-            st.session_state.raw_text = SCENARIOS["scenario_a_success"]["text"]
+            text = SCENARIOS["scenario_a_success"]["text"]
+            st.session_state.raw_text = text
+            st.session_state.raw_input = text
             st.session_state.workflow = ReorgWorkflow()
             st.rerun()
 
@@ -136,7 +138,9 @@ def render_home() -> None:
             format_func=lambda k: SCENARIOS[k]["label"],
         )
         if st.button("Start from scenario", use_container_width=True):
-            st.session_state.raw_text = SCENARIOS[scenario_key]["text"]
+            text = SCENARIOS[scenario_key]["text"]
+            st.session_state.raw_text = text
+            st.session_state.raw_input = text
             st.session_state.case = None
             st.session_state.workflow = ReorgWorkflow()
             st.session_state.view = "case"
