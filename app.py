@@ -19,7 +19,7 @@ import streamlit as st
 
 from app.data.scenarios import SCENARIOS
 from app.models.enums import CaseStatus
-from app.ui.auth import is_authenticated, render_login, sign_out
+from app.ui.auth import ensure_auth_cookie, is_authenticated, render_login, sign_out
 from app.ui.components import (
     case_badge,
     render_approvals,
@@ -353,6 +353,7 @@ def main() -> None:
         render_login()
         return
 
+    ensure_auth_cookie()
     _seed_case_index_if_empty()
     st.markdown(THEME_CSS, unsafe_allow_html=True)
 
