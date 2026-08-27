@@ -3,10 +3,16 @@
 from __future__ import annotations
 
 import streamlit as st
+import streamlit.components.v1 as components
 
 # Demo credentials (documented in RUN.txt)
 DEMO_USERNAME = "ops.demo"
 DEMO_PASSWORD = "reorg-demo"
+
+# Browser cookie so a full page refresh keeps the demo session.
+_AUTH_COOKIE = "rw_demo_auth"
+_AUTH_TOKEN = "rw-demo-v1-ops"
+_AUTH_MAX_AGE = 7 * 24 * 60 * 60  # 7 days
 
 LOGIN_CSS = """
 <style>
@@ -27,78 +33,81 @@ html, body, .stApp {
 }
 
 .block-container {
-  padding-top: 4.5rem !important;
-  max-width: 420px !important;
+  padding-top: 3.5rem !important;
+  max-width: 440px !important;
 }
 
-.rc-login-card {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 12px;
-  padding: 1.75rem 1.5rem 1.35rem 1.5rem;
-  backdrop-filter: blur(8px);
-  box-shadow: 0 12px 40px rgba(0, 20, 80, 0.35);
+.rw-portal-brand {
+  text-align: center;
+  margin: 0 0 1.75rem 0;
 }
-.rc-login-brand {
+.rw-portal-brand h1 {
   font-family: "IBM Plex Serif", Georgia, serif !important;
   font-weight: 700;
-  font-size: 1.85rem;
+  font-size: 2.15rem;
   line-height: 1.15;
   color: #FFFFFF !important;
-  margin: 0 0 0.35rem 0;
+  margin: 0 0 0.45rem 0;
   letter-spacing: -0.02em;
 }
-.rc-login-brand span { color: #B8D0FF !important; }
-.rc-login-sub {
-  margin: 0 0 1.15rem 0;
-  color: #E8F0FF !important;
-  font-size: 0.92rem;
+.rw-portal-brand h1 span { color: #B8D0FF !important; }
+.rw-portal-brand p {
+  margin: 0;
+  color: #D6E4FF !important;
+  font-size: 0.95rem;
   line-height: 1.45;
-  font-weight: 400;
 }
-.rc-login-hint {
-  margin: 0.85rem 0 0 0;
+
+.rw-login-card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 1.5rem 1.4rem 1.25rem 1.4rem;
+  box-shadow: 0 16px 48px rgba(0, 16, 64, 0.35);
+}
+
+.rw-login-card-title {
+  margin: 0 0 1rem 0;
+  font-size: 1.05rem;
+  font-weight: 650;
+  color: #0F172A !important;
+}
+
+.rw-login-hint {
+  margin: 0.9rem 0 0 0;
+  text-align: center;
   color: #C7D9FF !important;
   font-size: 0.78rem;
   line-height: 1.4;
 }
 
-/* High-contrast form chrome on blue */
 div[data-testid="stTextInput"] label p,
 div[data-testid="stTextInput"] label span,
 [data-testid="stWidgetLabel"] p {
-  color: #FFFFFF !important;
+  color: #1E293B !important;
   font-weight: 600 !important;
 }
 div[data-testid="stTextInput"] input {
-  background: #FFFFFF !important;
+  background: #F8FAFC !important;
   color: #0B1220 !important;
-  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border: 1px solid #94A3B8 !important;
   border-radius: 8px !important;
-}
-div[data-testid="stTextInput"] input::placeholder {
-  color: #64748B !important;
 }
 
 .stButton > button {
-  background: #FFFFFF !important;
-  color: #0033A0 !important;
-  border: 1px solid #FFFFFF !important;
+  background: #0052FF !important;
+  color: #FFFFFF !important;
+  border: 1px solid #0052FF !important;
   font-weight: 700 !important;
   border-radius: 8px !important;
   width: 100%;
 }
 .stButton > button:hover {
-  background: #E8F0FF !important;
-  color: #002B7A !important;
-  border-color: #E8F0FF !important;
+  background: #0041CC !important;
+  border-color: #0041CC !important;
 }
 
-div[data-testid="stAlert"] {
-  border-radius: 8px;
-}
+div[data-testid="stAlert"] { border-radius: 8px; }
 
-/* Minimize Streamlit chrome / hide Deploy */
 #MainMenu { visibility: hidden; }
 footer { visibility: hidden; }
 header[data-testid="stHeader"] { background: transparent; }
@@ -110,31 +119,77 @@ div[data-testid="stDecoration"] { display: none !important; }
 """
 
 
+def _write_auth_cookie(token: str, *, max_age: int = _AUTH_MAX_AGE) -> None:
+    """Set or clear a browser cookie. Streamlit can read cookies but not write them."""
+    components.html(
+        f"""
+        <script>
+        document.cookie = "{_AUTH_COOKIE}={token}; path=/; max-age={max_age}; SameSite=Lax";
+        </script>
+        """,
+        height=0,
+        width=0,
+    )
+
+
+def _restore_auth_from_cookie() -> bool:
+    try:
+        token = st.context.cookies.get(_AUTH_COOKIE)
+    except Exception:  # noqa: BLE001
+        return False
+    if token != _AUTH_TOKEN:
+        return False
+    st.session_state.authenticated = True
+    st.session_state.auth_user = DEMO_USERNAME
+    st.session_state.setdefault("view", "home")
+    return True
+
+
 def is_authenticated() -> bool:
-    return bool(st.session_state.get("authenticated"))
+    if st.session_state.get("authenticated"):
+        return True
+    return _restore_auth_from_cookie()
+
+
+def ensure_auth_cookie() -> None:
+    """Keep the demo auth cookie fresh while the user is signed in."""
+    if not st.session_state.get("authenticated"):
+        return
+    if st.session_state.get("_auth_cookie_written"):
+        return
+    _write_auth_cookie(_AUTH_TOKEN)
+    st.session_state._auth_cookie_written = True
 
 
 def sign_out() -> None:
     st.session_state.authenticated = False
     st.session_state.pop("auth_user", None)
     st.session_state.pop("login_error", None)
+    st.session_state.pop("_auth_cookie_written", None)
+    st.session_state.view = "home"
+    st.session_state.case = None
+    _write_auth_cookie("", max_age=0)
 
 
 def render_login() -> None:
-    """Full-bleed blue login gate. Mutates session_state on success."""
+    """Portal login: Workspace brand outside, Sign in card inside."""
     st.markdown(LOGIN_CSS, unsafe_allow_html=True)
 
     st.markdown(
         """
-        <div class="rc-login-card">
-          <p class="rc-login-brand">Reorg <span>Case</span></p>
-          <p class="rc-login-sub">Sign in</p>
+        <div class="rw-portal-brand">
+          <h1>Reorg <span>Workspace</span></h1>
+          <p>Governed reorganization cases for HR, Finance, and Ops</p>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    st.write("")  # spacing
+    st.markdown(
+        '<div class="rw-login-card"><p class="rw-login-card-title">Sign in</p>',
+        unsafe_allow_html=True,
+    )
+
     username = st.text_input("Username", key="login_username", autocomplete="username")
     password = st.text_input(
         "Password",
@@ -151,6 +206,9 @@ def render_login() -> None:
             st.session_state.authenticated = True
             st.session_state.auth_user = DEMO_USERNAME
             st.session_state.login_error = None
+            st.session_state.view = "home"
+            st.session_state.pop("_auth_cookie_written", None)
+            _write_auth_cookie(_AUTH_TOKEN)
             st.rerun()
         else:
             st.session_state.login_error = (
@@ -158,7 +216,8 @@ def render_login() -> None:
             )
             st.rerun()
 
+    st.markdown("</div>", unsafe_allow_html=True)
     st.markdown(
-        '<p class="rc-login-hint">Demo credentials are in RUN.txt.</p>',
+        '<p class="rw-login-hint">Demo credentials are in RUN.txt.</p>',
         unsafe_allow_html=True,
     )
