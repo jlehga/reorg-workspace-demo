@@ -302,14 +302,27 @@ div[data-testid="stMetricLabel"] {
 .stButton > button[data-testid="baseButton-primary"] {
   background: var(--rc-blue) !important;
   border-color: var(--rc-blue) !important;
-  color: #fff !important;
+  color: #FFFFFF !important;
+}
+/* Nested label nodes inherit app ink unless forced white */
+.stButton > button[kind="primary"] *,
+.stButton > button[data-testid="baseButton-primary"] * {
+  color: #FFFFFF !important;
 }
 .stButton > button[kind="primary"]:hover,
 .stButton > button[data-testid="baseButton-primary"]:hover {
   background: var(--rc-blue-hover) !important;
   border-color: var(--rc-blue-hover) !important;
-  color: #fff !important;
+  color: #FFFFFF !important;
   box-shadow: 0 1px 3px rgba(0, 82, 255, 0.25);
+}
+.stButton > button[kind="primary"]:hover *,
+.stButton > button[data-testid="baseButton-primary"]:hover * {
+  color: #FFFFFF !important;
+}
+section[data-testid="stSidebar"] .stButton > button[kind="primary"] *,
+section[data-testid="stSidebar"] .stButton > button[data-testid="baseButton-primary"] * {
+  color: #FFFFFF !important;
 }
 
 /* Sidebar secondary actions: stronger outline on light sidebar */
@@ -332,50 +345,53 @@ section[data-testid="stSidebar"] .stButton > button[data-testid="baseButton-prim
 }
 
 /*
- * Tabs: Streamlit/BaseWeb dark-theme text can stay white while .stApp is forced light.
- * Pin inactive tabs to slate and active to brand blue.
+ * Tabs (Streamlit 1.6x uses React Aria: [data-testid="stTab"] / role=tab).
+ * Pin inactive tabs to slate and active to brand blue. Override any dark-theme
+ * white text and do not let the global markdown ink rule win inside tabs.
  */
-div[data-testid="stTabs"] [data-baseweb="tab-list"],
-.stTabs [data-baseweb="tab-list"] {
+div[data-testid="stTabs"] [role="tablist"] {
   gap: 0.15rem;
   border-bottom: 1px solid var(--rc-border);
   background: transparent !important;
 }
-div[data-testid="stTabs"] [data-baseweb="tab"],
-.stTabs [data-baseweb="tab"],
-div[data-testid="stTabs"] button[role="tab"],
-.stTabs button[role="tab"] {
-  font-weight: 500 !important;
-  color: #334155 !important;
+div[data-testid="stTabs"] [data-testid="stTab"],
+div[data-testid="stTabs"] [role="tab"] {
+  font-weight: 600 !important;
+  color: #0F172A !important;
+  opacity: 1 !important;
   padding: 0.55rem 0.85rem;
   font-family: "IBM Plex Sans", system-ui, sans-serif !important;
   background: transparent !important;
 }
-div[data-testid="stTabs"] [data-baseweb="tab"] p,
-.stTabs [data-baseweb="tab"] p,
-div[data-testid="stTabs"] button[role="tab"] p,
-.stTabs button[role="tab"] p,
-div[data-testid="stTabs"] [data-baseweb="tab"] span,
-.stTabs [data-baseweb="tab"] span,
-div[data-testid="stTabs"] button[role="tab"] span,
-.stTabs button[role="tab"] span {
-  color: inherit !important;
-}
-div[data-testid="stTabs"] [aria-selected="true"],
-.stTabs [aria-selected="true"],
-div[data-testid="stTabs"] button[role="tab"][aria-selected="true"],
-.stTabs button[role="tab"][aria-selected="true"] {
-  color: var(--rc-blue) !important;
+div[data-testid="stTabs"] [data-testid="stTab"] p,
+div[data-testid="stTabs"] [role="tab"] p,
+div[data-testid="stTabs"] [data-testid="stTab"] span,
+div[data-testid="stTabs"] [role="tab"] span,
+div[data-testid="stTabs"] [data-testid="stTab"] [data-testid="stMarkdownContainer"] p,
+div[data-testid="stTabs"] [role="tab"] [data-testid="stMarkdownContainer"] p {
+  color: #0F172A !important;
+  opacity: 1 !important;
   font-weight: 600 !important;
 }
+div[data-testid="stTabs"] [role="tab"][aria-selected="true"],
+div[data-testid="stTabs"] [data-testid="stTab"][aria-selected="true"] {
+  color: var(--rc-blue) !important;
+  font-weight: 700 !important;
+}
+div[data-testid="stTabs"] [role="tab"][aria-selected="true"] p,
+div[data-testid="stTabs"] [data-testid="stTab"][aria-selected="true"] p,
+div[data-testid="stTabs"] [role="tab"][aria-selected="true"] span,
+div[data-testid="stTabs"] [data-testid="stTab"][aria-selected="true"] span,
+div[data-testid="stTabs"] [role="tab"][aria-selected="true"] [data-testid="stMarkdownContainer"] p,
+div[data-testid="stTabs"] [data-testid="stTab"][aria-selected="true"] [data-testid="stMarkdownContainer"] p {
+  color: var(--rc-blue) !important;
+  font-weight: 700 !important;
+}
 div[data-testid="stTabs"] [data-baseweb="tab-highlight"],
-.stTabs [data-baseweb="tab-highlight"],
-div[data-testid="stTabs"] [data-baseweb="tab-border"],
-.stTabs [data-baseweb="tab-border"] {
+div[data-testid="stTabs"] [data-baseweb="tab-border"] {
   background-color: var(--rc-blue) !important;
 }
-div[data-testid="stTabs"] [data-baseweb="tab-panel"],
-.stTabs [data-baseweb="tab-panel"] {
+div[data-testid="stTabs"] [role="tabpanel"] {
   padding-top: 0.75rem;
 }
 
@@ -389,13 +405,16 @@ label,
 .stTextInput label,
 .stSelectbox label,
 .stCheckbox label,
-div[data-testid="stMarkdownContainer"] p,
-div[data-testid="stMarkdownContainer"] li,
-div[data-testid="stMarkdownContainer"] span,
 .stCaption,
 [data-testid="stCaptionContainer"],
 [data-testid="stCaptionContainer"] p {
   color: var(--rc-ink) !important;
+  opacity: 1 !important;
+}
+/* Body markdown (exclude tab labels, which are also stMarkdownContainer) */
+.stApp .block-container > div div[data-testid="stMarkdownContainer"] p,
+.stApp .block-container > div div[data-testid="stMarkdownContainer"] li {
+  color: var(--rc-ink);
 }
 .stCaption,
 [data-testid="stCaptionContainer"],
