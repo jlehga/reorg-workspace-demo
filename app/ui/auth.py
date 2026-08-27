@@ -6,17 +6,14 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 # Demo credentials (documented in RUN.txt)
-DEMO_USERNAME = "ops.demo"
-DEMO_PASSWORD = "reorg-demo"
+DEMO_USERNAME = "demouser"
+DEMO_PASSWORD = "test123"
 
 # Browser cookie so a full page refresh keeps the demo session.
 _AUTH_COOKIE = "rw_demo_auth"
-_AUTH_TOKEN = "rw-demo-v1-ops"
+_AUTH_TOKEN = "rw-demo-v1"
 _AUTH_MAX_AGE = 7 * 24 * 60 * 60  # 7 days
 
-# Brand sits on the blue app background; the form itself is the white card.
-# (Streamlit cannot nest widgets inside an HTML <div>, so we never open a
-# fake card wrapper around "Sign in" alone.)
 LOGIN_CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:wght@600;700&display=swap');
@@ -35,16 +32,26 @@ html, body, .stApp {
     linear-gradient(165deg, #0033A0 0%, #0052FF 42%, #002B7A 100%) !important;
 }
 
+/* One cohesive white Sign-in card (Streamlit cannot wrap widgets in HTML). */
 .block-container {
-  padding-top: 4rem !important;
-  padding-bottom: 2rem !important;
-  max-width: 420px !important;
-  background: transparent !important;
+  position: relative !important;
+  max-width: 440px !important;
+  margin-top: 7.5rem !important;
+  padding: 1.6rem 1.5rem 1.35rem 1.5rem !important;
+  background: #FFFFFF !important;
+  border-radius: 12px !important;
+  box-shadow: 0 16px 48px rgba(0, 16, 64, 0.35) !important;
 }
 
+/* Brand sits above the card on the blue field. */
 .rw-portal-brand {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -5.75rem;
   text-align: center;
-  margin: 0 0 1.5rem 0;
+  margin: 0;
+  pointer-events: none;
 }
 .rw-portal-brand h1 {
   font-family: "IBM Plex Serif", Georgia, serif !important;
@@ -63,49 +70,35 @@ html, body, .stApp {
   line-height: 1.45;
 }
 
-/* One cohesive white card = the Streamlit form that wraps all login widgets */
-div[data-testid="stForm"] {
-  background: #FFFFFF !important;
-  border: none !important;
-  border-radius: 12px !important;
-  padding: 1.6rem 1.45rem 1.35rem 1.45rem !important;
-  box-shadow: 0 16px 48px rgba(0, 16, 64, 0.35) !important;
-}
-
 .rw-login-card-title {
-  margin: 0 0 1.05rem 0;
-  font-size: 1.1rem;
-  font-weight: 700;
+  margin: 0 0 1rem 0;
+  font-size: 1.05rem;
+  font-weight: 650;
   color: #0F172A !important;
-  font-family: "IBM Plex Sans", system-ui, sans-serif !important;
 }
 
 .rw-login-hint {
-  margin: 1rem 0 0 0;
+  margin: 0.85rem 0 0 0;
   text-align: center;
-  color: #C7D9FF !important;
+  color: #64748B !important;
   font-size: 0.78rem;
   line-height: 1.4;
 }
 
-div[data-testid="stForm"] div[data-testid="stTextInput"] label p,
-div[data-testid="stForm"] div[data-testid="stTextInput"] label span,
-div[data-testid="stForm"] [data-testid="stWidgetLabel"] p {
+div[data-testid="stTextInput"] label p,
+div[data-testid="stTextInput"] label span,
+[data-testid="stWidgetLabel"] p {
   color: #1E293B !important;
   font-weight: 600 !important;
 }
-div[data-testid="stForm"] div[data-testid="stTextInput"] input {
+div[data-testid="stTextInput"] input {
   background: #F8FAFC !important;
   color: #0B1220 !important;
   border: 1px solid #94A3B8 !important;
   border-radius: 8px !important;
 }
 
-div[data-testid="stForm"] .stButton > button,
-div[data-testid="stForm"] button[kind="primaryFormSubmit"],
-div[data-testid="stForm"] button[data-testid="stBaseButton-primaryFormSubmit"],
-div[data-testid="stForm"] button[kind="primary"],
-div[data-testid="stForm"] [data-testid="stFormSubmitButton"] button {
+.stButton > button {
   background: #0052FF !important;
   color: #FFFFFF !important;
   border: 1px solid #0052FF !important;
@@ -113,13 +106,9 @@ div[data-testid="stForm"] [data-testid="stFormSubmitButton"] button {
   border-radius: 8px !important;
   width: 100%;
 }
-div[data-testid="stForm"] .stButton > button:hover,
-div[data-testid="stForm"] button[kind="primaryFormSubmit"]:hover,
-div[data-testid="stForm"] button[data-testid="stBaseButton-primaryFormSubmit"]:hover,
-div[data-testid="stForm"] [data-testid="stFormSubmitButton"] button:hover {
+.stButton > button:hover {
   background: #0041CC !important;
   border-color: #0041CC !important;
-  color: #FFFFFF !important;
 }
 
 div[data-testid="stAlert"] { border-radius: 8px; }
@@ -188,7 +177,7 @@ def sign_out() -> None:
 
 
 def render_login() -> None:
-    """Portal login: brand on blue, one white form-card with all sign-in controls."""
+    """Portal login: Workspace brand on blue above; one white Sign-in card."""
     st.markdown(LOGIN_CSS, unsafe_allow_html=True)
 
     st.markdown(
@@ -201,28 +190,23 @@ def render_login() -> None:
         unsafe_allow_html=True,
     )
 
-    with st.form("login_form", clear_on_submit=False):
-        st.markdown(
-            '<p class="rw-login-card-title">Sign in</p>',
-            unsafe_allow_html=True,
-        )
-        username = st.text_input("Username", key="login_username", autocomplete="username")
-        password = st.text_input(
-            "Password",
-            type="password",
-            key="login_password",
-            autocomplete="current-password",
-        )
-        submitted = st.form_submit_button(
-            "Sign in",
-            type="primary",
-            use_container_width=True,
-        )
+    st.markdown(
+        '<p class="rw-login-card-title">Sign in</p>',
+        unsafe_allow_html=True,
+    )
+
+    username = st.text_input("Username", key="login_username", autocomplete="username")
+    password = st.text_input(
+        "Password",
+        type="password",
+        key="login_password",
+        autocomplete="current-password",
+    )
 
     if st.session_state.get("login_error"):
         st.error(st.session_state.login_error)
 
-    if submitted:
+    if st.button("Sign in", type="primary", use_container_width=True):
         if username.strip() == DEMO_USERNAME and password == DEMO_PASSWORD:
             st.session_state.authenticated = True
             st.session_state.auth_user = DEMO_USERNAME
