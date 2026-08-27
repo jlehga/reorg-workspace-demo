@@ -9,7 +9,10 @@ import streamlit.components.v1 as components
 DEMO_USERNAME = "demouser"
 DEMO_PASSWORD = "test123"
 
-# Browser cookie so a full page refresh keeps the demo session.
+# Persist demo session across full page refresh.
+# Query param is reliable on Streamlit Cloud; cookie is an optional local extra.
+_AUTH_QUERY_KEY = "auth"
+_AUTH_QUERY_VALUE = "demo"
 _AUTH_COOKIE = "rw_demo_auth"
 _AUTH_TOKEN = "rw-demo-v1"
 _AUTH_MAX_AGE = 7 * 24 * 60 * 60  # 7 days
@@ -235,6 +238,47 @@ def _write_auth_cookie(token: str, *, max_age: int = _AUTH_MAX_AGE) -> None:
     )
 
 
+def _set_auth_query_param() -> None:
+    """Put demo auth in the URL so refresh keeps the session on Streamlit Cloud."""
+    try:
+        st.query_params[_AUTH_QUERY_KEY] = _AUTH_QUERY_VALUE
+    except Exception:  # noqa: BLE001
+        pass
+
+
+def _clear_auth_query_param() -> None:
+    try:
+        if _AUTH_QUERY_KEY in st.query_params:
+            del st.query_params[_AUTH_QUERY_KEY]
+    except Exception:  # noqa: BLE001
+        pass
+
+
+def _query_auth_value() -> str | None:
+    try:
+        raw = st.query_params.get(_AUTH_QUERY_KEY)
+    except Exception:  # noqa: BLE001
+        return None
+    if raw is None:
+        return None
+    if isinstance(raw, (list, tuple)):
+        return str(raw[0]) if raw else None
+    return str(raw)
+
+
+def _mark_authenticated() -> None:
+    st.session_state.authenticated = True
+    st.session_state.auth_user = DEMO_USERNAME
+    st.session_state.setdefault("view", "home")
+
+
+def _restore_auth_from_query() -> bool:
+    if _query_auth_value() != _AUTH_QUERY_VALUE:
+        return False
+    _mark_authenticated()
+    return True
+
+
 def _restore_auth_from_cookie() -> bool:
     try:
         token = st.context.cookies.get(_AUTH_COOKIE)
@@ -242,35 +286,41 @@ def _restore_auth_from_cookie() -> bool:
         return False
     if token != _AUTH_TOKEN:
         return False
-    st.session_state.authenticated = True
-    st.session_state.auth_user = DEMO_USERNAME
-    st.session_state.setdefault("view", "home")
+    _mark_authenticated()
+    # Cookie worked locally — also mirror into the URL for Cloud-friendly refresh.
+    _set_auth_query_param()
     return True
 
 
 def is_authenticated() -> bool:
     if st.session_state.get("authenticated"):
         return True
+    # Prefer query param (works on Streamlit Cloud); cookie is optional fallback.
+    if _restore_auth_from_query():
+        return True
     return _restore_auth_from_cookie()
 
 
 def ensure_auth_cookie() -> None:
-    """Keep the demo auth cookie fresh while the user is signed in."""
+    """Keep demo auth persistence (query param + optional cookie) while signed in."""
     if not st.session_state.get("authenticated"):
         return
-    if st.session_state.get("_auth_cookie_written"):
+    if st.session_state.get("_auth_persist_written"):
         return
+    _set_auth_query_param()
     _write_auth_cookie(_AUTH_TOKEN)
-    st.session_state._auth_cookie_written = True
+    st.session_state._auth_persist_written = True
 
 
 def sign_out() -> None:
     st.session_state.authenticated = False
     st.session_state.pop("auth_user", None)
     st.session_state.pop("login_error", None)
+    st.session_state.pop("_auth_persist_written", None)
     st.session_state.pop("_auth_cookie_written", None)
     st.session_state.view = "home"
     st.session_state.case = None
+    _clear_auth_query_param()
     _write_auth_cookie("", max_age=0)
 
 
@@ -314,7 +364,9 @@ def render_login() -> None:
             st.session_state.auth_user = DEMO_USERNAME
             st.session_state.login_error = None
             st.session_state.view = "home"
+            st.session_state.pop("_auth_persist_written", None)
             st.session_state.pop("_auth_cookie_written", None)
+            _set_auth_query_param()
             _write_auth_cookie(_AUTH_TOKEN)
             st.rerun()
         else:

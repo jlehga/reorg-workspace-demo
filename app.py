@@ -54,8 +54,17 @@ def _init_state() -> None:
         st.session_state.case = None
     if "raw_text" not in st.session_state:
         st.session_state.raw_text = SCENARIOS["scenario_a_success"]["text"]
+    # Keep widget key in sync: Streamlit text_area(key=) ignores value= after first mount.
+    if "raw_input" not in st.session_state:
+        st.session_state.raw_input = st.session_state.raw_text
     if "case_index" not in st.session_state:
         st.session_state.case_index = []
+
+
+def _set_freeform_text(text: str) -> None:
+    """Update freeform request text and the text_area widget key together."""
+    st.session_state.raw_text = text
+    st.session_state.raw_input = text
 
 
 def _seed_case_index_if_empty() -> None:
@@ -78,7 +87,7 @@ def _render_sidebar(*, case_view: bool) -> None:
         if st.button("Reset workspace", use_container_width=True):
             st.session_state.workflow = ReorgWorkflow()
             st.session_state.case = None
-            st.session_state.raw_text = SCENARIOS["scenario_a_success"]["text"]
+            _set_freeform_text(SCENARIOS["scenario_a_success"]["text"])
             st.session_state.case_index = seed_demo_cases()
             st.session_state.view = "home"
             st.rerun()
@@ -94,7 +103,7 @@ def _render_sidebar(*, case_view: bool) -> None:
         label_visibility="collapsed",
     )
     if st.button("Load scenario text", use_container_width=True):
-        st.session_state.raw_text = SCENARIOS[scenario_key]["text"]
+        _set_freeform_text(SCENARIOS[scenario_key]["text"])
         st.session_state.case = None
         st.session_state.workflow = ReorgWorkflow()
         st.rerun()
@@ -115,7 +124,7 @@ def _render_sidebar(*, case_view: bool) -> None:
     if st.button("Reset case", use_container_width=True):
         st.session_state.workflow = ReorgWorkflow()
         st.session_state.case = None
-        st.session_state.raw_text = SCENARIOS["scenario_a_success"]["text"]
+        _set_freeform_text(SCENARIOS["scenario_a_success"]["text"])
         st.session_state.view = "home"
         st.rerun()
 
@@ -168,6 +177,7 @@ def _render_case_view() -> None:
             height=220,
             key="raw_input",
         )
+        # Widget key is canonical while the area is mounted; keep raw_text aligned.
         st.session_state.raw_text = raw
 
         if st.button("Analyze reorg", type="primary"):
