@@ -1,14 +1,13 @@
 ════════════════════════════════════════════════════════════════
 TRY THE DEMO (no git clone required)
 ════════════════════════════════════════════════════════════════
-Hosted URL (preferred when live):
-  See docs/HOSTING.md — deploy once via Streamlit Community Cloud
-  (or Render). Deep link:
-  https://share.streamlit.io/deploy?repository=jlehga/reorg-execution-system&branch=main&mainModule=app.py
-
-  After deploy, the public app is typically:
-  https://<your-app-name>.streamlit.app
-  (Paste the live URL here once Cloud shows Running.)
+Hosted URL (try first — no install):
+  Temporary tunnel (live while demo host is up):
+    https://notifications-developmental-diego-complicated.trycloudflare.com
+  Durable Streamlit Cloud (one-click deploy from public mirror):
+    https://share.streamlit.io/deploy?repository=jlehga/reorg-workspace-demo&branch=main&mainModule=app.py
+    → after Deploy finishes, share https://<app>.streamlit.app
+  Details: docs/HOSTING.md
 
 Zip download (no clone):
   1) Download reorg-execution-system.zip from GitHub Releases:

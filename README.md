@@ -30,7 +30,8 @@ The **Reorg Case** is the system of record for *execution*. HRIS/Finance/plannin
 
 ## Try without cloning
 
-- **Hosted demo:** see [docs/HOSTING.md](docs/HOSTING.md) (Streamlit Community Cloud / Render).
+- **Hosted demo (temporary):** https://notifications-developmental-diego-complicated.trycloudflare.com
+- **Durable Streamlit Cloud:** one-click from the [public mirror](https://share.streamlit.io/deploy?repository=jlehga/reorg-workspace-demo&branch=main&mainModule=app.py) — see [docs/HOSTING.md](docs/HOSTING.md).
 - **Zip:** `./make_zip.sh` → `dist/reorg-execution-system.zip`, or download from [GitHub Releases](https://github.com/jlehga/reorg-execution-system/releases).
 - **Clone (optional):** quickstart in [RUN.txt](RUN.txt).
 
