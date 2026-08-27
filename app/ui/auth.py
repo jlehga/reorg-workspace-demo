@@ -157,18 +157,18 @@ div[data-testid="stForm"] [data-testid="stFormSubmitButton"] button:hover {
   color: #FFFFFF !important;
 }
 
-/* Hide clipped "Show password" label text inside the field */
+/*
+  Hide the Streamlit show/hide password toggle. Global DM Sans font-family
+  overrides break Material Icons ligatures ("visibility" renders as text).
+  Password input remains type=password; toggle is optional for this demo.
+*/
 div[data-testid="stForm"] button[aria-label="Show password"],
-div[data-testid="stForm"] button[aria-label="Hide password"] {
-  font-size: 0 !important;
-  width: 2rem !important;
-  min-width: 2rem !important;
-  padding: 0 !important;
-}
-div[data-testid="stForm"] button[aria-label="Show password"] svg,
-div[data-testid="stForm"] button[aria-label="Hide password"] svg {
-  width: 1rem !important;
-  height: 1rem !important;
+div[data-testid="stForm"] button[aria-label="Hide password"],
+div[data-testid="stForm"] [data-testid="stTextInput"] button[kind="icon"],
+div[data-testid="stForm"] [data-testid="stTextInput"] button[data-testid="stBaseButton-icon"],
+div[data-testid="stForm"] [data-testid="stTextInput"] button[data-testid="stBaseButton-secondary"],
+div[data-testid="stForm"] [data-testid="InputInstruction"] {
+  display: none !important;
 }
 
 div[data-testid="stAlert"] { border-radius: 8px; }
