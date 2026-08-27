@@ -190,9 +190,6 @@ html, body, .stApp {
 .rc-case-col-spacer {
   display: none;
 }
-[data-testid="stElementContainer"]:has(.rc-past-cases-root) {
-  display: none !important;
-}
 
 /*
  * Past cases: every row (and the Status/Action header) is a Streamlit

@@ -192,14 +192,9 @@ def render_home() -> None:
                 st.rerun()
 
     with st.container(border=True):
-        # Marker in its own markdown block so the Past cases heading is not hidden
-        # by :has(.rc-past-cases-root) { display: none }.
         st.markdown(
+            '<div class="rc-home-section-label">Past cases</div>'
             '<div class="rc-past-cases-root" aria-hidden="true"></div>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            '<div class="rc-home-section-label">Past cases</div>',
             unsafe_allow_html=True,
         )
 
