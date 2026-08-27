@@ -24,7 +24,11 @@ LOGIN_CSS = """
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
 
 section[data-testid="stSidebar"] { display: none !important; }
-[data-testid="stSidebarCollapsedControl"] { display: none !important; }
+/* Hide all sidebar open/collapse chrome on the login portal */
+[data-testid="stSidebarCollapsedControl"],
+[data-testid="stExpandSidebarButton"],
+[data-testid="stSidebarCollapseButton"],
+[data-testid="stSidebarHeader"] { display: none !important; }
 
 html, body, .stApp, .stApp * {
   font-family: "DM Sans", "Source Sans 3", system-ui, sans-serif !important;

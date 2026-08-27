@@ -855,10 +855,79 @@ section[data-testid="stSidebar"] div[data-testid="stSelectbox"] svg {
   color: #0033A0 !important;
 }
 
-/* Minimize Streamlit chrome / hide Deploy */
+/*
+ * Keep sidebar collapse/expand always visible (Streamlit 1.6x).
+ * Open: stSidebarCollapseButton lives in stSidebarHeader (scrolls with content
+ * by default). Collapsed: stExpandSidebarButton sits in the app header
+ * (legacy: stSidebarCollapsedControl). Pin both so they stay clickable.
+ */
+[data-testid="stSidebarHeader"] {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1000002 !important;
+  /* Opaque enough that scrolled sidebar widgets cannot cover the control */
+  background: #0033A0 !important;
+  padding: 0.35rem 0.15rem 0.45rem 0 !important;
+  margin-bottom: 0.35rem !important;
+  pointer-events: auto !important;
+}
+[data-testid="stSidebarCollapseButton"],
+[data-testid="stSidebarCollapseButton"] button {
+  position: relative !important;
+  z-index: 1000003 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  color: #FFFFFF !important;
+}
+[data-testid="stSidebarCollapseButton"] span,
+[data-testid="stSidebarCollapseButton"] svg,
+[data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"] {
+  color: #FFFFFF !important;
+  fill: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+/* Collapsed sidebar: pin expand control to the main canvas edge */
+[data-testid="stSidebarCollapsedControl"],
+[data-testid="stExpandSidebarButton"] {
+  position: fixed !important;
+  top: 0.55rem !important;
+  left: 0.55rem !important;
+  z-index: 1000005 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  pointer-events: auto !important;
+  color: #0F172A !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.18) !important;
+}
+[data-testid="stSidebarCollapsedControl"] span,
+[data-testid="stSidebarCollapsedControl"] svg,
+[data-testid="stExpandSidebarButton"] span,
+[data-testid="stExpandSidebarButton"] svg,
+[data-testid="stExpandSidebarButton"] [data-testid="stIconMaterial"] {
+  color: #0F172A !important;
+  fill: #0F172A !important;
+  opacity: 1 !important;
+}
+/* Header must not steal clicks from the fixed expand control */
+header[data-testid="stHeader"] {
+  z-index: 999990 !important;
+  background: transparent;
+}
+header[data-testid="stHeader"] [data-testid="stExpandSidebarButton"],
+header[data-testid="stHeader"] [data-testid="stSidebarCollapsedControl"] {
+  pointer-events: auto !important;
+}
+
+/* Minimize Streamlit chrome / hide Deploy (keep kind=header only — not headerNoPadding expand) */
 #MainMenu { visibility: hidden; }
 footer { visibility: hidden; }
-header[data-testid="stHeader"] { background: transparent; }
 .stDeployButton, [data-testid="stDeployButton"],
 div[data-testid="stToolbar"] button[kind="header"],
 div[data-testid="stToolbar"] a { display: none !important; }
