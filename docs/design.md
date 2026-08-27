@@ -33,7 +33,7 @@ The deeper failure mode is not “manual work is slow”—it is that **there is
 
 ## 4. Non-Goals
 
-- Real Slack/email ingestion or Coinbase production integrations
+- Real Slack/email ingestion or production company-system integrations
 - Production identity, SSO, or fine-grained RBAC
 - Durable workflow engines (Temporal/Cadence), retries at scale, or multi-region HA
 - Full compensation-change workflows
@@ -228,7 +228,7 @@ Scales organizationally for large integration estates. **Deferred** for this pro
 
 ### Deliberately not built
 
-Real Slack/email ingestion; real Coinbase integrations; production auth/RBAC; durable workflow infra; production secrets management; full compensation workflows; comprehensive eval platform; production observability; polished production UI.
+Real Slack/email ingestion; real production system integrations; production auth/RBAC; durable workflow infra; production secrets management; full compensation workflows; comprehensive eval platform; production observability; polished production UI.
 
 > I concentrated the prototype on the areas containing the most important technical and product judgment: converting ambiguous intent into a validated change plan and safely coordinating automated and human-mediated execution.
 

@@ -30,6 +30,8 @@ The **Reorg Case** is the system of record for *execution*. HRIS/Finance/plannin
 
 ## Running locally
 
+Copy-paste guide (email-friendly): **[RUN.txt](RUN.txt)**. Submission checklist: **[SUBMISSION.txt](SUBMISSION.txt)**.
+
 ```bash
 python -m venv .venv
 source .venv/bin/activate
@@ -37,16 +39,11 @@ pip install -r requirements.txt
 streamlit run app.py --server.port 8765
 ```
 
-Open the URL Streamlit prints (default in this guide: [http://127.0.0.1:8765](http://127.0.0.1:8765)).
+Or: `./run_demo.sh`
 
-### Environment variables
+Open [http://127.0.0.1:8765](http://127.0.0.1:8765).
 
-| Variable | Required | Purpose |
-| --- | --- | --- |
-| `OPENAI_API_KEY` | No | If set, interpretation uses OpenAI structured JSON extraction. |
-| `OPENAI_MODEL` | No | Defaults to `gpt-4o-mini`. |
-
-Without an API key, the app uses a **deterministic demo extractor** that still produces schema-valid `ExtractedRequest` objects for the included scenarios. The provider name is shown in the sidebar so the limitation is explicit—not disguised as a live model.
+`OPENAI_API_KEY` is optional — without it, a deterministic demo extractor drives the scenarios.
 
 ### Tests
 
@@ -57,24 +54,9 @@ pytest -q
 
 ---
 
-## Demo scenario
+## Demo scenario (60 seconds)
 
-### Scenario A — mostly successful path (default)
-
-1. Sidebar → **Scenario A** → **Load scenario text** (or paste the sample).
-2. Click **Analyze Reorg**.
-3. **Reorg Case** tab: show effective date, org/CC moves, Sarah Patel exception, and the warning that Finance approval was *claimed* but not independently verified.
-4. **Plan & Approve** tab: show dependency graph (approval gate → HRIS → headcount/cost alloc → **manual GL** → reporting → reconcile). Click **Approve Plan**.
-5. **Execution** tab → **Run execution**. Automated steps complete; GL mapping pauses as **Needs Human Action**.
-6. Review the Finance Operations task instructions → **Mark Complete** (correct `CC-4175`).
-7. **Reconciliation** tab: all systems Passed; case **Completed**.
-8. **Audit** tab: walk the event trail.
-
-Optional failure beat: check **Simulate incorrect GL entry** before Mark Complete — reconciliation fails, reporting is blocked, case does not complete.
-
-### Scenario B — ambiguity / failure
-
-Load Scenario B. Analysis surfaces headcount mismatch, inactive cost center `CC-9999`, unknown entities, and unverified Finance claims. This demonstrates a governed workflow, not only a happy path.
+See **[RUN.txt](RUN.txt)** for the short path. Summary: Scenario A → Analyze → note unverified Finance → Approve → Run → Mark Complete GL → Reconciliation. Optional: incorrect-GL failure beat or Scenario B.
 
 ---
 
@@ -82,6 +64,8 @@ Load Scenario B. Analysis surfaces headcount mismatch, inactive cost center `CC-
 
 ```text
 app.py                 # Streamlit entrypoint
+run_demo.sh            # venv + streamlit on :8765
+RUN.txt / SUBMISSION.txt
 app/
   agents/              # Interpretation + LLM provider abstraction
   models/              # Typed Reorg Case domain models

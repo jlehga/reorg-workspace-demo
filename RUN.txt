@@ -1,0 +1,50 @@
+════════════════════════════════════════════════════════════════
+WHAT TO EMAIL (checklist — 3 attachments / links)
+════════════════════════════════════════════════════════════════
+1. Design doc:     docs/design.md
+2. Run instructions: this file (RUN.txt)  — or point them here in the repo
+3. Repo access:    https://github.com/jlehga/reorg-execution-system
+   Repo is PRIVATE. Do one of:
+   • Add recruiter / reviewer GitHub usernames as collaborators, OR
+   • Temporarily make the repo readable, OR
+   • Attach a zip of the repo (exclude .venv/ and _local/)
+
+Also see SUBMISSION.txt for the same checklist in one place.
+
+════════════════════════════════════════════════════════════════
+QUICKSTART — clone & run (copy/paste)
+════════════════════════════════════════════════════════════════
+Repo: https://github.com/jlehga/reorg-execution-system
+
+  git clone https://github.com/jlehga/reorg-execution-system.git
+  cd reorg-execution-system
+
+  python -m venv .venv
+  source .venv/bin/activate          # Windows: .venv\Scripts\activate
+  pip install -r requirements.txt
+  streamlit run app.py --server.port 8765
+
+Open: http://127.0.0.1:8765
+
+Or:  ./run_demo.sh
+
+OPENAI_API_KEY is optional. Without it, a deterministic demo extractor runs
+(fine for the walkthrough). With it, interpretation uses OpenAI.
+
+════════════════════════════════════════════════════════════════
+60-SECOND DEMO PATH
+════════════════════════════════════════════════════════════════
+1. Sidebar → Scenario A → Load scenario text
+2. Analyze Reorg
+3. Reorg Case: note unverified Finance approval warning
+4. Plan & Approve → Approve Plan
+5. Execution → Run execution → Mark Complete on GL task (CC-4175)
+6. Reconciliation: all Passed → case Completed
+7. (Optional) Audit tab for the event trail
+
+Optional failure beat: before Mark Complete, check "Simulate incorrect GL
+entry" → reconciliation fails / reporting blocked.
+Optional Scenario B: load Scenario B for ambiguity / validation failures.
+
+Design: docs/design.md
+Tests:  pytest -q

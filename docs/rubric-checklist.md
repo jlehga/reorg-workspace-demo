@@ -1,6 +1,6 @@
-# Rubric checklist vs Coinbase take-home
+# Rubric checklist vs take-home requirements
 
-| Coinbase requirement | Design | Prototype demonstration | Intentionally non-goal? |
+| Assignment requirement | Design | Prototype demonstration | Intentionally non-goal? |
 | --- | --- | --- | --- |
 | Design doc: summary / outcome | `docs/design.md` §1 | README + live case narrative | — |
 | Goals and non-goals | §3–4, §15 | Sidebar scenarios + README scope | — |

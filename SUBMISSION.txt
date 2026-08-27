@@ -1,0 +1,21 @@
+WHAT TO SEND (email / submission)
+=================================
+
+Attach or link these three items:
+
+1. Design doc
+   docs/design.md
+
+2. Run instructions
+   RUN.txt  (clone, venv, streamlit on port 8765, 60-second demo)
+
+3. Code access
+   https://github.com/jlehga/reorg-execution-system
+
+   PRIVATE REPO — reviewers cannot clone without access. Either:
+   - Add their GitHub usernames as collaborators, or
+   - Temporarily make the repo readable for review, or
+   - Zip the repo and attach it (exclude .venv/ and _local/).
+
+Do NOT email or attach: assets/ screenshots of the original assignment,
+_local/ files, or any proprietary prompt transcription.

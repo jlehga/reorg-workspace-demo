@@ -29,3 +29,8 @@ build/
 
 # Local assignment reference photos (do not publish proprietary source material)
 assets/
+
+# Local-only assignment materials (prompt transcription, etc.) — do not submit/email
+_local/
+**/coinbase*
+**/*coinbase*
