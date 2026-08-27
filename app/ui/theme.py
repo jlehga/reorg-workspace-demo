@@ -84,45 +84,58 @@ html, body, .stApp {
 }
 /* Center home brand + tagline (case view keeps left-aligned brand) */
 .block-container:has(.rc-home-root) .rc-brand {
-  align-items: center;
-  text-align: center;
+  align-items: center !important;
+  text-align: center !important;
+  width: 100% !important;
 }
 .block-container:has(.rc-home-root) .rc-brand-name,
 .block-container:has(.rc-home-root) .rc-brand-tagline {
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 40rem;
 }
 .block-container:has(.rc-home-root) [data-testid="stElementContainer"]:has(.rc-brand),
 .block-container:has(.rc-home-root) [data-testid="stMarkdown"]:has(.rc-brand),
-.block-container:has(.rc-home-root) [data-testid="stMarkdownContainer"]:has(.rc-brand) {
+.block-container:has(.rc-home-root) [data-testid="stMarkdownContainer"]:has(.rc-brand),
+.block-container:has(.rc-home-root) [data-testid="stMarkdownContainer"]:has(.rc-brand) > div {
   width: 100% !important;
+  max-width: 100% !important;
   text-align: center !important;
+  display: block !important;
 }
 .block-container:has(.rc-home-root) > div[data-testid="stVerticalBlock"] {
-  gap: 0.55rem !important;
+  gap: 0.7rem !important;
 }
 .block-container:has(.rc-home-root) [data-testid="stHorizontalBlock"] {
   gap: 1.1rem !important;
+  align-items: flex-start !important;
 }
-/* Keep column rhythm tight but never collapse paragraph→button spacing */
+/* Column rhythm: keep readable space between copy and actions */
 .block-container:has(.rc-home-root) [data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] > div[data-testid="stVerticalBlock"] {
-  gap: 0.65rem !important;
+  gap: 0.75rem !important;
 }
-.block-container:has(.rc-home-root) [data-testid="stElementContainer"] {
+/* Zero margins on non-button home elements only — never collapse action spacing */
+.block-container:has(.rc-home-root) [data-testid="stElementContainer"]:not(:has(.stButton)):not(:has(.rc-home-lead)) {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
 }
-/* Clear gap above primary/secondary home actions (fixes overlap from collapsed gaps) */
+/* Clear gap above home column buttons (fixes overlap covering description text) */
 .block-container:has(.rc-home-root) [data-testid="stColumn"] [data-testid="stElementContainer"]:has(.stButton) {
-  margin-top: 0.55rem !important;
-  padding-top: 0.15rem !important;
+  margin-top: 0.75rem !important;
+  margin-bottom: 0 !important;
+  padding-top: 0.2rem !important;
 }
-.block-container:has(.rc-home-root) [data-testid="stColumn"] .stButton {
+.block-container:has(.rc-home-root) [data-testid="stColumn"] .stButton,
+.block-container:has(.rc-home-root) [data-testid="stColumn"] .stButton > button {
   margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  position: relative !important;
+  top: 0 !important;
+  transform: none !important;
 }
 .block-container:has(.rc-home-root) [data-testid="stMarkdownContainer"] h3 {
-  margin: 0 0 0.15rem 0 !important;
+  margin: 0 0 0.2rem 0 !important;
   font-size: 1.02rem !important;
   font-weight: 600 !important;
   line-height: 1.25 !important;
@@ -132,11 +145,18 @@ html, body, .stApp {
   margin: 0 !important;
   line-height: 1.45 !important;
 }
+/* Lead copy under New Reorg Case — padding keeps button clear of text */
 .rc-home-lead {
-  margin: 0 !important;
-  padding: 0 0 0.35rem 0 !important;
+  display: block !important;
+  margin: 0 0 0.35rem 0 !important;
+  padding: 0 0 0.55rem 0 !important;
   line-height: 1.45 !important;
   color: var(--rc-ink) !important;
+  font-size: 1rem !important;
+}
+.block-container:has(.rc-home-root) [data-testid="stElementContainer"]:has(.rc-home-lead) {
+  margin-bottom: 0.15rem !important;
+  overflow: visible !important;
 }
 .block-container:has(.rc-home-root) [data-testid="stCaptionContainer"] {
   margin: 0 !important;

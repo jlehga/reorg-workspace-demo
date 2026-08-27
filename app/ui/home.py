@@ -112,11 +112,12 @@ def render_home() -> None:
     left, right = st.columns([1.2, 1])
     with left:
         st.markdown("### New Reorg Case")
+        # Use a div (not <p>): Streamlit strips class attributes from bare paragraphs.
         st.markdown(
-            '<p class="rc-home-lead">'
+            '<div class="rc-home-lead">'
             "Paste an email, Slack message, or document. The workspace turns it into a "
             "governed case: interpret, validate, approve, execute, and reconcile."
-            "</p>",
+            "</div>",
             unsafe_allow_html=True,
         )
         if st.button("New Reorg Case", type="primary", use_container_width=True):
