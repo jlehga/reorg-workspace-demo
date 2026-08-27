@@ -209,9 +209,14 @@ html, body, .stApp {
   border-bottom: 1px solid var(--rc-border);
   overflow-x: clip;
 }
+/*
+ * Status / Action labels must not sit on a horizontal rule.
+ * No border on the header row; clear air under the labels before the first case.
+ */
 [data-testid="stHorizontalBlock"]:has(.rc-case-col-head) {
-  padding: 0.2rem 0 0.42rem 0 !important;
-  margin: 0.1rem 0 -0.12rem 0 !important;
+  border-bottom: none !important;
+  padding: 0.1rem 0 0.15rem 0 !important;
+  margin: 0.05rem 0 0.7rem 0 !important;
 }
 /* No trailing divider after the last case. */
 [data-testid="stHorizontalBlock"]:has(.rc-case-row-last) {
@@ -301,10 +306,15 @@ html, body, .stApp {
   max-width: 100%;
 }
 @media (max-width: 720px) {
-  [data-testid="stHorizontalBlock"]:has(.rc-case-main),
-  [data-testid="stHorizontalBlock"]:has(.rc-case-col-head) {
+  [data-testid="stHorizontalBlock"]:has(.rc-case-main) {
     gap: 0.45rem !important;
     padding: 0.55rem 0 !important;
+  }
+  [data-testid="stHorizontalBlock"]:has(.rc-case-col-head) {
+    gap: 0.45rem !important;
+    border-bottom: none !important;
+    padding: 0.1rem 0 0.1rem 0 !important;
+    margin: 0.05rem 0 0.55rem 0 !important;
   }
   .rc-case-col-head-action {
     text-align: left;
