@@ -10,8 +10,12 @@ TRY THE DEMO (no install required)
 
 2. Design deliverable: docs/design.md
 
-3. OPTIONAL — only if the live link does not work:
-   Zip (no clone):
+3. Source (version-controlled; not required to review):
+   Private repo: https://github.com/jlehga/reorg-execution-system
+   Access on request, or use an attached / release zip. Cloning is optional.
+
+4. OPTIONAL — only if the live link does not work:
+   Zip (preferred fallback — no clone):
      Download reorg-execution-system.zip from GitHub Releases:
        https://github.com/jlehga/reorg-execution-system/releases
      Or build locally: ./make_zip.sh  →  dist/reorg-execution-system.zip
@@ -20,7 +24,7 @@ TRY THE DEMO (no install required)
        → streamlit run app.py --server.port 8765
        → http://127.0.0.1:8765
 
-   Clone & run:
+   Clone & run (only if access has been granted):
      git clone https://github.com/jlehga/reorg-execution-system.git
      cd reorg-execution-system
      python -m venv .venv

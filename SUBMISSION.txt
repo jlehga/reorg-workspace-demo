@@ -12,16 +12,20 @@ How to try it
 2. Design document (primary design deliverable):
    docs/design.md
 
-3. OPTIONAL — only if the live link does not work:
+3. Source (version-controlled; not required to review):
+   Private GitHub repository:
+   https://github.com/jlehga/reorg-execution-system
+   Access available on request, or attach / download a source zip.
+   Reviewers do not need to clone to evaluate the design or walkthrough.
+
+4. OPTIONAL — only if the live demo is unavailable:
    Zip: download reorg-execution-system.zip from
    https://github.com/jlehga/reorg-execution-system/releases
-   or build with ./make_zip.sh → dist/reorg-execution-system.zip
-   Then: unzip → python -m venv .venv → pip install -r requirements.txt
+   (or build with ./make_zip.sh → dist/reorg-execution-system.zip),
+   then: unzip → python -m venv .venv → pip install -r requirements.txt
    → streamlit run app.py --server.port 8765 → http://127.0.0.1:8765
 
-   Clone:
-   Private: https://github.com/jlehga/reorg-execution-system
-   Public mirror: https://github.com/jlehga/reorg-workspace-demo
+   Clone only if repo access has been granted — see RUN.txt.
    Full quickstart + 60-second path: RUN.txt
 
 Included materials
@@ -29,7 +33,8 @@ Included materials
 • Design document (primary design deliverable): docs/design.md
 • Run / review instructions: RUN.txt
 • Hosting guide: docs/HOSTING.md
-• Source repository (optional): https://github.com/jlehga/reorg-execution-system
+• Source repository (version-controlled; access on request):
+  https://github.com/jlehga/reorg-execution-system
 
 What the prototype demonstrates
 -------------------------------

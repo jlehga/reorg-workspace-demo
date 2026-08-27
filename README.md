@@ -33,11 +33,19 @@ The **Reorg Case** is the system of record for *execution*. HRIS/Finance/plannin
 1. **Live demo (primary):** https://jlehga-reorg-workspace-demo-app-ggbknu.streamlit.app/  
    Login: **demouser** / **test123**
 2. **Design deliverable:** [docs/design.md](docs/design.md)
-3. **OPTIONAL** — only if the live link does not work: zip or clone — see [RUN.txt](RUN.txt) and [docs/HOSTING.md](docs/HOSTING.md).
+3. **Source (version-controlled):** private repo
+   [jlehga/reorg-execution-system](https://github.com/jlehga/reorg-execution-system) —
+   access on request, or use an attached / release zip. Cloning is not required
+   to review the design or walkthrough.
+4. **OPTIONAL** — only if the live link does not work: zip (preferred) or clone
+   if access has been granted — see [RUN.txt](RUN.txt) and
+   [docs/HOSTING.md](docs/HOSTING.md).
 
 Copy-paste guide: **[RUN.txt](RUN.txt)**. Submission checklist: **[SUBMISSION.txt](SUBMISSION.txt)**.
 
 ### Running locally (fallback)
+
+From a zip (or clone if access granted):
 
 ```bash
 python -m venv .venv

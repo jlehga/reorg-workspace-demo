@@ -40,10 +40,12 @@ streamlit run app.py --server.port 8765
 
 ### Git clone
 
+Only if access has been granted (private repo is version-controlled; not required for review):
+
 Private: https://github.com/jlehga/reorg-execution-system  
 Public mirror: https://github.com/jlehga/reorg-workspace-demo  
 
-See `RUN.txt` quickstart. Only needed if reviewers want full source/history.
+See `RUN.txt` quickstart. Prefer zip above when the live demo is down.
 
 ### Other hosts (maintainer)
 
