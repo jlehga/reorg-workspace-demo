@@ -61,12 +61,6 @@ def _init_state() -> None:
         st.session_state.raw_input = st.session_state.raw_text
     if "case_index" not in st.session_state:
         st.session_state.case_index = []
-    if "llm_api_key" not in st.session_state:
-        st.session_state.llm_api_key = ""
-    if "llm_model" not in st.session_state:
-        st.session_state.llm_model = ""
-    if "llm_base_url" not in st.session_state:
-        st.session_state.llm_base_url = ""
 
 
 def _set_freeform_text(text: str) -> None:
@@ -80,63 +74,6 @@ def _seed_case_index_if_empty() -> None:
         st.session_state.case_index = seed_demo_cases()
 
 
-
-def _refresh_workflow_llm() -> None:
-    """Point the current workflow interpreter at the provider from Settings/env."""
-    wf: ReorgWorkflow = st.session_state.workflow
-    wf.interpreter.provider = get_llm_provider()
-
-
-def _render_settings_panel() -> None:
-    mode = llm_mode_label()
-    st.markdown(
-        f'<p class="rc-sidebar-mode">Interpretation: <strong>{html_escape(mode)}</strong></p>',
-        unsafe_allow_html=True,
-    )
-    with st.expander("Settings", expanded=False):
-        st.caption(
-            "Optional live LLM for freeform interpretation. "
-            "Leave blank to keep the built-in demo parser. Env vars also work."
-        )
-        api_key = st.text_input(
-            "LLM API key",
-            value=st.session_state.get("llm_api_key") or "",
-            type="password",
-            key="settings_llm_api_key_input",
-            help="Stored in this browser session only. Not written to disk.",
-        )
-        model = st.text_input(
-            "Model (optional)",
-            value=st.session_state.get("llm_model") or "",
-            key="settings_llm_model_input",
-            placeholder="e.g. gpt-4o-mini",
-        )
-        base_url = st.text_input(
-            "Base URL (optional)",
-            value=st.session_state.get("llm_base_url") or "",
-            key="settings_llm_base_url_input",
-            placeholder="OpenAI-compatible endpoint",
-        )
-        cols = st.columns(2)
-        with cols[0]:
-            if st.button("Save", use_container_width=True, key="settings_llm_save"):
-                st.session_state.llm_api_key = (api_key or "").strip()
-                st.session_state.llm_model = (model or "").strip()
-                st.session_state.llm_base_url = (base_url or "").strip()
-                _refresh_workflow_llm()
-                st.rerun()
-        with cols[1]:
-            if st.button("Clear", use_container_width=True, key="settings_llm_clear"):
-                st.session_state.llm_api_key = ""
-                st.session_state.llm_model = ""
-                st.session_state.llm_base_url = ""
-                st.session_state.settings_llm_api_key_input = ""
-                st.session_state.settings_llm_model_input = ""
-                st.session_state.settings_llm_base_url_input = ""
-                _refresh_workflow_llm()
-                st.rerun()
-
-
 def _render_sidebar(*, case_view: bool) -> None:
     auth_user = st.session_state.get("auth_user", "demo")
 
@@ -147,8 +84,11 @@ def _render_sidebar(*, case_view: bool) -> None:
         st.rerun()
 
     st.markdown("---")
-    st.markdown('<p class="rc-sidebar-label">Settings</p>', unsafe_allow_html=True)
-    _render_settings_panel()
+    mode = llm_mode_label()
+    st.markdown(
+        f'<p class="rc-sidebar-mode">Interpretation: <strong>{html_escape(mode)}</strong></p>',
+        unsafe_allow_html=True,
+    )
 
     if not case_view:
         st.markdown("---")

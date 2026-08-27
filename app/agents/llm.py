@@ -282,10 +282,10 @@ class OpenAIProvider(LLMProvider):
     """
     Live LLM structured extraction via an OpenAI-compatible API.
 
-    Uses LLM_API_KEY (required). Optional LLM_MODEL and LLM_BASE_URL.
-    Values may come from Streamlit session_state (in-app Settings) or env.
-    This is only for the app's interpretation step (freeform text → typed
-    ExtractedRequest), not for approvals or system writes.
+    Uses LLM_API_KEY (required). Optional LLM_MODEL and LLM_BASE_URL from env
+    (or Streamlit Cloud secrets mapped to env). This is only for the app's
+    interpretation step (freeform text → typed ExtractedRequest), not for
+    approvals or system writes.
     """
 
     name = "llm"
@@ -338,31 +338,12 @@ class OpenAIProvider(LLMProvider):
         return ExtractedRequest.model_validate(data)
 
 
-def _session_llm_overrides() -> dict[str, str | None]:
-    """Optional in-app Settings overrides (session_state); safe outside Streamlit."""
-    try:
-        import streamlit as st
-
-        ss = st.session_state
-        key = ss.get("llm_api_key")
-        model = ss.get("llm_model")
-        base = ss.get("llm_base_url")
-        return {
-            "api_key": (str(key).strip() if key else None) or None,
-            "model": (str(model).strip() if model else None) or None,
-            "base_url": (str(base).strip() if base else None) or None,
-        }
-    except Exception:  # noqa: BLE001 — no Streamlit / no session
-        return {"api_key": None, "model": None, "base_url": None}
-
-
 def resolve_llm_settings() -> dict[str, str | None]:
-    """Session Settings first, then environment variables."""
-    overrides = _session_llm_overrides()
+    """Read LLM config from environment only (no in-app key UI)."""
     return {
-        "api_key": overrides["api_key"] or (os.getenv("LLM_API_KEY") or None),
-        "model": overrides["model"] or (os.getenv("LLM_MODEL") or None),
-        "base_url": overrides["base_url"] or (os.getenv("LLM_BASE_URL") or None),
+        "api_key": (os.getenv("LLM_API_KEY") or None),
+        "model": (os.getenv("LLM_MODEL") or None),
+        "base_url": (os.getenv("LLM_BASE_URL") or None),
     }
 
 
@@ -375,7 +356,7 @@ def llm_mode_label() -> str:
 
 def get_llm_provider() -> LLMProvider:
     """
-    Use a live LLM when an API key is set (in-app Settings or LLM_API_KEY env).
+    Use a live LLM when LLM_API_KEY is set in the environment.
 
     Otherwise fall back to the deterministic demo extractor so the walkthrough
     runs with no credentials. The LLM is only used to interpret freeform intake;

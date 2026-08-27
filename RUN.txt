@@ -62,8 +62,7 @@ https://github.com/jlehga/reorg-execution-system
 ────────────────────────────────────────────────────────────────
 6. OPTIONAL LLM
 ────────────────────────────────────────────────────────────────
-Optional live LLM via in-app Settings (or env). Without a key, the
-built-in demo parser runs. The model does not approve or execute.
+Optional live LLM via env (LLM_API_KEY); otherwise the built-in demo parser.
 
 Design: docs/design.md
 Tests:  pytest -q

@@ -58,9 +58,9 @@ Or: `./run_demo.sh`
 
 Open [http://127.0.0.1:8765](http://127.0.0.1:8765). After Sign in: Workspace home → New Reorg Case → case workflow.
 
-Optional live LLM via in-app Settings (or env `LLM_API_KEY`). Without a
-key, a built-in demo parser runs. The model is not used for approvals
-or system writes.
+Optional live LLM via env `LLM_API_KEY` (optional `LLM_MODEL`, `LLM_BASE_URL`).
+Without a key, a built-in demo parser runs. The model is not used for
+approvals or system writes.
 
 ### Tests
 

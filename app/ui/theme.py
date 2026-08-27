@@ -855,28 +855,6 @@ section[data-testid="stSidebar"] div[data-testid="stSelectbox"] svg {
   color: #0033A0 !important;
 }
 
-/* Sidebar Settings inputs */
-section[data-testid="stSidebar"] .stTextInput input,
-section[data-testid="stSidebar"] div[data-testid="stTextInput"] input {
-  background-color: rgba(255, 255, 255, 0.95) !important;
-  color: #0F172A !important;
-  border-color: rgba(255, 255, 255, 0.55) !important;
-}
-section[data-testid="stSidebar"] [data-testid="stExpander"] {
-  background: rgba(255, 255, 255, 0.08) !important;
-  border: 1px solid rgba(255, 255, 255, 0.22) !important;
-  border-radius: 8px !important;
-}
-section[data-testid="stSidebar"] [data-testid="stExpander"] summary,
-section[data-testid="stSidebar"] [data-testid="stExpander"] summary span,
-section[data-testid="stSidebar"] [data-testid="stExpander"] summary p {
-  color: #FFFFFF !important;
-}
-section[data-testid="stSidebar"] [data-testid="stExpander"] details,
-section[data-testid="stSidebar"] [data-testid="stExpander"] div[role="button"] {
-  color: #FFFFFF !important;
-}
-
 /* Minimize Streamlit chrome / hide Deploy */
 #MainMenu { visibility: hidden; }
 footer { visibility: hidden; }

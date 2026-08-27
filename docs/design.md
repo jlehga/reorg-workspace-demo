@@ -117,7 +117,7 @@ Typed Pydantic models (`ExtractedRequest`, `ValidationResult`, `ChangePlan`, `Hu
 
 | Step | Mechanism | Why |
 | --- | --- | --- |
-| Interpretation | LLM structured extraction (optional live model via in-app Settings or `LLM_API_KEY`; deterministic demo provider otherwise). Used only to parse freeform intake. | Intake is inherently unstructured |
+| Interpretation | LLM structured extraction (optional live model via `LLM_API_KEY` env; deterministic demo provider otherwise). Used only to parse freeform intake. | Intake is inherently unstructured |
 | Schema boundary | Pydantic validation | Prevent freeform model text from driving mutations |
 | Validation | Deterministic services vs SoR fixtures | Truth must not be probabilistic |
 | Planning | Deterministic dependency graph | Order is a business invariant |
