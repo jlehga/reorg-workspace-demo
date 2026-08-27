@@ -283,19 +283,30 @@ class OpenAIProvider(LLMProvider):
     Live LLM structured extraction via an OpenAI-compatible API.
 
     Uses LLM_API_KEY (required). Optional LLM_MODEL and LLM_BASE_URL.
+    Values may come from Streamlit session_state (in-app Settings) or env.
     This is only for the app's interpretation step (freeform text → typed
     ExtractedRequest), not for approvals or system writes.
     """
 
     name = "llm"
 
-    def __init__(self, model: str | None = None, api_key: str | None = None) -> None:
+    def __init__(
+        self,
+        model: str | None = None,
+        api_key: str | None = None,
+        base_url: str | None = None,
+    ) -> None:
         from openai import OpenAI
 
-        key = api_key or os.getenv("LLM_API_KEY")
-        self.model = model or os.getenv("LLM_MODEL") or "gpt-4o-mini"
-        base_url = os.getenv("LLM_BASE_URL") or None
-        self.client = OpenAI(api_key=key, base_url=base_url) if base_url else OpenAI(api_key=key)
+        cfg = resolve_llm_settings()
+        key = api_key or cfg["api_key"]
+        self.model = model or cfg["model"] or "gpt-4o-mini"
+        resolved_base = base_url if base_url is not None else cfg["base_url"]
+        self.client = (
+            OpenAI(api_key=key, base_url=resolved_base)
+            if resolved_base
+            else OpenAI(api_key=key)
+        )
 
     def extract(self, raw_text: str) -> ExtractedRequest:
         safe_text = redact_for_prompt(raw_text)
@@ -327,24 +338,61 @@ class OpenAIProvider(LLMProvider):
         return ExtractedRequest.model_validate(data)
 
 
-def _llm_api_key() -> str | None:
-    return os.getenv("LLM_API_KEY")
+def _session_llm_overrides() -> dict[str, str | None]:
+    """Optional in-app Settings overrides (session_state); safe outside Streamlit."""
+    try:
+        import streamlit as st
+
+        ss = st.session_state
+        key = ss.get("llm_api_key")
+        model = ss.get("llm_model")
+        base = ss.get("llm_base_url")
+        return {
+            "api_key": (str(key).strip() if key else None) or None,
+            "model": (str(model).strip() if model else None) or None,
+            "base_url": (str(base).strip() if base else None) or None,
+        }
+    except Exception:  # noqa: BLE001 — no Streamlit / no session
+        return {"api_key": None, "model": None, "base_url": None}
+
+
+def resolve_llm_settings() -> dict[str, str | None]:
+    """Session Settings first, then environment variables."""
+    overrides = _session_llm_overrides()
+    return {
+        "api_key": overrides["api_key"] or (os.getenv("LLM_API_KEY") or None),
+        "model": overrides["model"] or (os.getenv("LLM_MODEL") or None),
+        "base_url": overrides["base_url"] or (os.getenv("LLM_BASE_URL") or None),
+    }
+
+
+def llm_mode_label() -> str:
+    """Human-readable interpretation mode for the UI."""
+    if resolve_llm_settings()["api_key"]:
+        return "Live LLM"
+    return "Built-in demo parser"
 
 
 def get_llm_provider() -> LLMProvider:
     """
-    Use a live LLM when LLM_API_KEY is set.
+    Use a live LLM when an API key is set (in-app Settings or LLM_API_KEY env).
 
     Otherwise fall back to the deterministic demo extractor so the walkthrough
     runs with no credentials. The LLM is only used to interpret freeform intake;
     it never authorizes or executes changes.
     """
-    if _llm_api_key():
+    cfg = resolve_llm_settings()
+    if cfg["api_key"]:
         try:
-            return OpenAIProvider()
+            return OpenAIProvider(
+                api_key=cfg["api_key"],
+                model=cfg["model"],
+                base_url=cfg["base_url"],
+            )
         except Exception:
             return DeterministicExtractor()
     return DeterministicExtractor()
+
 
 
 def _parse_date(text: str) -> Optional[str]:

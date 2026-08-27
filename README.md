@@ -58,9 +58,8 @@ Or: `./run_demo.sh`
 
 Open [http://127.0.0.1:8765](http://127.0.0.1:8765). After Sign in: Workspace home → New Reorg Case → case workflow.
 
-Optional `LLM_API_KEY`: lets the app call a live LLM to interpret freeform reorg
-text into a structured case. Without it, a built-in deterministic parser runs the
-demo. Optional: `LLM_MODEL`, `LLM_BASE_URL`. The model is not used for approvals
+Optional live LLM via in-app Settings (or env `LLM_API_KEY`). Without a
+key, a built-in demo parser runs. The model is not used for approvals
 or system writes.
 
 ### Tests

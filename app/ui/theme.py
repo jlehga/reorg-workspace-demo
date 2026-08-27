@@ -167,13 +167,24 @@ html, body, .stApp {
   line-height: 1.35 !important;
 }
 .rc-home-section-label {
-  margin: 0.35rem 0 0.1rem 0;
-  padding-top: 0.55rem;
-  border-top: 1px solid var(--rc-border);
+  margin: 0 0 0.35rem 0;
+  padding-top: 0;
+  border-top: none;
   font-size: 1.02rem;
   font-weight: 600;
   color: var(--rc-ink);
   line-height: 1.25;
+}
+/* Soft section cards (New Reorg Case / Quick load / Past cases) */
+.block-container:has(.rc-home-root) div[data-testid="stVerticalBlockBorderWrapper"] {
+  background: #F8FAFC !important;
+  border: 1px solid var(--rc-border) !important;
+  border-radius: 10px !important;
+  padding: 0.85rem 1rem 1rem 1rem !important;
+  box-shadow: none !important;
+}
+.block-container:has(.rc-home-root) div[data-testid="stVerticalBlockBorderWrapper"] > div {
+  gap: 0.65rem !important;
 }
 .rc-past-cases-root,
 .rc-case-col-spacer {

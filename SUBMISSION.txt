@@ -28,9 +28,8 @@ How to review
    Not required for the design review or walkthrough.
 
 6. Optional LLM:
-   LLM_API_KEY enables live LLM interpretation of freeform text; without
-   it, a built-in demo parser is used. Optional LLM_MODEL / LLM_BASE_URL.
-   The model does not approve or execute changes.
+   Optional live LLM via in-app Settings (or env). Without a key, the
+   built-in demo parser runs. The model does not approve or execute.
 
 What’s in the zip
 -----------------

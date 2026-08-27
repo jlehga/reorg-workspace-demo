@@ -62,10 +62,8 @@ https://github.com/jlehga/reorg-execution-system
 ────────────────────────────────────────────────────────────────
 6. OPTIONAL LLM
 ────────────────────────────────────────────────────────────────
-LLM_API_KEY is optional. Without it, a deterministic demo extractor runs
-(fine for the walkthrough). With a key, freeform interpretation uses a
-live LLM. Optional: LLM_MODEL, LLM_BASE_URL.
-The model does not approve or execute changes.
+Optional live LLM via in-app Settings (or env). Without a key, the
+built-in demo parser runs. The model does not approve or execute.
 
 Design: docs/design.md
 Tests:  pytest -q

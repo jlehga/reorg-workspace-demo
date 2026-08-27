@@ -14,7 +14,7 @@ Public mirror (source for the hosted app):
 
 https://github.com/jlehga/reorg-workspace-demo
 
-No secrets are required for the walkthrough. Optional: `LLM_API_KEY` under Streamlit App settings → Secrets for live LLM interpretation (`LLM_MODEL` / `LLM_BASE_URL` also optional).
+No secrets are required for the walkthrough. Optional live LLM via in-app Settings (or Streamlit secrets / env).
 
 ## OPTIONAL — only if the live link does not work
 

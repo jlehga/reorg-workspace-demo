@@ -145,64 +145,67 @@ def render_home() -> None:
 
     left, right = st.columns([1.2, 1])
     with left:
-        st.markdown("### New Reorg Case")
-        # Use a div (not <p>): Streamlit strips class attributes from bare paragraphs.
-        st.markdown(
-            '<div class="rc-home-lead">'
-            "Paste an email, Slack message, or document. The workspace turns it into a "
-            "governed case: interpret, validate, approve, execute, and reconcile."
-            "</div>",
-            unsafe_allow_html=True,
-        )
-        if st.button("New Reorg Case", type="primary", use_container_width=True):
-            st.session_state.view = "case"
-            st.session_state.case = None
-            text = SCENARIOS["scenario_a_success"]["text"]
-            st.session_state.raw_text = text
-            st.session_state.raw_input = text
-            st.session_state.workflow = ReorgWorkflow()
-            st.rerun()
-
-    with right:
-        st.markdown("### Quick load")
-        st.caption("Optional demo scenarios for a guided walkthrough.")
-        scenario_key = st.selectbox(
-            "Scenario",
-            options=list(SCENARIOS.keys()),
-            format_func=scenario_option_label,
-        )
-        notes = SCENARIOS[scenario_key].get("notes") or ""
-        if notes:
+        with st.container(border=True):
+            st.markdown("### New Reorg Case")
+            # Use a div (not <p>): Streamlit strips class attributes from bare paragraphs.
             st.markdown(
-                f'<div class="rc-scenario-preview">'
-                f'<p class="rc-scenario-preview-label">What to expect</p>'
-                f'<p class="rc-scenario-preview-body">{html.escape(notes)}</p>'
-                f"</div>",
+                '<div class="rc-home-lead">'
+                "Paste an email, Slack message, or document. The workspace turns it into a "
+                "governed case: interpret, validate, approve, execute, and reconcile."
+                "</div>",
                 unsafe_allow_html=True,
             )
-        if st.button("Start from scenario", use_container_width=True):
-            text = SCENARIOS[scenario_key]["text"]
-            st.session_state.raw_text = text
-            st.session_state.raw_input = text
-            st.session_state.case = None
-            st.session_state.workflow = ReorgWorkflow()
-            st.session_state.view = "case"
-            st.rerun()
+            if st.button("New Reorg Case", type="primary", use_container_width=True):
+                st.session_state.view = "case"
+                st.session_state.case = None
+                text = SCENARIOS["scenario_a_success"]["text"]
+                st.session_state.raw_text = text
+                st.session_state.raw_input = text
+                st.session_state.workflow = ReorgWorkflow()
+                st.rerun()
 
-    st.markdown(
-        '<div class="rc-home-section-label">Past cases</div>'
-        '<div class="rc-past-cases-root" aria-hidden="true"></div>',
-        unsafe_allow_html=True,
-    )
+    with right:
+        with st.container(border=True):
+            st.markdown("### Quick load")
+            st.caption("Optional demo scenarios for a guided walkthrough.")
+            scenario_key = st.selectbox(
+                "Choose a scenario",
+                options=list(SCENARIOS.keys()),
+                format_func=scenario_option_label,
+            )
+            notes = SCENARIOS[scenario_key].get("notes") or ""
+            if notes:
+                st.markdown(
+                    f'<div class="rc-scenario-preview">'
+                    f'<p class="rc-scenario-preview-label">What to expect</p>'
+                    f'<p class="rc-scenario-preview-body">{html.escape(notes)}</p>'
+                    f"</div>",
+                    unsafe_allow_html=True,
+                )
+            if st.button("Start from scenario", use_container_width=True):
+                text = SCENARIOS[scenario_key]["text"]
+                st.session_state.raw_text = text
+                st.session_state.raw_input = text
+                st.session_state.case = None
+                st.session_state.workflow = ReorgWorkflow()
+                st.session_state.view = "case"
+                st.rerun()
 
-    cases: list[dict[str, Any]] = st.session_state.get("case_index", [])
-    if not cases:
-        st.info("No cases yet. Create one with New Reorg Case.")
-        return
+    with st.container(border=True):
+        st.markdown(
+            '<div class="rc-home-section-label">Past cases</div>'
+            '<div class="rc-past-cases-root" aria-hidden="true"></div>',
+            unsafe_allow_html=True,
+        )
 
-    _render_past_cases_header()
-    for i, row in enumerate(cases):
-        _render_past_case_row(row, is_last=(i == len(cases) - 1))
+        cases: list[dict[str, Any]] = st.session_state.get("case_index", [])
+        if not cases:
+            st.info("No cases yet. Create one with New Reorg Case.")
+            return
+
+        _render_past_cases_header()
+        for i, row in enumerate(cases):
+            _render_past_case_row(row, is_last=(i == len(cases) - 1))
 
 
 def upsert_case_index(case) -> None:
