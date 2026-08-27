@@ -891,8 +891,8 @@ section[data-testid="stSidebar"] div[data-testid="stSelectbox"] svg {
   position: sticky !important;
   top: 0 !important;
   z-index: 1000002 !important;
-  /* Opaque enough that scrolled sidebar widgets cannot cover the control */
-  background: #0033A0 !important;
+  /* Match sidebar body blue (#0052FF mid-tone); keep opaque so scroll can't cover control */
+  background: #0052FF !important;
   padding: 0.35rem 0.15rem 0.45rem 0 !important;
   margin-bottom: 0.35rem !important;
   pointer-events: auto !important;
