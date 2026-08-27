@@ -81,17 +81,18 @@ def _case_row_html(
         if openable
         else f'<div class="rc-case-action">{action_html}</div>'
     )
-    return f"""
-    <div class="{row_klass}">
-      <div class="rc-case-main">
-        <p class="rc-case-title">{title}</p>
-        <p class="rc-case-meta">{meta}</p>
-        {note_html}
-      </div>
-      <div class="rc-case-status">{_status_badge(str(row.get("status", "unknown")))}</div>
-      {action_block}
-    </div>
-    """
+    # Single-line HTML: Streamlit markdown breaks multi-block HTML on blank lines.
+    return (
+        f'<div class="{row_klass}">'
+        f'<div class="rc-case-main">'
+        f'<p class="rc-case-title">{title}</p>'
+        f'<p class="rc-case-meta">{meta}</p>'
+        f"{note_html}"
+        f"</div>"
+        f'<div class="rc-case-status">{_status_badge(str(row.get("status", "unknown")))}</div>'
+        f"{action_block}"
+        f"</div>"
+    )
 
 
 def render_home() -> None:
@@ -147,23 +148,18 @@ def render_home() -> None:
         st.info("No cases yet. Create one with New Reorg Case.")
         return
 
-    # Batch non-openable rows into one HTML list so status columns share a grid.
-    buffer: list[str] = []
-
-    def flush_buffer() -> None:
-        nonlocal buffer
-        if not buffer:
-            return
-        st.markdown(
-            f'<div class="rc-case-list">{"".join(buffer)}</div>',
-            unsafe_allow_html=True,
-        )
-        buffer = []
-
+    # One HTML list (no blank lines) so Streamlit keeps markup as HTML.
+    sample_rows: list[str] = []
+    openable_rows: list[dict[str, Any]] = []
     for row in cases:
-        openable = bool(row.get("openable") and row.get("case_ref"))
-        if openable:
-            flush_buffer()
+        if row.get("openable") and row.get("case_ref"):
+            if sample_rows:
+                st.markdown(
+                    f'<div class="rc-case-list">{"".join(sample_rows)}</div>',
+                    unsafe_allow_html=True,
+                )
+                sample_rows = []
+            openable_rows.append(row)
             main = st.columns([6.2, 1])
             with main[0]:
                 st.markdown(
@@ -177,9 +173,13 @@ def render_home() -> None:
                     st.session_state.view = "case"
                     st.rerun()
         else:
-            buffer.append(_case_row_html(row, action_html="Sample"))
+            sample_rows.append(_case_row_html(row, action_html="Sample"))
 
-    flush_buffer()
+    if sample_rows:
+        st.markdown(
+            f'<div class="rc-case-list">{"".join(sample_rows)}</div>',
+            unsafe_allow_html=True,
+        )
 
 
 def upsert_case_index(case) -> None:
