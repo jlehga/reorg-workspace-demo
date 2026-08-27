@@ -35,8 +35,8 @@ html, body, .stApp, .stApp * {
 }
 
 .block-container {
-  padding-top: 1.75rem !important;
-  padding-bottom: 1.25rem !important;
+  padding-top: 1.35rem !important;
+  padding-bottom: 1rem !important;
   padding-left: 1rem !important;
   padding-right: 1rem !important;
   max-width: 400px !important;
@@ -45,7 +45,7 @@ html, body, .stApp, .stApp * {
 
 /* Collapse Streamlit's default vertical rhythm on the login portal */
 .block-container > div[data-testid="stVerticalBlock"] {
-  gap: 0.55rem !important;
+  gap: 0.4rem !important;
 }
 .block-container [data-testid="stMarkdownContainer"] {
   margin: 0 !important;
@@ -57,27 +57,28 @@ html, body, .stApp, .stApp * {
 
 .rw-portal-brand {
   text-align: center;
-  margin: 0 0 0.65rem 0;
+  margin: 0 auto 0.5rem auto;
   width: 100%;
 }
 .rw-portal-brand h1 {
   font-family: "DM Sans", "Source Sans 3", system-ui, sans-serif !important;
   font-weight: 700;
-  font-size: 1.95rem;
-  line-height: 1.2;
+  font-size: 1.85rem;
+  line-height: 1.15;
   color: #FFFFFF !important;
-  margin: 0 0 0.35rem 0;
+  margin: 0 0 0.25rem 0;
   letter-spacing: -0.03em;
   text-align: center;
 }
 .rw-portal-brand h1 span { color: #B8D0FF !important; }
 .rw-portal-brand p {
-  margin: 0;
+  margin: 0 auto;
   color: #D6E4FF !important;
-  font-size: 0.9rem;
-  line-height: 1.4;
+  font-size: 0.88rem;
+  line-height: 1.35;
   text-align: center;
   font-weight: 400;
+  max-width: 22rem;
 }
 
 /* One cohesive white card = the form wrapping title + inputs + button */
@@ -85,12 +86,12 @@ div[data-testid="stForm"] {
   background: #FFFFFF !important;
   border: none !important;
   border-radius: 12px !important;
-  padding: 1.1rem 1.2rem 1rem 1.2rem !important;
+  padding: 0.95rem 1.1rem 0.9rem 1.1rem !important;
   box-shadow: 0 14px 40px rgba(0, 16, 64, 0.32) !important;
   margin: 0 !important;
 }
 div[data-testid="stForm"] > div[data-testid="stVerticalBlock"] {
-  gap: 0.55rem !important;
+  gap: 0.4rem !important;
 }
 div[data-testid="stForm"] [data-testid="stElementContainer"],
 div[data-testid="stForm"] [data-testid="stFormSubmitButton"],

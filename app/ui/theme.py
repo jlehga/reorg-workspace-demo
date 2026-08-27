@@ -42,8 +42,8 @@ html, body, .stApp {
 }
 
 .block-container {
-  padding-top: 1.25rem;
-  padding-bottom: 3rem;
+  padding-top: 1rem;
+  padding-bottom: 2.5rem;
   max-width: 1180px;
 }
 
@@ -51,15 +51,15 @@ html, body, .stApp {
 .rc-brand {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  margin-bottom: 0.85rem;
-  padding-bottom: 0.9rem;
+  gap: 0.2rem;
+  margin: 0 0 0.55rem 0;
+  padding: 0 0 0.55rem 0;
   border-bottom: 1px solid var(--rc-border);
 }
 .rc-brand-name {
   font-family: "IBM Plex Serif", Georgia, serif !important;
   font-weight: 700;
-  font-size: 2.05rem;
+  font-size: 1.85rem;
   line-height: 1.15;
   letter-spacing: -0.02em;
   color: var(--rc-ink);
@@ -71,10 +71,132 @@ html, body, .stApp {
 .rc-brand-tagline {
   margin: 0;
   color: var(--rc-muted);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 400;
   max-width: 52rem;
-  line-height: 1.45;
+  line-height: 1.4;
+}
+
+/* Home workspace: tighter Streamlit rhythm + aligned past-case rows */
+.rc-home-root { display: none; }
+.block-container:has(.rc-home-root) {
+  padding-top: 0.85rem !important;
+}
+.block-container:has(.rc-home-root) > div[data-testid="stVerticalBlock"] {
+  gap: 0.4rem !important;
+}
+.block-container:has(.rc-home-root) [data-testid="stHorizontalBlock"] {
+  gap: 1.1rem !important;
+}
+.block-container:has(.rc-home-root) [data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] > div[data-testid="stVerticalBlock"] {
+  gap: 0.35rem !important;
+}
+.block-container:has(.rc-home-root) [data-testid="stElementContainer"] {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+.block-container:has(.rc-home-root) [data-testid="stMarkdownContainer"] h3 {
+  margin: 0 0 0.15rem 0 !important;
+  font-size: 1.02rem !important;
+  font-weight: 600 !important;
+  line-height: 1.25 !important;
+  color: var(--rc-ink) !important;
+}
+.block-container:has(.rc-home-root) [data-testid="stMarkdownContainer"] p {
+  margin: 0 !important;
+  line-height: 1.4 !important;
+}
+.block-container:has(.rc-home-root) [data-testid="stCaptionContainer"] {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.block-container:has(.rc-home-root) [data-testid="stCaptionContainer"] p {
+  margin: 0 !important;
+  line-height: 1.35 !important;
+}
+.rc-home-section-label {
+  margin: 0.25rem 0 0.2rem 0;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--rc-border);
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--rc-ink);
+  line-height: 1.25;
+}
+.rc-case-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0.15rem 0 0 0;
+}
+.rc-case-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 7.25rem 5.25rem;
+  column-gap: 0.85rem;
+  align-items: start;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--rc-border);
+}
+.rc-case-row.rc-case-row-openable {
+  grid-template-columns: minmax(0, 1fr) 7.25rem;
+}
+.rc-case-row:last-child {
+  border-bottom: none;
+}
+.rc-case-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  min-width: 0;
+}
+.rc-case-title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--rc-ink);
+  line-height: 1.3;
+}
+.rc-case-meta {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--rc-muted);
+  line-height: 1.35;
+}
+.rc-case-note {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--rc-muted);
+  line-height: 1.35;
+}
+.rc-case-status {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-top: 0.1rem;
+}
+.rc-case-action {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding-top: 0.12rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--rc-muted);
+}
+.rc-case-open-slot {
+  margin-top: -0.15rem;
+}
+@media (max-width: 720px) {
+  .rc-case-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "main status"
+      "main action";
+    row-gap: 0.25rem;
+  }
+  .rc-case-main { grid-area: main; }
+  .rc-case-status { grid-area: status; justify-content: flex-end; }
+  .rc-case-action { grid-area: action; }
 }
 
 /* Stage framing */

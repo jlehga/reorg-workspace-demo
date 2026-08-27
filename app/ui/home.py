@@ -2,12 +2,29 @@
 
 from __future__ import annotations
 
+import html
 from typing import Any
 
 import streamlit as st
 
 from app.data.scenarios import SCENARIOS
 from app.workflow.engine import ReorgWorkflow
+
+_STATUS_BADGE = {
+    "completed": "rc-badge-green",
+    "failed": "rc-badge-red",
+    "blocked": "rc-badge-red",
+    "executing": "rc-badge-blue",
+    "reconciling": "rc-badge-blue",
+    "interpreted": "rc-badge-blue",
+    "validated": "rc-badge-blue",
+    "planned": "rc-badge-blue",
+    "approved": "rc-badge-blue",
+    "awaiting_approval": "rc-badge-orange",
+    "needs_review": "rc-badge-orange",
+    "needs_human_action": "rc-badge-orange",
+    "draft": "rc-badge-gray",
+}
 
 
 def seed_demo_cases() -> list[dict[str, Any]]:
@@ -34,7 +51,51 @@ def seed_demo_cases() -> list[dict[str, Any]]:
     ]
 
 
+def _status_badge(status_raw: str) -> str:
+    key = str(status_raw or "unknown").strip().lower().replace(" ", "_")
+    label = html.escape(key.replace("_", " ").title())
+    klass = _STATUS_BADGE.get(key, "rc-badge-gray")
+    return f'<span class="rc-badge {klass}">{label}</span>'
+
+
+def _case_row_html(
+    row: dict[str, Any],
+    *,
+    action_html: str | None = "Sample",
+) -> str:
+    title = html.escape(str(row.get("title") or row.get("id") or "Reorg Case"))
+    case_id = html.escape(str(row.get("id") or "—"))
+    effective = html.escape(str(row.get("effective_date") or "—"))
+    updated = html.escape(str(row.get("updated") or ""))
+    note = row.get("note")
+    note_html = (
+        f'<p class="rc-case-note">{html.escape(str(note))}</p>' if note else ""
+    )
+    meta = f"{case_id} · Effective {effective}"
+    if updated:
+        meta += f" · {updated}"
+    openable = action_html is None
+    row_klass = "rc-case-row rc-case-row-openable" if openable else "rc-case-row"
+    action_block = (
+        ""
+        if openable
+        else f'<div class="rc-case-action">{action_html}</div>'
+    )
+    return f"""
+    <div class="{row_klass}">
+      <div class="rc-case-main">
+        <p class="rc-case-title">{title}</p>
+        <p class="rc-case-meta">{meta}</p>
+        {note_html}
+      </div>
+      <div class="rc-case-status">{_status_badge(str(row.get("status", "unknown")))}</div>
+      {action_block}
+    </div>
+    """
+
+
 def render_home() -> None:
+    st.markdown('<div class="rc-home-root" aria-hidden="true"></div>', unsafe_allow_html=True)
     st.markdown(
         """
         <div class="rc-brand">
@@ -76,37 +137,49 @@ def render_home() -> None:
             st.session_state.view = "case"
             st.rerun()
 
-    st.markdown("---")
-    st.markdown("### Past cases")
+    st.markdown(
+        '<div class="rc-home-section-label">Past cases</div>',
+        unsafe_allow_html=True,
+    )
 
     cases: list[dict[str, Any]] = st.session_state.get("case_index", [])
     if not cases:
         st.info("No cases yet. Create one with New Reorg Case.")
         return
 
+    # Batch non-openable rows into one HTML list so status columns share a grid.
+    buffer: list[str] = []
+
+    def flush_buffer() -> None:
+        nonlocal buffer
+        if not buffer:
+            return
+        st.markdown(
+            f'<div class="rc-case-list">{"".join(buffer)}</div>',
+            unsafe_allow_html=True,
+        )
+        buffer = []
+
     for row in cases:
-        status = str(row.get("status", "unknown")).replace("_", " ").title()
-        with st.container():
-            c1, c2, c3 = st.columns([3, 1.2, 1])
-            with c1:
-                st.markdown(f"**{row.get('title') or row.get('id')}**")
-                st.caption(
-                    f"{row.get('id')} · Effective {row.get('effective_date') or '—'} · "
-                    f"{row.get('updated') or ''}"
+        openable = bool(row.get("openable") and row.get("case_ref"))
+        if openable:
+            flush_buffer()
+            main = st.columns([6.2, 1])
+            with main[0]:
+                st.markdown(
+                    f'<div class="rc-case-list">{_case_row_html(row, action_html=None)}</div>',
+                    unsafe_allow_html=True,
                 )
-                if row.get("note"):
-                    st.caption(row["note"])
-            with c2:
-                st.write(status)
-            with c3:
-                if row.get("openable") and row.get("case_ref"):
-                    if st.button("Open", key=f"open_{row['id']}", use_container_width=True):
-                        st.session_state.case = row["case_ref"]
-                        st.session_state.view = "case"
-                        st.rerun()
-                else:
-                    st.caption("Sample")
-            st.markdown("")
+            with main[1]:
+                st.markdown('<div class="rc-case-open-slot"></div>', unsafe_allow_html=True)
+                if st.button("Open", key=f"open_{row['id']}", use_container_width=True):
+                    st.session_state.case = row["case_ref"]
+                    st.session_state.view = "case"
+                    st.rerun()
+        else:
+            buffer.append(_case_row_html(row, action_html="Sample"))
+
+    flush_buffer()
 
 
 def upsert_case_index(case) -> None:
