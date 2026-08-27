@@ -249,9 +249,9 @@ html, body, [class*="css"] {
   padding: 0.12rem 0.4rem;
   border-radius: 4px;
 }
-.rc-type-auto { background: #EEF2FF; color: #3730A3; }
+.rc-type-auto { background: var(--rc-blue-soft); color: #003DB8; }
 .rc-type-manual { background: #FEF3C7; color: #92400E; }
-.rc-type-gate { background: #E0E7FF; color: #3730A3; }
+.rc-type-gate { background: #E2E8F0; color: #334155; }
 .rc-action-meta {
   font-size: 0.82rem;
   color: var(--rc-muted);
@@ -310,13 +310,26 @@ div[data-testid="stMetricLabel"] {
   font-weight: 500;
   color: var(--rc-muted);
   padding: 0.55rem 0.85rem;
+  font-family: "IBM Plex Sans", system-ui, sans-serif !important;
 }
 .stTabs [aria-selected="true"] {
   color: var(--rc-blue) !important;
   font-weight: 600;
 }
-.stTabs [data-baseweb="tab-highlight"] {
+.stTabs [data-baseweb="tab-highlight"],
+.stTabs [data-baseweb="tab-border"] {
   background-color: var(--rc-blue) !important;
+}
+.stTabs [data-baseweb="tab-panel"] {
+  padding-top: 0.75rem;
+}
+
+/* Force brand typography through Streamlit wrappers */
+.rc-brand-name, .rc-brand-name * {
+  font-family: "IBM Plex Serif", Georgia, serif !important;
+}
+.stMarkdown, .stText, .stCaption, label, p, span, button {
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
 }
 
 /* Alerts */

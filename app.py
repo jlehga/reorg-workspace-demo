@@ -59,7 +59,7 @@ def main() -> None:
     st.markdown(
         """
         <div class="rc-brand">
-          <h1 class="rc-brand-name">Reorg <span>Case</span></h1>
+          <div class="rc-brand-name">Reorg <span>Case</span></div>
           <p class="rc-brand-tagline">
             Turn freeform reorg requests into a governed case —
             interpret, validate, approve, execute, and reconcile across HR and Finance systems.
@@ -104,6 +104,8 @@ def main() -> None:
             st.rerun()
 
     case = st.session_state.case
+    if case is not None:
+        case_badge(case)
 
     tab_submit, tab_case, tab_plan, tab_exec, tab_recon, tab_audit = st.tabs(
         [
@@ -152,8 +154,6 @@ def main() -> None:
             with tab:
                 st.info("Submit and analyze a reorg request to populate this view.")
         return
-
-    case_badge(case)
 
     with tab_case:
         stage_header(
