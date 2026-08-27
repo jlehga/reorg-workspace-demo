@@ -134,7 +134,7 @@ html, body, .stApp {
   grid-template-columns: minmax(0, 1fr) 7.25rem 5.25rem;
   column-gap: 0.85rem;
   align-items: start;
-  padding: 0.55rem 0;
+  padding: 0.42rem 0;
   border-bottom: 1px solid var(--rc-border);
 }
 .rc-case-row.rc-case-row-openable {

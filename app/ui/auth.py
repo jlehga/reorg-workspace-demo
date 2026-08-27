@@ -157,6 +157,20 @@ div[data-testid="stForm"] [data-testid="stFormSubmitButton"] button:hover {
   color: #FFFFFF !important;
 }
 
+/* Hide clipped "Show password" label text inside the field */
+div[data-testid="stForm"] button[aria-label="Show password"],
+div[data-testid="stForm"] button[aria-label="Hide password"] {
+  font-size: 0 !important;
+  width: 2rem !important;
+  min-width: 2rem !important;
+  padding: 0 !important;
+}
+div[data-testid="stForm"] button[aria-label="Show password"] svg,
+div[data-testid="stForm"] button[aria-label="Hide password"] svg {
+  width: 1rem !important;
+  height: 1rem !important;
+}
+
 div[data-testid="stAlert"] { border-radius: 8px; }
 
 #MainMenu { visibility: hidden; }
