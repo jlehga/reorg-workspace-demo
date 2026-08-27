@@ -1,0 +1,22 @@
+{
+  "approvals": [
+    {
+      "id": "APR-100",
+      "subject": "Payments Engineering reorg to Jane Smith",
+      "approver_role": "Finance",
+      "approver_name": "Finance Controller Desk",
+      "status": "pending",
+      "related_cost_centers": ["CC-4102", "CC-4175"],
+      "notes": "No recorded Finance approval for Payments move as of fixture snapshot."
+    },
+    {
+      "id": "APR-200",
+      "subject": "Q3 Platform hiring plan",
+      "approver_role": "Finance",
+      "approver_name": "Finance Controller Desk",
+      "status": "approved",
+      "related_cost_centers": ["CC-4200"],
+      "notes": "Unrelated prior approval; must not satisfy Payments reorg."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "cost_centers": [
+    {
+      "id": "CC-4000",
+      "name": "Engineering Leadership",
+      "active": true,
+      "gl_account": "GL-6000"
+    },
+    {
+      "id": "CC-4100",
+      "name": "Consumer Engineering",
+      "active": true,
+      "gl_account": "GL-6100"
+    },
+    {
+      "id": "CC-4102",
+      "name": "Payments Engineering",
+      "active": true,
+      "gl_account": "GL-6102"
+    },
+    {
+      "id": "CC-4175",
+      "name": "Payments Engineering (Jane Org)",
+      "active": true,
+      "gl_account": "GL-6175"
+    },
+    {
+      "id": "CC-4200",
+      "name": "Platform Engineering",
+      "active": true,
+      "gl_account": "GL-6200"
+    },
+    {
+      "id": "CC-9999",
+      "name": "Deprecated (inactive)",
+      "active": false,
+      "gl_account": "GL-9999"
+    }
+  ]
+}

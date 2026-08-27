@@ -1,0 +1,46 @@
+Reorg Execution System: submission for review
+==============================================
+
+Thank you for reviewing this take-home prototype.
+
+How to try it (pick one — clone is optional)
+--------------------------------------------
+1. Hosted demo (preferred, no install):
+   Temporary: https://notifications-developmental-diego-complicated.trycloudflare.com
+   Durable: one-click Streamlit deploy from the public mirror
+   https://share.streamlit.io/deploy?repository=jlehga/reorg-workspace-demo&branch=main&mainModule=app.py
+   Full hosting steps: docs/HOSTING.md
+
+2. Zip (no git clone): download reorg-execution-system.zip from
+   https://github.com/jlehga/reorg-execution-system/releases
+   or build with ./make_zip.sh → dist/reorg-execution-system.zip
+   Then: unzip → python -m venv .venv → pip install -r requirements.txt
+   → streamlit run app.py --server.port 8765 → http://127.0.0.1:8765
+
+3. Optional source clone:
+   Private: https://github.com/jlehga/reorg-execution-system
+   Public mirror: https://github.com/jlehga/reorg-workspace-demo
+   Full quickstart + 60-second path: RUN.txt
+
+Demo login: demouser / test123
+
+Included materials
+------------------
+• Design document (primary design deliverable): docs/design.md
+• Run / review instructions: RUN.txt
+• Hosting guide (Streamlit Cloud / Render / zip): docs/HOSTING.md
+• Source repository (optional): https://github.com/jlehga/reorg-execution-system
+
+What the prototype demonstrates
+-------------------------------
+This Streamlit app is a Reorg Workspace portal. After Sign in, operators open
+or start a Reorg Case and walk a cost-center reorg: natural-language intake →
+validated case → approval → task execution → reconciliation and audit trail.
+Scenario A covers the happy path; optional controls show blocked reporting on
+failed GL reconciliation, and Scenario B surfaces ambiguity and validation
+failures.
+
+For architecture, trade-offs, and scope, see docs/design.md. Optional
+LLM_API_KEY lets the app call a live LLM for freeform text interpretation
+only; without it, a built-in demo parser is used. The model does not approve or
+execute changes.
