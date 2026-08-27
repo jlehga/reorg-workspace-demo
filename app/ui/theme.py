@@ -51,7 +51,7 @@ html, body, .stApp {
 .rc-brand {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.45rem;
   margin: 0 0 0.55rem 0;
   padding: 0 0 0.55rem 0;
   border-bottom: 1px solid var(--rc-border);
@@ -63,7 +63,7 @@ html, body, .stApp {
   line-height: 1.15;
   letter-spacing: -0.02em;
   color: var(--rc-ink);
-  margin: 0;
+  margin: 0 0 0.15rem 0;
 }
 .rc-brand-name span {
   color: var(--rc-blue);
@@ -637,15 +637,46 @@ div[data-testid="stTextInput"] input {
   border-color: var(--rc-border) !important;
 }
 
-/* Select / checkbox readable on light */
+/* Select / checkbox readable on light — slate fill so dropdowns read as controls */
 .stSelectbox [data-baseweb="select"] > div,
 div[data-testid="stSelectbox"] [data-baseweb="select"] > div {
   color: var(--rc-ink) !important;
-  background-color: var(--rc-white) !important;
+  background-color: #E8EEF6 !important;
+  border-color: #94A3B8 !important;
+}
+.stSelectbox [data-baseweb="select"] > div:hover,
+div[data-testid="stSelectbox"] [data-baseweb="select"] > div:hover {
+  background-color: var(--rc-blue-soft) !important;
+  border-color: var(--rc-blue) !important;
 }
 .stCheckbox label span,
 div[data-testid="stCheckbox"] label span {
   color: var(--rc-ink) !important;
+}
+
+/* Home Quick load: scenario notes preview under selectbox */
+.rc-scenario-preview {
+  margin: 0.15rem 0 0.1rem 0;
+  padding: 0.55rem 0.7rem;
+  background: var(--rc-surface);
+  border: 1px solid var(--rc-border);
+  border-left: 3px solid var(--rc-blue);
+  border-radius: var(--rc-radius);
+}
+.rc-scenario-preview-label {
+  margin: 0 0 0.2rem 0 !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--rc-muted) !important;
+  line-height: 1.3 !important;
+}
+.rc-scenario-preview-body {
+  margin: 0 !important;
+  font-size: 0.84rem !important;
+  color: var(--rc-ink-2) !important;
+  line-height: 1.45 !important;
 }
 
 /* Alerts / status callouts readable */

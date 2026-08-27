@@ -17,7 +17,7 @@ if str(ROOT) not in sys.path:
 
 import streamlit as st
 
-from app.data.scenarios import SCENARIOS
+from app.data.scenarios import SCENARIOS, scenario_option_label
 from app.models.enums import CaseStatus
 from app.ui.auth import ensure_auth_cookie, is_authenticated, render_login, sign_out
 from app.ui.components import (
@@ -99,7 +99,7 @@ def _render_sidebar(*, case_view: bool) -> None:
     scenario_key = st.selectbox(
         "Load scenario",
         options=list(SCENARIOS.keys()),
-        format_func=lambda k: SCENARIOS[k]["label"],
+        format_func=scenario_option_label,
         label_visibility="collapsed",
     )
     if st.button("Load scenario text", use_container_width=True):

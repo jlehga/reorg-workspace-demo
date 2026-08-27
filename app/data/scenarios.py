@@ -17,7 +17,9 @@ Also move the Ledger team under an unknown manager named Alex Unknown.
 
 SCENARIOS = {
     "scenario_a_success": {
-        "label": "Scenario A: Payments move (mostly valid, claimed Finance approval)",
+        "title": "Payments move",
+        "outcome": "Happy path",
+        "label": "Payments move — Happy path",
         "text": SCENARIO_A_SUCCESS.strip(),
         "notes": (
             "Valid entities and cost centers. Headcount claim (14) matches. "
@@ -26,7 +28,9 @@ SCENARIOS = {
         ),
     },
     "scenario_b_failure": {
-        "label": "Scenario B: Ambiguity / invalid cost center / headcount mismatch",
+        "title": "Payments + Ledger move",
+        "outcome": "Ambiguity / failure",
+        "label": "Payments + Ledger move — Ambiguity / failure",
         "text": SCENARIO_B_FAILURE.strip(),
         "notes": (
             "Headcount claim (20) does not match Payments membership (14). "
@@ -35,3 +39,9 @@ SCENARIOS = {
         ),
     },
 }
+
+
+def scenario_option_label(key: str) -> str:
+    """Short dropdown label: title + one-line outcome (avoids a long cryptic truncate)."""
+    s = SCENARIOS[key]
+    return f"{s['title']} — {s['outcome']}"

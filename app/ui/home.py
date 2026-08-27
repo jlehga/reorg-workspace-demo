@@ -7,7 +7,7 @@ from typing import Any
 
 import streamlit as st
 
-from app.data.scenarios import SCENARIOS
+from app.data.scenarios import SCENARIOS, scenario_option_label
 from app.workflow.engine import ReorgWorkflow
 
 _STATUS_BADGE = {
@@ -131,12 +131,21 @@ def render_home() -> None:
 
     with right:
         st.markdown("### Quick load")
-        st.caption("Optional demo scenarios for the interview walkthrough.")
+        st.caption("Optional demo scenarios for a guided walkthrough.")
         scenario_key = st.selectbox(
             "Scenario",
             options=list(SCENARIOS.keys()),
-            format_func=lambda k: SCENARIOS[k]["label"],
+            format_func=scenario_option_label,
         )
+        notes = SCENARIOS[scenario_key].get("notes") or ""
+        if notes:
+            st.markdown(
+                f'<div class="rc-scenario-preview">'
+                f'<p class="rc-scenario-preview-label">What to expect</p>'
+                f'<p class="rc-scenario-preview-body">{html.escape(notes)}</p>'
+                f"</div>",
+                unsafe_allow_html=True,
+            )
         if st.button("Start from scenario", use_container_width=True):
             text = SCENARIOS[scenario_key]["text"]
             st.session_state.raw_text = text
