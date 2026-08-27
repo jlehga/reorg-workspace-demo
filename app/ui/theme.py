@@ -82,18 +82,44 @@ html, body, .stApp {
 .block-container:has(.rc-home-root) {
   padding-top: 0.85rem !important;
 }
+/* Center home brand + tagline (case view keeps left-aligned brand) */
+.block-container:has(.rc-home-root) .rc-brand {
+  align-items: center;
+  text-align: center;
+}
+.block-container:has(.rc-home-root) .rc-brand-name,
+.block-container:has(.rc-home-root) .rc-brand-tagline {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.block-container:has(.rc-home-root) [data-testid="stElementContainer"]:has(.rc-brand),
+.block-container:has(.rc-home-root) [data-testid="stMarkdown"]:has(.rc-brand),
+.block-container:has(.rc-home-root) [data-testid="stMarkdownContainer"]:has(.rc-brand) {
+  width: 100% !important;
+  text-align: center !important;
+}
 .block-container:has(.rc-home-root) > div[data-testid="stVerticalBlock"] {
-  gap: 0.4rem !important;
+  gap: 0.55rem !important;
 }
 .block-container:has(.rc-home-root) [data-testid="stHorizontalBlock"] {
   gap: 1.1rem !important;
 }
+/* Keep column rhythm tight but never collapse paragraph→button spacing */
 .block-container:has(.rc-home-root) [data-testid="stHorizontalBlock"] > div[data-testid="stColumn"] > div[data-testid="stVerticalBlock"] {
-  gap: 0.35rem !important;
+  gap: 0.65rem !important;
 }
 .block-container:has(.rc-home-root) [data-testid="stElementContainer"] {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
+}
+/* Clear gap above primary/secondary home actions (fixes overlap from collapsed gaps) */
+.block-container:has(.rc-home-root) [data-testid="stColumn"] [data-testid="stElementContainer"]:has(.stButton) {
+  margin-top: 0.55rem !important;
+  padding-top: 0.15rem !important;
+}
+.block-container:has(.rc-home-root) [data-testid="stColumn"] .stButton {
+  margin-top: 0 !important;
 }
 .block-container:has(.rc-home-root) [data-testid="stMarkdownContainer"] h3 {
   margin: 0 0 0.15rem 0 !important;
@@ -104,7 +130,13 @@ html, body, .stApp {
 }
 .block-container:has(.rc-home-root) [data-testid="stMarkdownContainer"] p {
   margin: 0 !important;
-  line-height: 1.4 !important;
+  line-height: 1.45 !important;
+}
+.rc-home-lead {
+  margin: 0 !important;
+  padding: 0 0 0.35rem 0 !important;
+  line-height: 1.45 !important;
+  color: var(--rc-ink) !important;
 }
 .block-container:has(.rc-home-root) [data-testid="stCaptionContainer"] {
   margin: 0 !important;
