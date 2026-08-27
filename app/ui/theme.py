@@ -792,15 +792,25 @@ div[data-testid="stAlert"] div {
   color: inherit;
 }
 
-/* Sidebar = login blue gradient; light text */
+/*
+ * Sidebar chrome = one solid brand blue (#0052FF / --rc-blue).
+ * Do NOT use a multi-stop gradient here: sticky stSidebarHeader is a
+ * separate opaque layer, and any gradient vs solid mismatch shows as a
+ * horizontal band under the collapse strip.
+ */
 section[data-testid="stSidebar"] {
-  background:
-    radial-gradient(700px 420px at 10% -10%, #1A4DFF 0%, transparent 55%),
-    linear-gradient(165deg, #0033A0 0%, #0052FF 48%, #002B7A 100%) !important;
+  background: #0052FF !important;
+  background-image: none !important;
   border-right: 1px solid rgba(0, 43, 122, 0.55);
 }
-section[data-testid="stSidebar"] > div {
+section[data-testid="stSidebar"] > div,
+section[data-testid="stSidebar"] [data-testid="stSidebarContent"],
+section[data-testid="stSidebar"] [data-testid="stSidebarUserContent"],
+section[data-testid="stSidebar"] [data-testid="stSidebarNav"],
+section[data-testid="stSidebar"] [data-testid="stVerticalBlockBorderWrapper"] {
   background: transparent !important;
+  background-image: none !important;
+  background-color: transparent !important;
 }
 section[data-testid="stSidebar"],
 section[data-testid="stSidebar"] p,
@@ -891,11 +901,20 @@ section[data-testid="stSidebar"] div[data-testid="stSelectbox"] svg {
   position: sticky !important;
   top: 0 !important;
   z-index: 1000002 !important;
-  /* Match sidebar body blue (#0052FF mid-tone); keep opaque so scroll can't cover control */
+  /* Same solid as section[data-testid="stSidebar"] — opaque so scroll can't cover control */
   background: #0052FF !important;
+  background-image: none !important;
+  background-color: #0052FF !important;
   padding: 0.35rem 0.15rem 0.45rem 0 !important;
   margin-bottom: 0.35rem !important;
   pointer-events: auto !important;
+}
+/* Defensive: Streamlit sometimes paints nested header chrome separately */
+section[data-testid="stSidebar"] [data-testid="stSidebarHeader"],
+section[data-testid="stSidebar"] [data-testid="stSidebarHeader"] > div {
+  background: #0052FF !important;
+  background-image: none !important;
+  background-color: #0052FF !important;
 }
 [data-testid="stSidebarCollapseButton"],
 [data-testid="stSidebarCollapseButton"] button {
