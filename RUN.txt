@@ -1,17 +1,4 @@
 ════════════════════════════════════════════════════════════════
-WHAT TO EMAIL (checklist — 3 attachments / links)
-════════════════════════════════════════════════════════════════
-1. Design doc:     docs/design.md
-2. Run instructions: this file (RUN.txt)  — or point them here in the repo
-3. Repo access:    https://github.com/jlehga/reorg-execution-system
-   Repo is PRIVATE. Do one of:
-   • Add recruiter / reviewer GitHub usernames as collaborators, OR
-   • Temporarily make the repo readable, OR
-   • Attach a zip of the repo (exclude .venv/ and _local/)
-
-Also see SUBMISSION.txt for the same checklist in one place.
-
-════════════════════════════════════════════════════════════════
 QUICKSTART — clone & run (copy/paste)
 ════════════════════════════════════════════════════════════════
 Repo: https://github.com/jlehga/reorg-execution-system
