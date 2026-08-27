@@ -6,12 +6,12 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 # Demo credentials (documented in RUN.txt)
-DEMO_USERNAME = "ops.demo"
-DEMO_PASSWORD = "reorg-demo"
+DEMO_USERNAME = "demouser"
+DEMO_PASSWORD = "test123"
 
 # Browser cookie so a full page refresh keeps the demo session.
 _AUTH_COOKIE = "rw_demo_auth"
-_AUTH_TOKEN = "rw-demo-v1-ops"
+_AUTH_TOKEN = "rw-demo-v1"
 _AUTH_MAX_AGE = 7 * 24 * 60 * 60  # 7 days
 
 # Brand sits on the blue app background; the Streamlit form IS the white card.

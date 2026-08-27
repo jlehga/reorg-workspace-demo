@@ -18,7 +18,7 @@ How to try it (pick one — clone is optional)
 3. Optional source clone: https://github.com/jlehga/reorg-execution-system
    Full quickstart + 60-second path: RUN.txt
 
-Demo login: ops.demo / reorg-demo
+Demo login: demouser / test123
 
 Included materials
 ------------------

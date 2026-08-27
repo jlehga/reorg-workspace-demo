@@ -22,8 +22,8 @@ Zip download (no clone):
   3) Open http://127.0.0.1:8765
 
 Demo login (Reorg Workspace portal):
-  Username: ops.demo
-  Password: reorg-demo
+  Username: demouser
+  Password: test123
 
 Design deliverable: docs/design.md
 Hosting details:     docs/HOSTING.md
@@ -54,7 +54,7 @@ extractor runs (fine for the walkthrough). With a key, interpretation uses a liv
 ════════════════════════════════════════════════════════════════
 60-SECOND DEMO PATH
 ════════════════════════════════════════════════════════════════
-1. Sign in with ops.demo / reorg-demo
+1. Sign in with demouser / test123
 2. Workspace home → New Reorg Case (or Start from scenario / Scenario A)
 3. Analyze Reorg
 4. Reorg Case: note unverified Finance approval warning

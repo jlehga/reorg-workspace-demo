@@ -23,7 +23,7 @@ https://share.streamlit.io/deploy?repository=jlehga/reorg-execution-system&branc
 
 No secrets are required for the walkthrough. Optional: add `LLM_API_KEY` or `OPENAI_API_KEY` in Streamlit Cloud → App settings → Secrets if you want live LLM interpretation.
 
-Demo login: **ops.demo** / **reorg-demo**
+Demo login: **demouser** / **test123**
 
 ## Option B — Render (free web service)
 

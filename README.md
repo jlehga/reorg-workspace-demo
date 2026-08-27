@@ -51,7 +51,7 @@ Or: `./run_demo.sh`
 
 Open [http://127.0.0.1:8765](http://127.0.0.1:8765).
 
-Demo login: **ops.demo** / **reorg-demo** (see RUN.txt). After Sign in: Workspace home → New Reorg Case → case workflow.
+Demo login: **demouser** / **test123** (see RUN.txt). After Sign in: Workspace home → New Reorg Case → case workflow.
 
 Optional `LLM_API_KEY`: lets the app call a live LLM to interpret freeform reorg
 text into a structured case. Without it, a built-in deterministic parser runs the
